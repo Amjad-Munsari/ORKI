@@ -1,9 +1,9 @@
 {
   "Nav": {
-    "shop": "تسوق",
-    "tops": "قمصان",
-    "bottoms": "بناطيل",
-    "about": "عنا",
+    "shop": "المتجر",
+    "tops": "الأعلى",
+    "bottoms": "الأسفل",
+    "about": "عن أوركي",
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
     "switchToAr": "AR",
@@ -11,14 +11,14 @@
   },
   "Footer": {
     "shipping": "الشحن",
-    "returns": "الإرجاع",
+    "returns": "المرتجعات",
     "contact": "تواصل معنا",
     "copyright": "© 2026 ORKI. جميع الحقوق محفوظة."
   },
   "Placeholder": {
-    "imageAlt": "صورة منتج ORKI"
+    "imageAlt": "صورة بديلة لمنتج أوركي"
   },
   "Meta": {
-    "siteTitle": "ORKI — ملابس الشوارع"
+    "siteTitle": "أوركي — ملابس الشوارع"
   }
 }
