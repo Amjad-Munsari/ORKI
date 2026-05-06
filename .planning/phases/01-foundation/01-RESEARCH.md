@@ -393,6 +393,8 @@ export function PlaceholderImage({aspectRatio, alt, priority = false}: Placehold
           ORKI
         </span>
       </div>
+      {/* next/image with fill — wired now; Phase 2 swaps src only */}
+      <Image src="data:..." alt={alt} fill priority={priority} className="object-cover opacity-0" />
     </div>
   );
 }
@@ -764,29 +766,23 @@ The following directives from CLAUDE.md are absolute constraints for Phase 1 pla
 | A1 | `Space_Grotesk` export name matches `next/font/google` export for Space Grotesk font | Code Examples (fonts.ts) | Import fails; must check actual export name — may be `Space_Grotesk` with underscore |
 | A2 | `IBM_Plex_Arabic` export name matches `next/font/google` for IBM Plex Arabic | Code Examples (fonts.ts) | Import fails; must verify export name during scaffolding |
 | A3 | shadcn v4.7.0 `init` command correctly configures Tailwind v4 dark mode with black/white palette without manual post-editing | Architecture Patterns (Pattern 8) | May need manual CSS variable overrides in globals.css after init |
-| A4 | `localePrefix: 'always'` in `defineRouting` is the correct setting (forces `/en/` on all routes) | Pattern 2 | If `'as-needed'` is preferred, EN URLs would be `/` without prefix — check with user preference |
 | A5 | Phosphor Icons `Bold` weight is available in `@phosphor-icons/react` v2.1.10 | Standard Stack | Weight may require different import pattern; verify during task execution |
 
-**Claims tagged `[ASSUMED]`:** A1-A5 above. A1 and A2 are minor — verify actual export names from `next/font/google` during the fonts.ts creation task. A3 requires a post-init CSS review step. A4 is a product decision (`localePrefix: 'always'` is recommended for SEO — every page has a predictable locale URL). A5 is low risk.
+**Claims tagged `[ASSUMED]`:** A1-A3, A5 above. A1 and A2 are minor — verify actual export names from `next/font/google` during the fonts.ts creation task. A3 requires a post-init CSS review step. A5 is low risk.
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Next.js version pinning strategy**
-   - What we know: `latest` is now v16.2.5; project requires v15; CLAUDE.md says "Next.js 15"
-   - What's unclear: Whether the user wants to target 15.x LTS or is willing to use v16 if next-intl supports proxy.ts
-   - Recommendation: Plan uses `next@^15.3.9` (current 15.x stable). If user wants v16, that is a scope change that requires validating next-intl v4 proxy.ts compatibility first.
+1. **Next.js version pinning strategy** — RESOLVED
+   - Decision: Use `next@^15.3.9` (v16 is `latest` on npm but breaks the next-intl middleware pattern; `middleware.ts` → `proxy.ts` rename in v16 is incompatible with this project's setup).
+   - Plans pin `"next": "^15.3.9"` in package.json and verify via `npm list next 2>/dev/null | grep 'next@15\.'`.
 
-2. **`localePrefix` strategy: `'always'` vs `'as-needed'`**
-   - What we know: `'always'` forces `/en/` prefix on all routes; `'as-needed'` omits prefix for the default locale (EN)
-   - What's unclear: Whether SEO requires `/en/` prefix or if the root `/` should serve English without prefix
-   - Recommendation: Use `'always'` for clean bilingual symmetry (`/en/shop` and `/ar/shop` mirror each other). This is consistent with the ARCHITECTURE.md pattern.
+2. **`localePrefix` strategy: `'always'` vs `'as-needed'`** — RESOLVED
+   - Decision: Use `localePrefix: 'always'`. This gives symmetric `/en/shop` and `/ar/shop` URLs, which is correct for SEO bilingual parity and is consistent with the ARCHITECTURE.md pattern. All routes have a predictable locale prefix.
 
-3. **shadcn dark mode class vs attribute**
-   - What we know: shadcn supports both `class` strategy (`.dark` class on `<html>`) and `media` strategy
-   - What's unclear: Whether shadcn init defaults to `class` strategy with Tailwind v4
-   - Recommendation: Force dark as default by keeping `class="dark"` on `<html>` permanently (the site is dark-only; there is no light mode toggle). This is simpler than a theme provider.
+3. **shadcn dark mode class vs attribute** — RESOLVED
+   - Decision: Keep `class="dark"` permanently on `<html>`. The site is dark-only with no light mode toggle. A permanent `.dark` class is simpler than a ThemeProvider and avoids a flash of incorrect theme on load.
 
 ---
 

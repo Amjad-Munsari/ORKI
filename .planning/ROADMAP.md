@@ -31,15 +31,28 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
   3. A placeholder image slot at any aspect ratio (3:4 catalog, 4:5 PDP hero) renders an intentional dark-field editorial treatment — never a broken grey box or empty container.
   4. The global navigation displays category links (Tops, Bottoms), About, and a working EN/AR language switcher. The footer displays policy links and Contact. Both adapt correctly to RTL.
   5. All pages are inspectable at 375px, 768px, and 1280px+ without layout breakage.
-**Plans**: 7 plans
-Plans:
+**Plans**: 7 (01-01 through 01-07)
+
+**Wave 0:**
 - [ ] 01-01-PLAN.md — Scaffold Next.js 15, Tailwind v4, PostCSS, ESLint (physical class ban + no-img-element)
+
+**Wave 1** *(blocked on Wave 0)*:
 - [ ] 01-02-PLAN.md — next-intl routing, middleware, translation files, TypeScript types, data stubs, shadcn init
 - [ ] 01-03-PLAN.md — Fonts (Space Grotesk + IBM Plex Arabic), root layout (lang/dir/dark), globals.css
 - [ ] 01-04-PLAN.md — PlaceholderImage component, animation-presets.ts, useDirection hook
+
+**Wave 2** *(blocked on Wave 1)*:
 - [ ] 01-05-PLAN.md — Navbar, LanguageSwitcher, MobileNavDrawer (direction-aware Sheet)
 - [ ] 01-06-PLAN.md — Footer, layout integration (Navbar+Footer), placeholder home page
+
+**Wave 3** *(blocked on Wave 2)*:
 - [ ] 01-07-PLAN.md — Lint + build gate, browser verification (RTL, fonts, placeholders, nav, responsive)
+
+**Cross-cutting constraints:**
+- ESLint physical class ban established in Wave 0 — applies to all waves
+- `lang` + `dir` set atomically on `<html>` — set in 01-03, inherited by all subsequent phases
+- `next/image` only — ESLint rule from 01-01 covers all component additions in Waves 1–2
+
 **UI hint**: yes
 
 ### Phase 2: Core Shopping
