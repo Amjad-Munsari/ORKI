@@ -1,7 +1,7 @@
 ---
 phase: 1
 slug: foundation
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-05-06
@@ -241,6 +241,8 @@ Breakpoints (from REQUIREMENTS.md FOUND-05):
 
 **Content max-width:** `max-w-[1280px] mx-auto` — constrains content at large viewports. Full-bleed backgrounds (black) extend to viewport edge.
 
+**Focal points:** Primary visual anchor of the nav bar is the ORKI logo wordmark (accent white `#FFFFFF`, Heading role 20px/600, positioned at inline-start). Secondary visual anchor is the language switcher (Label role 13px/400, positioned at inline-end). Footer primary anchor: brand copyright line (Label role, inline-start).
+
 **No horizontal scroll at any breakpoint.** All widths responsive.
 
 ---
@@ -273,11 +275,11 @@ These decisions made in Phase 1 are permanent constraints for the project:
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS (focal point explicitly declared)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-05-06
