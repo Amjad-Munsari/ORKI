@@ -31,7 +31,15 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
   3. A placeholder image slot at any aspect ratio (3:4 catalog, 4:5 PDP hero) renders an intentional dark-field editorial treatment — never a broken grey box or empty container.
   4. The global navigation displays category links (Tops, Bottoms), About, and a working EN/AR language switcher. The footer displays policy links and Contact. Both adapt correctly to RTL.
   5. All pages are inspectable at 375px, 768px, and 1280px+ without layout breakage.
-**Plans**: TBD
+**Plans**: 7 plans
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold Next.js 15, Tailwind v4, PostCSS, ESLint (physical class ban + no-img-element)
+- [ ] 01-02-PLAN.md — next-intl routing, middleware, translation files, TypeScript types, data stubs, shadcn init
+- [ ] 01-03-PLAN.md — Fonts (Space Grotesk + IBM Plex Arabic), root layout (lang/dir/dark), globals.css
+- [ ] 01-04-PLAN.md — PlaceholderImage component, animation-presets.ts, useDirection hook
+- [ ] 01-05-PLAN.md — Navbar, LanguageSwitcher, MobileNavDrawer (direction-aware Sheet)
+- [ ] 01-06-PLAN.md — Footer, layout integration (Navbar+Footer), placeholder home page
+- [ ] 01-07-PLAN.md — Lint + build gate, browser verification (RTL, fonts, placeholders, nav, responsive)
 **UI hint**: yes
 
 ### Phase 2: Core Shopping
@@ -95,7 +103,7 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/7 | Not started | - |
 | 2. Core Shopping | 0/TBD | Not started | - |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |
