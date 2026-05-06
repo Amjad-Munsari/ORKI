@@ -1,0 +1,24 @@
+{
+  "Nav": {
+    "shop": "تسوق",
+    "tops": "قمصان",
+    "bottoms": "بناطيل",
+    "about": "عنا",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "switchToAr": "AR",
+    "switchToEn": "EN"
+  },
+  "Footer": {
+    "shipping": "الشحن",
+    "returns": "الإرجاع",
+    "contact": "تواصل معنا",
+    "copyright": "© 2026 ORKI. جميع الحقوق محفوظة."
+  },
+  "Placeholder": {
+    "imageAlt": "صورة منتج ORKI"
+  },
+  "Meta": {
+    "siteTitle": "ORKI — ملابس الشوارع"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "Nav": {
+    "shop": "Shop",
+    "tops": "Tops",
+    "bottoms": "Bottoms",
+    "about": "About",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchToAr": "AR",
+    "switchToEn": "EN"
+  },
+  "Footer": {
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "contact": "Contact",
+    "copyright": "© 2026 ORKI. All rights reserved."
+  },
+  "Placeholder": {
+    "imageAlt": "ORKI product placeholder"
+  },
+  "Meta": {
+    "siteTitle": "ORKI — Underground Streetwear"
+  }
+}
