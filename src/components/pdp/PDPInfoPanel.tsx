@@ -1,0 +1,69 @@
+'use client'
+import { useState } from 'react'
+import { SizeSelector } from './SizeSelector'
+import { AddToCartButton } from './AddToCartButton'
+import { StockStateBadge } from '@/components/shop/StockStateBadge'
+import { getStockState } from '@/lib/products'
+import type { Product, Locale } from '@/types/domain'
+
+interface PDPInfoPanelProps {
+  product: Product
+  locale: Locale
+}
+
+export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const stockState = getStockState(product)
+  const isFullyOOS = stockState === 'out-of-stock'
+
+  const formattedPrice = new Intl.NumberFormat('ar-SA-u-nu-latn', {
+    style: 'currency',
+    currency: 'SAR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(product.price)
+
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="text-xl font-semibold tracking-[-0.02em]">
+        {product.name[locale]}
+      </h1>
+
+      <p className="text-sm text-white/60">{formattedPrice}</p>
+
+      {!isFullyOOS && (
+        <SizeSelector
+          sizes={product.sizes}
+          selectedSize={selectedSize}
+          onSizeChange={setSelectedSize}
+          locale={locale}
+        />
+      )}
+
+      {isFullyOOS ? (
+        <button
+          type="button"
+          disabled
+          className="w-full h-[52px] rounded-lg bg-transparent border border-white/20
+                     text-white/40 cursor-not-allowed font-semibold text-base"
+        >
+          {locale === 'ar' ? 'نفد المخزون' : 'Out of Stock'}
+        </button>
+      ) : (
+        <AddToCartButton
+          product={product}
+          selectedSize={selectedSize}
+          locale={locale}
+        />
+      )}
+
+      <p className="text-sm text-white/60">
+        {locale === 'ar'
+          ? 'إرجاع مجاني خلال 14 يوماً بدون أي أسئلة.'
+          : 'Free returns within 14 days. No questions asked.'}
+      </p>
+
+      <StockStateBadge state={stockState} locale={locale} context="pdp" />
+    </div>
+  )
+}

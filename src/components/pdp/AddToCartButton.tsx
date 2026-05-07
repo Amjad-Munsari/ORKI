@@ -17,11 +17,13 @@ interface AddToCartButtonProps {
 export function AddToCartButton({ product, selectedSize, locale }: AddToCartButtonProps) {
   const [state, setState] = useState<ButtonState>('idle')
   const addItem = useCartStore(s => s.addItem)
+  const setDrawerOpen = useCartStore(s => s.setDrawerOpen)
   const shouldReduceMotion = useReducedMotion()
 
   function handleClick() {
     if (!selectedSize || state === 'success') return
     addItem(product, selectedSize)
+    setDrawerOpen(true)
     setState('success')
     // Reset after 1500ms per D-11
     setTimeout(() => setState('idle'), 1500)

@@ -1,10 +1,14 @@
-import {useTranslations} from 'next-intl';
-import {Link} from '@/i18n/navigation';
-import {LanguageSwitcher} from './LanguageSwitcher';
-import {MobileNavDrawer} from './MobileNavDrawer';
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
+import { ShoppingCart } from 'lucide-react'
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { MobileNavDrawer } from './MobileNavDrawer'
+import { CategoryDropdown } from './CategoryDropdown'
+import { CartTrigger } from './CartTrigger'
 
-export function Navbar() {
-  const t = useTranslations('Nav');
+// async Server Component — getLocale() and getTranslations() are async
+export async function Navbar() {
+  const t = await getTranslations('Nav')
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.12] bg-black">
@@ -19,23 +23,13 @@ export function Navbar() {
           <span dir="ltr">ORKI</span>
         </Link>
 
-        {/* Desktop nav links — hidden below md (768px) */}
+        {/* Desktop nav — hidden below md (768px) */}
         <nav
           className="hidden md:flex items-center gap-8"
           aria-label="Main navigation"
         >
-          <Link
-            href="/shop/tops"
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"
-          >
-            {t('tops')}
-          </Link>
-          <Link
-            href="/shop/bottoms"
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"
-          >
-            {t('bottoms')}
-          </Link>
+          {/* D-01: CategoryDropdown replaces direct Tops/Bottoms links */}
+          <CategoryDropdown />
           <Link
             href="/about"
             className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"
@@ -44,10 +38,14 @@ export function Navbar() {
           </Link>
         </nav>
 
-        {/* Inline-end cluster: language switcher + hamburger (mobile) */}
+        {/* Inline-end cluster: cart icon + language switcher + hamburger (mobile) */}
         <div className="flex items-center gap-4">
+          <div className="relative hidden md:flex">
+            <CartTrigger ariaLabel={t('cart')} />
+          </div>
+
           <LanguageSwitcher />
-          {/* Mobile hamburger — visible below md, hidden at md+ */}
+
           <div className="md:hidden">
             <MobileNavDrawer />
           </div>
@@ -55,5 +53,5 @@ export function Navbar() {
 
       </div>
     </header>
-  );
+  )
 }

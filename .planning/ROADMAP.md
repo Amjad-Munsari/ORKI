@@ -13,7 +13,7 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 ## Phases
 
 - [x] **Phase 1: Foundation** - RTL architecture, i18n routing, fonts, placeholder system, nav, and footer
-- [ ] **Phase 2: Core Shopping** - Shop, category, and product detail pages — full bilingual browse-to-cart flow
+- [x] **Phase 2: Core Shopping** - Shop, category, and product detail pages — full bilingual browse-to-cart flow
 - [ ] **Phase 3: Cart & Checkout** - Cart drawer, CartStore, full checkout flow with all payment methods and error states
 - [ ] **Phase 4: Brand & Polish** - Home page, About, Contact, page transitions, scroll animations, reduced-motion
 
@@ -138,6 +138,6 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | Complete | 2026-05-07 |
-| 2. Core Shopping | 0/8 | Planned | - |
+| 2. Core Shopping | 8/8 | Complete | 2026-05-07 |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |

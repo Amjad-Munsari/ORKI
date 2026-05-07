@@ -4,8 +4,11 @@ import type { CartItem, Product } from '@/types/domain'
 
 interface CartState {
   items: CartItem[]
+  isDrawerOpen: boolean
   addItem: (product: Product, selectedSize: string) => void
   removeItem: (productId: string, selectedSize: string) => void
+  updateQuantity: (productId: string, selectedSize: string, delta: number) => void
+  setDrawerOpen: (isOpen: boolean) => void
   clearCart: () => void
   getTotalCount: () => number
 }
@@ -14,6 +17,7 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isDrawerOpen: false,
 
       addItem: (product, selectedSize) =>
         set(state => {
@@ -38,6 +42,17 @@ export const useCartStore = create<CartState>()(
             i => !(i.product.id === productId && i.selectedSize === selectedSize)
           ),
         })),
+
+      updateQuantity: (productId, selectedSize, delta) =>
+        set(state => ({
+          items: state.items.map(i =>
+            i.product.id === productId && i.selectedSize === selectedSize
+              ? { ...i, quantity: Math.max(1, i.quantity + delta) }
+              : i
+          ),
+        })),
+
+      setDrawerOpen: (isOpen) => set({ isDrawerOpen: isOpen }),
 
       clearCart: () => set({ items: [] }),
 
