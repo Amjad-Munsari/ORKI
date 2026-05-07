@@ -68,4 +68,54 @@
 - Non-apparel categories.
 
 ## Traceability
-*(To be populated by the roadmapper)*
+
+| Requirement | Phase |
+|-------------|-------|
+| INFRA-01 | Phase 5 |
+| INFRA-02 | Phase 5 |
+| INFRA-03 | Phase 5 |
+| INFRA-04 | Phase 5 |
+| SEC-01 | Phase 6 |
+| SEC-02 | Phase 6 |
+| SEC-03 | Phase 6 |
+| SEC-04 | Phase 6 |
+| SEC-05 | Phase 6 |
+| SEC-06 | Phase 6 |
+| SEC-07 | Phase 6 |
+| SEC-08 | Phase 6 |
+| SEC-09 | Phase 6 |
+| ECOM-01 | Phase 7 |
+| ECOM-05 | Phase 7 |
+| ECOM-06 | Phase 7 |
+| SEO-01 | Phase 7 |
+| SEO-04 | Phase 7 |
+| SEO-05 | Phase 7 |
+| SEO-06 | Phase 7 |
+| SEO-07 | Phase 7 |
+| SEO-08 | Phase 7 |
+| SEO-09 | Phase 7 |
+| SEO-10 | Phase 7 |
+| PERF-01 | Phase 7 |
+| PERF-02 | Phase 7 |
+| UX-01 | Phase 8 |
+| UX-02 | Phase 8 |
+| UX-03 | Phase 8 |
+| UX-04 | Phase 8 |
+| UX-05 | Phase 8 |
+| UX-06 | Phase 8 |
+| UX-07 | Phase 8 |
+| UX-08 | Phase 8 |
+| UX-09 | Phase 8 |
+| ECOM-02 | Phase 8 |
+| ECOM-03 | Phase 8 |
+| ECOM-04 | Phase 8 |
+| LGL-01 | Phase 9 |
+| LGL-02 | Phase 9 |
+| LGL-03 | Phase 9 |
+| LGL-04 | Phase 9 |
+| PERF-03 | Phase 9 |
+| PERF-04 | Phase 9 |
+| PERF-05 | Phase 9 |
+| PERF-06 | Phase 9 |
+| SEO-02 | Phase 9 |
+| SEO-03 | Phase 9 |

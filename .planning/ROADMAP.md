@@ -6,5 +6,59 @@
 
 ---
 
-## Next Milestone: Backend Integration (Phase 5)
-*(Run `/gsd-new-milestone` to begin planning Phase 5)*
+## Current Milestone: v2.0 Backend Integration & Technical Foundations
+
+**Goal:** Connect the ORKI frontend to a local database (pre-Supabase) to establish real data flows, authentication, and core ecommerce logic while explicitly deferring live payment gateways.
+
+### Phase 5: Local Database & ORM Setup
+**Goal:** Establish local database infrastructure and initial schemas.
+**Requirements:** INFRA-01, INFRA-02, INFRA-03, INFRA-04
+**Success Criteria:**
+1. Local database is running and accessible
+2. ORM is configured with strict parameterization
+3. Environment variables successfully load and connect to DB
+4. Dependencies pass audit and are locked
+
+### Phase 6: Authentication & Security Core
+**Goal:** Implement secure user authentication and fundamental API security.
+**Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09
+**Success Criteria:**
+1. User can register and log in via httpOnly cookies
+2. Invalid login returns generic message and locks after repeated failures
+3. API endpoints reject unauthenticated or unvalidated requests
+4. Security headers and CSRF protections are verified active
+
+### Phase 7: Product Catalog & Inventory
+**Goal:** Connect the frontend catalog to the database with inventory controls and SEO.
+**Requirements:** ECOM-01, ECOM-05, ECOM-06, SEO-01, SEO-04, SEO-05, SEO-06, SEO-07, SEO-08, SEO-09, SEO-10, PERF-01, PERF-02
+**Success Criteria:**
+1. Products render from DB via SSR/SSG
+2. Inventory locking prevents overselling the same item
+3. Out-of-stock items show "notify me" rather than failing
+4. Images upload automatically convert to WebP and serve from CDN
+5. JSON-LD and Open Graph tags validate successfully
+
+### Phase 8: Cart, Checkout State & Order Flow
+**Goal:** Build persistent cart and robust order state machine.
+**Requirements:** UX-01, UX-02, UX-03, UX-04, UX-05, UX-06, UX-07, UX-08, UX-09, ECOM-02, ECOM-03, ECOM-04
+**Success Criteria:**
+1. Cart persists for guest and logged-in users
+2. Checkout displays total cost and visible progress steps
+3. Order state machine correctly transitions pending → confirmed
+4. Form validations highlight errors without losing data
+5. Simulated payment failure preserves cart state
+
+### Phase 9: Performance, Legal & Polish
+**Goal:** Ensure compliance, Web Vitals performance, and final infrastructure requirements.
+**Requirements:** LGL-01, LGL-02, LGL-03, LGL-04, PERF-03, PERF-04, PERF-05, PERF-06, SEO-02, SEO-03
+**Success Criteria:**
+1. Core Web Vitals targets met (LCP < 2.5s)
+2. Privacy policy, T&C, and Cookie banners are active
+3. N+1 database query checks pass
+4. sitemap.xml automatically generates
+
+---
+
+## Backlog
+
+*(Empty)*
