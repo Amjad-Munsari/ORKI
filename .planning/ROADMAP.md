@@ -65,7 +65,28 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
   3. The size selector shows individual size buttons — not a dropdown — with out-of-stock sizes visually disabled and unselectable. The Add to Cart button stays disabled until a size is chosen.
   4. All three stock states are visually distinct and fully designed: in-stock, partially out-of-stock (some sizes sold out), and fully out-of-stock.
   5. The size guide modal opens from the PDP and displays a measurements chart. JSON-LD Product schema is present in page source on every PDP. Related products appear at the bottom of the PDP.
-**Plans**: TBD
+**Plans**: 8 plans (02-01 through 02-08)
+
+**Wave 1** *(no dependencies — run in parallel)*:
+- [ ] 02-01-PLAN.md — Product data (6 products), lib/products.ts extensions (getStockState, getRelatedProducts), animation presets (4 new), i18n Shop namespace
+- [ ] 02-02-PLAN.md — Test infrastructure (vitest install, vitest.config.ts, tests/setup.ts, unit test stubs for products/formatPrice/cartStore)
+
+**Wave 2** *(blocked on Wave 1)*:
+- [ ] 02-03-PLAN.md — CartStore (Zustand + persist + skipHydration), StoreHydration, layout wiring, shadcn dialog install
+
+**Wave 3** *(blocked on Wave 1 + Wave 2)*:
+- [ ] 02-04-PLAN.md — Shop components: ProductCard (hover zoom+underline), ProductGrid, StockStateBadge, ShopHeader (filter/sort Client Component)
+- [ ] 02-05-PLAN.md — Shop pages: /shop index (searchParams filter+sort) and /shop/[category] (pre-filtered)
+
+**Wave 4** *(blocked on Wave 3)*:
+- [ ] 02-06-PLAN.md — PDP components: PDPGallery, PDPLayout, SizeSelector (OOS aria), SizeGuideModal, AddToCartButton (AnimatePresence), RelatedProducts
+
+**Wave 5** *(blocked on Wave 4)*:
+- [ ] 02-07-PLAN.md — PDP page route (JSON-LD, PDPInfoPanel Client Component), CategoryDropdown (NavigationMenu), CartBadge, Navbar update
+
+**Wave 6** *(blocked on Wave 5)*:
+- [ ] 02-08-PLAN.md — Verification gate: vitest run + lint + build + browser verification (7 flows)
+
 **UI hint**: yes
 
 ### Phase 3: Cart & Checkout
@@ -117,6 +138,6 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | Complete | 2026-05-07 |
-| 2. Core Shopping | 0/TBD | Not started | - |
+| 2. Core Shopping | 0/8 | Planned | - |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |
