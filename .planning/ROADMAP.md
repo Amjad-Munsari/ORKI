@@ -14,7 +14,7 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 
 - [x] **Phase 1: Foundation** - RTL architecture, i18n routing, fonts, placeholder system, nav, and footer
 - [x] **Phase 2: Core Shopping** - Shop, category, and product detail pages — full bilingual browse-to-cart flow
-- [ ] **Phase 3: Cart & Checkout** - Cart drawer, CartStore, full checkout flow with all payment methods and error states
+- [x] **Phase 3: Cart & Checkout** - Cart drawer, CartStore, full checkout flow with all payment methods and error states
 - [ ] **Phase 4: Brand & Polish** - Home page, About, Contact, page transitions, scroll animations, reduced-motion
 
 ---
@@ -99,7 +99,14 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
   3. Refreshing the page preserves all cart contents — line items, quantities, and selected sizes persist to localStorage.
   4. The checkout page shows a shipping form, an order summary, and a payment method selector offering Credit/Debit Card, Mada, STC Pay, Apple Pay, and Cash on Delivery.
   5. All four checkout error states are rendered and styled: card declined, network error, item out of stock at purchase time, and address not serviceable. Completing a mock checkout shows the order confirmation page.
-**Plans**: TBD
+**Plans**: 4 plans (03-01 through 03-04)
+
+**Wave 1:**
+- [x] 03-01-PLAN.md — Cart Infrastructure & Badge
+- [x] 03-02-PLAN.md — Cart Drawer UI
+- [x] 03-03-PLAN.md — Checkout Flow
+- [x] 03-04-PLAN.md — Payment & Mock Completion
+
 **UI hint**: yes
 
 ### Phase 4: Brand & Polish
@@ -139,5 +146,5 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 |-------|----------------|--------|-----------|
 | 1. Foundation | 7/7 | Complete | 2026-05-07 |
 | 2. Core Shopping | 8/8 | Complete | 2026-05-07 |
-| 3. Cart & Checkout | 0/TBD | Not started | - |
+| 3. Cart & Checkout | 4/4 | Complete | 2026-05-07 |
 | 4. Brand & Polish | 0/TBD | Not started | - |
