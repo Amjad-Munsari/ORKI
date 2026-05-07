@@ -12,7 +12,7 @@
 - [ ] **FOUND-01**: Site serves bilingual content with URL-based locale routing (`/en/...` and `/ar/...`)
 - [ ] **FOUND-02**: Arabic locale renders full RTL layout using CSS logical properties throughout
 - [ ] **FOUND-03**: English and Arabic typefaces load via next/font with FOUT prevention
-- [ ] **FOUND-04**: Placeholder image system uses intentional dark-field editorial treatment with locked aspect ratios (3:4 catalog, 4:5 PDP hero)
+- [x] **FOUND-04**: Placeholder image system uses intentional dark-field editorial treatment with locked aspect ratios (3:4 catalog, 4:5 PDP hero)
 - [ ] **FOUND-05**: All pages are mobile-responsive across standard breakpoints (375px, 768px, 1280px+)
 
 ### Navigation

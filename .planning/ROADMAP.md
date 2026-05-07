@@ -37,9 +37,9 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 - [ ] 01-01-PLAN.md — Scaffold Next.js 15, Tailwind v4, PostCSS, ESLint (physical class ban + no-img-element)
 
 **Wave 1** *(blocked on Wave 0)*:
-- [ ] 01-02-PLAN.md — next-intl routing, middleware, translation files, TypeScript types, data stubs, shadcn init
-- [ ] 01-03-PLAN.md — Fonts (Space Grotesk + IBM Plex Arabic), root layout (lang/dir/dark), globals.css
-- [ ] 01-04-PLAN.md — PlaceholderImage component, animation-presets.ts, useDirection hook
+- [x] 01-02-PLAN.md — next-intl routing, middleware, translation files, TypeScript types, data stubs, shadcn init
+- [x] 01-03-PLAN.md — Fonts (Space Grotesk + IBM Plex Arabic), root layout (lang/dir/dark), globals.css
+- [x] 01-04-PLAN.md — PlaceholderImage component, animation-presets.ts, useDirection hook
 
 **Wave 2** *(blocked on Wave 1)*:
 - [ ] 01-05-PLAN.md — Navbar, LanguageSwitcher, MobileNavDrawer (direction-aware Sheet)
@@ -116,7 +116,7 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/7 | Not started | - |
+| 1. Foundation | 4/7 | In progress | - |
 | 2. Core Shopping | 0/TBD | Not started | - |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |
