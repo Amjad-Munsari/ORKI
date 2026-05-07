@@ -47,7 +47,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* ORKI font families — switched via :lang() selectors below */
-  --font-space-grotesk: var(--font-space-grotesk);
+  --font-geist: var(--font-geist);
   --font-ibm-plex-arabic: var(--font-ibm-plex-arabic);
 
   /* ORKI color palette — black and white only */
@@ -158,7 +158,7 @@
    Changing locale changes <html lang>, triggering the correct rule. */
 
 :lang(en) {
-  font-family: var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-geist), sans-serif;
 }
 
 :lang(ar) {

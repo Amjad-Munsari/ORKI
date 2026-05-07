@@ -23,7 +23,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="relative h-[90vh] w-full overflow-hidden flex items-end pb-24">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?q=80&w=1936&auto=format&fit=crop"
             alt="ORKI Hero"
             fill
             priority
@@ -88,10 +88,10 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Category Splat */}
-      <section className="pb-32 max-w-[1280px] mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ScrollReveal direction="left">
+      {/* Category Splat - Full Screen Cards */}
+      <section className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <ScrollReveal direction="left" className="w-full">
             <CategoryCard
               title={isRtl ? 'القطع العلوية' : 'Tops'}
               href="/shop/tops"
@@ -99,7 +99,7 @@ export default async function HomePage({ params }: HomePageProps) {
               locale={locale}
             />
           </ScrollReveal>
-          <ScrollReveal direction="right" delay={0.2}>
+          <ScrollReveal direction="right" delay={0.2} className="w-full">
             <CategoryCard
               title={isRtl ? 'القطع السفلية' : 'Bottoms'}
               href="/shop/bottoms"
@@ -138,21 +138,21 @@ export default async function HomePage({ params }: HomePageProps) {
 function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-[600px] overflow-hidden rounded-lg">
+    <Link href={href} className="group relative h-[700px] overflow-hidden">
       <Image
         src={image}
         alt={title}
         fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-      <div className="absolute inset-0 p-12 flex flex-col justify-end items-start">
-        <h3 className="text-5xl font-bold uppercase tracking-tighter text-white mb-6">
+      <div className="absolute inset-0 p-16 flex flex-col justify-end items-start">
+        <h3 className="text-6xl md:text-8xl font-bold uppercase tracking-tighter text-white mb-8">
           {title}
         </h3>
-        <span className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white">
-          {isRtl ? 'استكشف' : 'Explore'}
-          {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
+        <span className="flex items-center gap-6 text-sm font-bold uppercase tracking-[0.2em] text-white">
+          {isRtl ? 'استكشف' : 'Explore Collection'}
+          {isRtl ? <ArrowLeft className="size-5" /> : <ArrowRight className="size-5" />}
         </span>
       </div>
     </Link>

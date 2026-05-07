@@ -89,18 +89,11 @@ export function MobileNavDrawer() {
           aria-label="Mobile navigation"
         >
           <Link
-            href="/shop/tops"
+            href="/shop"
             onClick={() => setIsOpen(false)}
             className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
           >
-            {t('tops')}
-          </Link>
-          <Link
-            href="/shop/bottoms"
-            onClick={() => setIsOpen(false)}
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
-          >
-            {t('bottoms')}
+            {t('shop')}
           </Link>
           <Link
             href="/about"

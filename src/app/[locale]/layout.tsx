@@ -3,7 +3,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import { spaceGrotesk, ibmPlexArabic } from '@/lib/fonts';
+import { geist, ibmPlexArabic } from '@/lib/fonts';
 import { Navbar } from '@/components/nav/Navbar';
 import { Footer } from '@/components/footer/Footer';
 import { StoreHydration } from '@/store/StoreHydration';
@@ -39,7 +39,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html
       lang={locale}
       dir={dir}
-      className={`dark ${spaceGrotesk.variable} ${ibmPlexArabic.variable}`}
+      className={`dark ${geist.variable} ${ibmPlexArabic.variable}`}
     >
       <body className="bg-black text-white antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider locale={locale} messages={messages}>

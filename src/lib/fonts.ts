@@ -1,13 +1,10 @@
-import { Space_Grotesk, IBM_Plex_Sans_Arabic } from 'next/font/google';
+import { Geist, IBM_Plex_Sans_Arabic } from 'next/font/google';
 
-// Space Grotesk — EN locale primary typeface.
+// Geist — EN locale primary typeface.
 // Use `variable` option (not `className`) so :lang(en) CSS selector controls application.
-// This prevents specificity conflicts in bilingual font switching.
-export const spaceGrotesk = Space_Grotesk({
+export const geist = Geist({
   subsets: ['latin'],
-  weight: ['400', '600'],
-  display: 'swap',
-  variable: '--font-space-grotesk',
+  variable: '--font-geist',
 });
 
 // IBM Plex Sans Arabic — AR locale primary typeface.
