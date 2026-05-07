@@ -14,11 +14,11 @@ export async function Navbar() {
         
         {/* Left Side: Navigation Links */}
         <nav className="hidden md:flex items-center gap-10 flex-1" aria-label="Main navigation">
-          <Link href="/shop/men" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
-            Men
+          <Link href="/shop/tops" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Tops
           </Link>
-          <Link href="/shop/women" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
-            Women
+          <Link href="/shop/bottoms" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Bottoms
           </Link>
           <Link href="/about" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
             Our Story

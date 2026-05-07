@@ -44,7 +44,7 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Featured Collection — Moved here, right below Hero */}
+      {/* Featured Collection */}
       <section className="py-32 max-w-[1440px] mx-auto px-8">
         <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="space-y-4">
@@ -69,19 +69,21 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Category Splat — Moved below Featured Items */}
-      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px]">
+      {/* Category Splat - Side-by-side Full Height */}
+      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px] bg-white">
         <CategoryCard
-          title={isRtl ? "مجموعة الرجال" : "Men's Collection"}
-          href="/shop/men"
-          image="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1974&auto=format&fit=crop"
+          title={isRtl ? "القطع العلوية" : "Tops"}
+          href="/shop/tops"
+          image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
           locale={locale}
+          darkText
         />
         <CategoryCard
-          title={isRtl ? "مجموعة النساء" : "Women's Collection"}
-          href="/shop/women"
-          image="https://images.unsplash.com/photo-1492633423870-43d1cd2775ff?q=80&w=2070&auto=format&fit=crop"
+          title={isRtl ? "القطع السفلية" : "Bottoms"}
+          href="/shop/bottoms"
+          image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1974&auto=format&fit=crop"
           locale={locale}
+          darkText
         />
       </section>
 
@@ -107,22 +109,33 @@ export default async function HomePage({ params }: HomePageProps) {
   )
 }
 
-function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
+function CategoryCard({ 
+  title, 
+  href, 
+  image, 
+  locale,
+  darkText = false 
+}: { 
+  title: string; 
+  href: string; 
+  image: string; 
+  locale: string;
+  darkText?: boolean;
+}) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
+    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16 border-r border-black/5 last:border-r-0">
       <Image
         src={image}
         alt={title}
         fill
-        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+        className="object-contain p-20 transition-transform duration-1000 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <h3 className="text-5xl md:text-7xl font-medium text-white leading-tight">
+        <h3 className={`text-5xl md:text-7xl font-medium leading-tight ${darkText ? 'text-black' : 'text-white'}`}>
           {title}
         </h3>
-        <div className="bg-white text-black px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
+        <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
           {isRtl ? 'تسوق الآن' : 'Shop Now'}
           {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
         </div>

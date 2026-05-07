@@ -49,8 +49,8 @@ export function Footer() {
               <span className="text-xs font-semibold text-white/40 block">(Navigation)</span>
               <ul className="space-y-4">
                 <li><Link href="/" className="text-sm font-semibold hover:text-white/60 transition-colors">Home</Link></li>
-                <li><Link href="/shop/men" className="text-sm font-semibold hover:text-white/60 transition-colors">Men</Link></li>
-                <li><Link href="/shop/women" className="text-sm font-semibold hover:text-white/60 transition-colors">Women</Link></li>
+                <li><Link href="/shop/tops" className="text-sm font-semibold hover:text-white/60 transition-colors">Tops</Link></li>
+                <li><Link href="/shop/bottoms" className="text-sm font-semibold hover:text-white/60 transition-colors">Bottoms</Link></li>
                 <li><Link href="/about" className="text-sm font-semibold hover:text-white/60 transition-colors">Our Story</Link></li>
               </ul>
             </div>
