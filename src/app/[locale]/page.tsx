@@ -129,7 +129,7 @@ function CategoryCard({
         src={image}
         alt={title}
         fill
-        className="object-contain p-20 transition-transform duration-1000 group-hover:scale-105"
+        className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
         <h3 className={`text-5xl md:text-7xl font-medium leading-tight ${darkText ? 'text-black' : 'text-white'}`}>
