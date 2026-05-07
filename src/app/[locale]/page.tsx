@@ -20,74 +20,63 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <div className="w-full">
       {/* Editorial Hero */}
-      <section className="relative h-[85vh] w-full overflow-hidden flex items-end pb-32">
+      <section className="relative h-screen w-full overflow-hidden flex items-end pb-24 md:pb-32">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=2070&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2070&auto=format&fit=crop"
             alt="ORKI Hero"
             fill
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-6 w-full">
-          <div className="space-y-12">
-            <h1 className="text-7xl md:text-[140px] font-bold uppercase tracking-tighter leading-[0.85] text-white">
-              {isRtl ? (
-                <>
-                  الأصل <br /> الحديث
-                </>
-              ) : (
-                <>
-                  ORIGIN <br /> MODERN
-                </>
-              )}
+        <div className="relative z-10 max-w-[1440px] mx-auto px-8 w-full">
+          <ScrollReveal direction="up" className="max-w-4xl space-y-6">
+            <span className="text-sm font-medium text-white/90 block">
+              {isRtl ? '(مجموعة مختارة)' : '(Featured Collection)'}
+            </span>
+            <h1 className="text-6xl md:text-[90px] font-medium text-white leading-[1.1] tracking-tight">
+              {isRtl ? 'أساسيات العصر الحديث' : 'Timeless Essentials for the Season'}
             </h1>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <p className="text-sm md:text-base uppercase tracking-widest text-white/60 font-bold max-w-sm leading-relaxed">
-                {isRtl 
-                  ? 'استكشف أول مجموعة من أوركي. تصاميم مستوحاة من ثقافة الشارع السعودي.' 
-                  : 'Explore the debut collection from ORKI. Underground Saudi streetwear curated for the bold.'}
-              </p>
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-6 h-16 px-12 bg-white text-black rounded-none font-bold uppercase tracking-widest hover:bg-white/90 transition-colors group"
-              >
-                {isRtl ? 'تسوق الآن' : 'Shop Collection'}
-                {isRtl ? <ArrowLeft className="size-5" /> : <ArrowRight className="size-5" />}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
-          <div className="w-[1px] h-12 bg-white/20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-white animate-scroll-indicator" />
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
+      {/* Category Splat - Side-by-side Full Height */}
+      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px]">
+        <CategoryCard
+          title={isRtl ? "مجموعة الرجال" : "Men's Collection"}
+          href="/shop/men"
+          image="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1974&auto=format&fit=crop"
+          locale={locale}
+        />
+        <CategoryCard
+          title={isRtl ? "مجموعة النساء" : "Women's Collection"}
+          href="/shop/women"
+          image="https://images.unsplash.com/photo-1492633423870-43d1cd2775ff?q=80&w=2070&auto=format&fit=crop"
+          locale={locale}
+        />
+      </section>
+
       {/* Featured Collection */}
-      <section className="py-32 max-w-[1280px] mx-auto px-6">
-        <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+      <section className="py-32 max-w-[1440px] mx-auto px-8">
+        <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tighter text-white">
+            <h2 className="text-4xl font-medium text-white">
               {isRtl ? 'الإصدارات المميزة' : 'Featured Drops'}
             </h2>
-            <div className="w-24 h-1 bg-white" />
           </div>
           <Link 
             href="/shop"
-            className="text-xs font-bold uppercase tracking-widest text-white underline underline-offset-8 hover:text-white/60 transition-colors"
+            className="text-sm font-medium text-white/60 hover:text-white transition-colors border-b border-white/20 pb-1"
           >
             {isRtl ? 'مشاهدة الكل' : 'View All Products'}
           </Link>
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
           {featuredProducts.map((product, idx) => (
             <ScrollReveal key={product.id} delay={idx * 0.1}>
               <ProductCard product={product} locale={locale as any} />
@@ -96,43 +85,18 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Category Splat - Full Screen Cards */}
-      <section className="w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <ScrollReveal direction="left" className="w-full">
-            <CategoryCard
-              title={isRtl ? 'القطع العلوية' : 'Tops'}
-              href="/shop/tops"
-              image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
-              locale={locale}
-            />
-          </ScrollReveal>
-          <ScrollReveal direction="right" delay={0.2} className="w-full">
-            <CategoryCard
-              title={isRtl ? 'القطع السفلية' : 'Bottoms'}
-              href="/shop/bottoms"
-              image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1974&auto=format&fit=crop"
-              locale={locale}
-            />
-          </ScrollReveal>
-        </div>
-      </section>
-
       {/* Brand Ethos */}
-      <section className="py-48 bg-[#0a0a0a] border-y border-white/5">
-        <ScrollReveal className="max-w-[1280px] mx-auto px-6 text-center space-y-12">
-          <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
-            {isRtl ? 'مهمتنا' : 'Our Ethos'}
-          </span>
-          <h3 className="text-4xl md:text-7xl font-bold uppercase tracking-tighter text-white leading-tight max-w-4xl mx-auto">
+      <section className="py-64 bg-[#050505]">
+        <ScrollReveal className="max-w-[1440px] mx-auto px-8 text-center space-y-12">
+          <h3 className="text-4xl md:text-7xl font-medium text-white leading-tight max-w-5xl mx-auto">
             {isRtl 
-              ? 'نحن لا نصنع الملابس، نحن نوثق ثقافة الشارع في قلب الرياض.' 
-              : 'We don\'t just make clothes. We document the evolution of Saudi street culture.'}
+              ? 'نحن لا نصنع الملابس، نحن نوثق ثقافة الشارع.' 
+              : 'We don\'t just make clothes. We document the evolution of street culture.'}
           </h3>
           <div className="pt-8">
             <Link 
               href="/about"
-              className="text-xs font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+              className="text-sm font-medium text-white/40 hover:text-white transition-colors"
             >
               {isRtl ? 'اقرأ قصتنا' : 'Read Our Story'} —
             </Link>
@@ -146,22 +110,22 @@ export default async function HomePage({ params }: HomePageProps) {
 function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-[700px] overflow-hidden">
+    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
       <Image
         src={image}
         alt={title}
         fill
         className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-      <div className="absolute inset-0 p-12 md:p-24 flex flex-col justify-end items-start">
-        <h3 className="text-7xl md:text-[120px] font-bold uppercase tracking-tighter text-white mb-8 leading-[0.8]">
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
+      <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <h3 className="text-5xl md:text-7xl font-medium text-white leading-tight">
           {title}
         </h3>
-        <span className="flex items-center gap-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
-          {isRtl ? 'استكشف المجموعة' : 'Explore Collection'}
-          {isRtl ? <ArrowLeft className="size-5" /> : <ArrowRight className="size-5" />}
-        </span>
+        <div className="bg-white text-black px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
+          {isRtl ? 'تسوق الآن' : 'Shop Now'}
+          {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
+        </div>
       </div>
     </Link>
   )

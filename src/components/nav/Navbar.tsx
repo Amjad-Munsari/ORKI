@@ -1,50 +1,50 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { ShoppingCart } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { MobileNavDrawer } from './MobileNavDrawer'
-import { CategoryDropdown } from './CategoryDropdown'
 import { CartTrigger } from './CartTrigger'
 
-// async Server Component — getLocale() and getTranslations() are async
 export async function Navbar() {
   const t = await getTranslations('Nav')
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.12] bg-black">
-      <div className="max-w-[1280px] mx-auto px-6 h-16 flex items-center justify-between">
-
-        {/* Logo — inline-start */}
-        <Link
-          href="/"
-          className="text-xl font-semibold tracking-[-0.02em] text-white hover:opacity-80 transition-opacity duration-150"
-        >
-          {/* ORKI always renders in Latin characters — wrap in ltr span for AR context */}
-          <span dir="ltr">ORKI</span>
-        </Link>
-
-        {/* Desktop nav — hidden below md (768px) */}
-        <nav
-          className="hidden md:flex items-center gap-8"
-          aria-label="Main navigation"
-        >
-          <CategoryDropdown label={t('shop')} />
-          <Link
-            href="/about"
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"
-          >
-            {t('about')}
+    <header className="fixed top-0 z-50 w-full bg-white text-black border-b border-black/5">
+      <div className="max-w-[1440px] mx-auto px-8 h-20 flex items-center justify-between">
+        
+        {/* Left Side: Navigation Links */}
+        <nav className="hidden md:flex items-center gap-10 flex-1" aria-label="Main navigation">
+          <Link href="/shop/men" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Men
+          </Link>
+          <Link href="/shop/women" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Women
+          </Link>
+          <Link href="/about" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Our Story
+          </Link>
+          <Link href="/contact" className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity">
+            Contact
           </Link>
         </nav>
 
-        {/* Inline-end cluster: cart icon + language switcher + hamburger (mobile) */}
-        <div className="flex items-center gap-4">
-          <div className="relative hidden md:flex">
-            <CartTrigger ariaLabel={t('cart')} />
-          </div>
+        {/* Center: Logo */}
+        <div className="flex-1 flex justify-center">
+          <Link
+            href="/"
+            className="text-2xl font-bold tracking-[-0.05em] hover:opacity-80 transition-opacity"
+          >
+            <span dir="ltr">ORKI</span>
+          </Link>
+        </div>
 
+        {/* Right Side: Icons & Lang */}
+        <div className="flex items-center justify-end gap-6 flex-1">
+          <button className="hover:opacity-60 transition-opacity">
+            <Search className="size-5" strokeWidth={2.5} />
+          </button>
+          <CartTrigger ariaLabel={t('cart')} />
           <LanguageSwitcher />
-
           <div className="md:hidden">
             <MobileNavDrawer />
           </div>

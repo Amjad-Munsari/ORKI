@@ -26,7 +26,7 @@ export function CartBadge() {
             mass: 0.5
           }}
           className="absolute -top-1 -inset-inline-end-1
-                     min-w-[18px] h-[18px] rounded-full bg-white text-black
+                     min-w-[18px] h-[18px] rounded-full bg-black text-white
                      text-[10px] font-bold flex items-center justify-center px-1
                      pointer-events-none select-none z-10"
           aria-label={`${count} items in cart`}
