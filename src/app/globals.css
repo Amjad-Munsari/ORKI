@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -46,6 +45,18 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* ORKI font families — switched via :lang() selectors below */
+  --font-space-grotesk: var(--font-space-grotesk);
+  --font-ibm-plex-arabic: var(--font-ibm-plex-arabic);
+
+  /* ORKI color palette — black and white only */
+  --color-dominant: #000000;
+  --color-secondary-surface: #111111;
+  --color-accent-orki: #ffffff;
+  --color-orki-border: rgba(255, 255, 255, 0.12);
+  --color-placeholder-bg: #0A0A0A;
+  --color-placeholder-mark: rgba(255, 255, 255, 0.15);
 }
 
 :root {
@@ -123,8 +134,49 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: #000000;
+    color: #ffffff;
+    min-height: 100dvh;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     @apply font-sans;
   }
+
+  /* Touch target minimum for all interactive elements */
+  a, button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ─── Font Switching ──────────────────────────────────────────────────────
+   Font controlled via CSS :lang() selector — not via component className.
+   Both fonts loaded as CSS variables (next/font variable option).
+   Changing locale changes <html lang>, triggering the correct rule. */
+
+:lang(en) {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+:lang(ar) {
+  font-family: var(--font-ibm-plex-arabic), sans-serif;
+  /* Arabic optical size adjustment — 17px reads at same weight as 16px Latin */
+  font-size: 1.0625rem;
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────
+   Heading and display roles tighten letter-spacing to -0.02em */
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+}
+
+/* ─── Directional Icon Utility ────────────────────────────────────────────
+   Chevron icons flip in RTL contexts. Apply .rtl-flip to the icon element. */
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
 }
