@@ -1,7 +1,7 @@
 # Project State: ORKI
 
 **Current Phase:** 1 — Foundation
-**Status:** Executing — Plan 04 of 7 complete
+**Status:** Executing — Plan 05 of 7 complete
 **Last Updated:** 2026-05-07
 
 ## Project Reference
@@ -14,11 +14,11 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 4 of 7 in current phase
-Status: Executing (01-01 through 01-04 complete)
-Last activity: 2026-05-07 — Plans 01-01, 01-02, 01-03, 01-04 complete
+Plan: 5 of 7 in current phase
+Status: Executing (01-01 through 01-05 complete)
+Last activity: 2026-05-07 — Plans 01-01, 01-02, 01-03, 01-04, 01-05 complete
 
-Progress: [████░░░░░░] ~14% (4/28 total plans estimated)
+Progress: [█████░░░░░] ~18% (5/28 total plans estimated)
 
 ## Performance Metrics
 
@@ -31,7 +31,7 @@ Progress: [████░░░░░░] ~14% (4/28 total plans estimated)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| Phase 1 Foundation (in progress) | 4/7 | ~40 min | ~10 min |
+| Phase 1 Foundation (in progress) | 5/7 | ~65 min | ~13 min |
 
 *Updated after each plan completion*
 
@@ -49,6 +49,9 @@ Recent decisions affecting current work:
 - Init: Cart state is Zustand + persist middleware — CartStore initialized in Phase 2 before the cart page exists.
 - 01-04: Data URI transparent GIF as next/image placeholder src in Phase 1; opacity-0 on Image element hides it while dark-field div provides the visual.
 - 01-04: animationPresets typed as const with as const tuple assertions for exact Motion transition type compatibility.
+- 01-05: base-ui Dialog uses render prop (not Radix asChild) for SheetTrigger composition — confirmed base-ui API pattern for this project's shadcn setup.
+- 01-05: drawerSide derived from locale at runtime (locale === 'ar' ? 'left' : 'right') — never hardcoded, per Pitfall 7.
+- 01-05: ORKI brand name wrapped in <span dir="ltr"> in Navbar to prevent Arabic bidi algorithm from mirroring the brand name.
 
 ### Pending Todos
 
@@ -67,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-05-07
-Stopped at: Completed 01-04-PLAN.md (PlaceholderImage, animation-presets, useDirection)
+Stopped at: Completed 01-05-PLAN.md (Navbar, LanguageSwitcher, MobileNavDrawer)
 Resume file: None
