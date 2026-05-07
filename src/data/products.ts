@@ -22,7 +22,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/hoodie.png'],
     inStock: true,
   },
   {
@@ -43,7 +43,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/hoodie.png'],
     inStock: true,
   },
   {
@@ -64,7 +64,7 @@ export const products: Product[] = [
       { label: 'L', inStock: false },
       { label: 'XL', inStock: false },
     ],
-    images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/hoodie.png'],
     inStock: false,
   },
   {
@@ -85,7 +85,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: false },
     ],
-    images: ['https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/jeans.png'],
     inStock: true,
   },
   {
@@ -106,7 +106,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: ['https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/jeans.png'],
     inStock: true,
   },
   {
@@ -127,7 +127,7 @@ export const products: Product[] = [
       { label: 'L', inStock: false },
       { label: 'XL', inStock: true },
     ],
-    images: ['https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=2000&auto=format&fit=crop'],
+    images: ['/images/products/jeans.png'],
     inStock: true,
   },
 ];

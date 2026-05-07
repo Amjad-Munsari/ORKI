@@ -74,13 +74,13 @@ export default async function HomePage({ params }: HomePageProps) {
         <CategoryCard
           title={isRtl ? "القطع العلوية" : "Tops"}
           href="/shop/tops"
-          image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
+          image="/images/products/hoodie.png"
           locale={locale}
         />
         <CategoryCard
           title={isRtl ? "القطع السفلية" : "Bottoms"}
           href="/shop/bottoms"
-          image="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1972&auto=format&fit=crop"
+          image="/images/products/jeans.png"
           locale={locale}
         />
       </section>
