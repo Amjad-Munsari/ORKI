@@ -80,7 +80,7 @@ Each task was committed atomically:
 1. **Task 1: Navbar + LanguageSwitcher** - `b3f8be9` (feat)
 2. **Task 2: MobileNavDrawer** - `832352e` (feat)
 
-**Plan metadata:** TBD (docs: complete plan)
+**Plan metadata:** `fc2d2e9` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/components/nav/Navbar.tsx` - Server component: sticky header, ORKI wordmark, desktop nav links, LanguageSwitcher, MobileNavDrawer slot
