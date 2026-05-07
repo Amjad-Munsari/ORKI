@@ -3,6 +3,8 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { spaceGrotesk, ibmPlexArabic } from '@/lib/fonts';
+import { Navbar } from '@/components/nav/Navbar';
+import { Footer } from '@/components/footer/Footer';
 import '@/app/globals.css';
 
 type Props = {
@@ -37,9 +39,13 @@ export default async function LocaleLayout({ children, params }: Props) {
       dir={dir}
       className={`dark ${spaceGrotesk.variable} ${ibmPlexArabic.variable}`}
     >
-      <body className="bg-black text-white antialiased">
+      <body className="bg-black text-white antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider>
-          {children}
+          <Navbar />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
