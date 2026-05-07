@@ -22,7 +22,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1974&auto=format&fit=crop'],
     inStock: true,
   },
   {
@@ -43,7 +43,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1974&auto=format&fit=crop'],
     inStock: true,
   },
   {
@@ -64,7 +64,7 @@ export const products: Product[] = [
       { label: 'L', inStock: false },
       { label: 'XL', inStock: false },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=1974&auto=format&fit=crop'],
     inStock: false,
   },
   {
@@ -85,7 +85,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: false },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1974&auto=format&fit=crop'],
     inStock: true,
   },
   {
@@ -106,7 +106,7 @@ export const products: Product[] = [
       { label: 'L', inStock: true },
       { label: 'XL', inStock: true },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1974&auto=format&fit=crop'],
     inStock: true,
   },
   {
@@ -127,7 +127,7 @@ export const products: Product[] = [
       { label: 'L', inStock: false },
       { label: 'XL', inStock: true },
     ],
-    images: [],
+    images: ['https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1974&auto=format&fit=crop'],
     inStock: true,
   },
 ];
