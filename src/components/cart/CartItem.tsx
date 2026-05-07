@@ -32,7 +32,7 @@ export function CartItem({ item, locale }: CartItemProps) {
             </h3>
             <button
               onClick={() => removeItem(item.product.id, item.selectedSize)}
-              className="text-white/40 hover:text-white transition-colors p-1 -mr-1"
+              className="text-white/40 hover:text-white transition-colors p-1 -me-1"
               aria-label="Remove item"
             >
               <Trash2 className="size-4" />

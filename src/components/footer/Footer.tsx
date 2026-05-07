@@ -1,9 +1,7 @@
-import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Truck, RotateCcw, ShieldCheck, Users } from 'lucide-react'
 
 export function Footer() {
-  const t = useTranslations('Footer')
   const currentYear = new Date().getFullYear()
 
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { CreditCard, Smartphone, Banknote } from 'lucide-react'
+import { CreditCard, Smartphone, Banknote, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Locale } from '@/types/domain'
 
@@ -15,7 +15,7 @@ interface PaymentGridProps {
 export function PaymentGrid({ locale, selected, onSelect }: PaymentGridProps) {
   const isRtl = locale === 'ar'
 
-  const methods: { id: PaymentMethod; label: string; icon: any; sublabel?: string }[] = [
+  const methods: { id: PaymentMethod; label: string; icon: LucideIcon; sublabel?: string }[] = [
     { 
       id: 'card', 
       label: isRtl ? 'بطاقة ائتمان' : 'Credit Card', 

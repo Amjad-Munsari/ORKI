@@ -2,7 +2,7 @@
 
 import { use, useState } from 'react'
 import { ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react'
-import type { Locale } from '@/types/domain'
+
 
 interface ContactPageProps {
   params: Promise<{ locale: string }>

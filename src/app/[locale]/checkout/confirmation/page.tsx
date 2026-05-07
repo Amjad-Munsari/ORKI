@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { useCartStore } from '@/store/cartStore'
 import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react'
-import type { Locale } from '@/types/domain'
+
 
 interface ConfirmationPageProps {
   params: Promise<{ locale: string }>

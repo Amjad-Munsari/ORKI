@@ -33,7 +33,7 @@ export function CartDrawer({ locale }: CartDrawerProps) {
           <SheetTitle className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
             <ShoppingBag className="size-5" />
             {isRtl ? 'حقيبة التسوق' : 'Shopping Bag'}
-            <span className="ml-auto text-sm font-normal text-white/40 tabular-nums">
+            <span className="ms-auto text-sm font-normal text-white/40 tabular-nums">
               ({items.length})
             </span>
           </SheetTitle>

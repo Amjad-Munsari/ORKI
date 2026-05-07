@@ -1,7 +1,7 @@
 'use client'
 
 import { use, useState } from 'react'
-import { ShippingForm } from '@/components/checkout/ShippingForm'
+import { ShippingForm, type ShippingFormData } from '@/components/checkout/ShippingForm'
 import { OrderSummary } from '@/components/checkout/OrderSummary'
 import { PaymentGrid, type PaymentMethod } from '@/components/checkout/PaymentGrid'
 import { useRouter } from '@/i18n/navigation'
@@ -19,12 +19,12 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const isRtl = locale === 'ar'
 
   const [step, setStep] = useState<1 | 2>(1)
-  const [shippingData, setShippingData] = useState<any>(null)
+  const [shippingData, setShippingData] = useState<ShippingFormData | null>(null)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleShippingSubmit = (data: any) => {
+  const handleShippingSubmit = (data: ShippingFormData) => {
     setShippingData(data)
     setStep(2)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -53,8 +53,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       }
 
       router.push(`/checkout/confirmation?orderId=${data.orderId}`)
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
       setIsSubmitting(false)
     }
   }

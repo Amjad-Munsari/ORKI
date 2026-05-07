@@ -22,7 +22,7 @@ export function OrderSummary({ locale }: OrderSummaryProps) {
         {isRtl ? 'ملخص الطلب' : 'Order Summary'}
       </h2>
 
-      <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="space-y-6 max-h-[400px] overflow-y-auto pe-2 custom-scrollbar">
         {items.map((item) => (
           <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-4">
             <div className="relative size-16 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center select-none">

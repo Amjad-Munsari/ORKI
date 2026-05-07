@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { Locale } from '@/types/domain';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -45,7 +46,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreHydration />
           <Navbar />
-          <CartDrawer locale={locale as any} />
+          <CartDrawer locale={locale as Locale} />
           <PageTransition>
             <main className="flex-1">
               {children}

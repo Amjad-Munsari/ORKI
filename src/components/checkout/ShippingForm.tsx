@@ -3,9 +3,20 @@
 import { useState } from 'react'
 import type { Locale } from '@/types/domain'
 
+export interface ShippingFormData {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  city: string
+  district: string
+  address: string
+  apartment: string
+}
+
 interface ShippingFormProps {
   locale: Locale
-  onSubmit: (data: any) => void
+  onSubmit: (data: ShippingFormData) => void
 }
 
 export function ShippingForm({ locale, onSubmit }: ShippingFormProps) {

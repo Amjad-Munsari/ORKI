@@ -1,7 +1,7 @@
 'use client'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useCartStore } from '@/store/cartStore'
-import { animationPresets } from '@/lib/animation-presets'
+
 
 // Server renders count=0 (skipHydration), client rehydrates actual value after StoreHydration mounts.
 // Progressive enhancement: badge not visible on first server paint, appears after hydration.

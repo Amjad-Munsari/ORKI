@@ -1,10 +1,12 @@
-import { useTranslations } from 'next-intl'
+
 
 import { Link } from '@/i18n/navigation'
 import { getAllProducts } from '@/lib/products'
 import { ProductCard } from '@/components/shop/ProductCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
+
+import type { Locale } from '@/types/domain'
 
 interface HomePageProps {
   params: Promise<{ locale: string }>
@@ -64,7 +66,7 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
           {featuredProducts.map((product, idx) => (
             <ScrollReveal key={product.id} delay={idx * 0.1}>
-              <ProductCard product={product} locale={locale as any} />
+              <ProductCard product={product} locale={locale as Locale} />
             </ScrollReveal>
           ))}
         </div>
@@ -75,13 +77,11 @@ export default async function HomePage({ params }: HomePageProps) {
         <CategoryCard
           title={isRtl ? "القطع العلوية" : "Tops"}
           href="/shop/tops"
-          image="/images/categories/tops-teaser.png"
           locale={locale}
         />
         <CategoryCard
           title={isRtl ? "القطع السفلية" : "Bottoms"}
           href="/shop/bottoms"
-          image="/images/categories/bottoms-teaser.png"
           locale={locale}
         />
       </section>
@@ -108,7 +108,7 @@ export default async function HomePage({ params }: HomePageProps) {
   )
 }
 
-function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
+function CategoryCard({ title, href, locale }: { title: string; href: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
     <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
