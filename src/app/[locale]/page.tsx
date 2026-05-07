@@ -44,23 +44,7 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Category Splat - Side-by-side Full Height */}
-      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px]">
-        <CategoryCard
-          title={isRtl ? "مجموعة الرجال" : "Men's Collection"}
-          href="/shop/men"
-          image="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1974&auto=format&fit=crop"
-          locale={locale}
-        />
-        <CategoryCard
-          title={isRtl ? "مجموعة النساء" : "Women's Collection"}
-          href="/shop/women"
-          image="https://images.unsplash.com/photo-1492633423870-43d1cd2775ff?q=80&w=2070&auto=format&fit=crop"
-          locale={locale}
-        />
-      </section>
-
-      {/* Featured Collection */}
+      {/* Featured Collection — Moved here, right below Hero */}
       <section className="py-32 max-w-[1440px] mx-auto px-8">
         <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="space-y-4">
@@ -83,6 +67,22 @@ export default async function HomePage({ params }: HomePageProps) {
             </ScrollReveal>
           ))}
         </div>
+      </section>
+
+      {/* Category Splat — Moved below Featured Items */}
+      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px]">
+        <CategoryCard
+          title={isRtl ? "مجموعة الرجال" : "Men's Collection"}
+          href="/shop/men"
+          image="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1974&auto=format&fit=crop"
+          locale={locale}
+        />
+        <CategoryCard
+          title={isRtl ? "مجموعة النساء" : "Women's Collection"}
+          href="/shop/women"
+          image="https://images.unsplash.com/photo-1492633423870-43d1cd2775ff?q=80&w=2070&auto=format&fit=crop"
+          locale={locale}
+        />
       </section>
 
       {/* Brand Ethos */}
