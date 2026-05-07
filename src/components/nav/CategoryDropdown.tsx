@@ -13,13 +13,13 @@ export function CategoryDropdown({ label }: { label?: string }) {
   const t = useTranslations('Nav')
 
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
+    <NavigationMenu className="max-w-max">
+      <NavigationMenuList className="justify-start gap-0">
         <NavigationMenuItem>
           <NavigationMenuTrigger
             className="bg-transparent text-white/60 hover:text-white hover:bg-transparent
                        data-popup-open:text-white data-popup-open:bg-transparent
-                       text-base font-normal px-0 h-auto min-h-[44px]
+                       text-base font-normal px-0
                        [&_svg]:hidden" // Hide the arrow icon
           >
             {label || t('categories')}

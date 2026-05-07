@@ -33,8 +33,8 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
 
         <div className="relative z-10 max-w-[1280px] mx-auto px-6 w-full">
-          <div className="max-w-3xl space-y-8">
-            <h1 className="text-6xl md:text-[100px] font-bold uppercase tracking-tighter leading-none text-white">
+          <div className="max-w-4xl space-y-8">
+            <h1 className="text-6xl md:text-[100px] font-bold uppercase tracking-tighter leading-[0.9] text-white">
               {isRtl ? 'الأصل / الحديث' : 'ORIGIN / MODERN'}
             </h1>
             <p className="text-sm md:text-lg uppercase tracking-widest text-white/80 font-bold max-w-md leading-relaxed">
