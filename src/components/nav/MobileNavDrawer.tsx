@@ -1,0 +1,116 @@
+'use client';
+
+import {useState} from 'react';
+import {motion, AnimatePresence, useReducedMotion} from 'motion/react';
+import {useLocale, useTranslations} from 'next-intl';
+import {Link} from '@/i18n/navigation';
+import {List, X} from '@phosphor-icons/react';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import {useDirection} from '@/hooks/useDirection';
+import {animationPresets} from '@/lib/animation-presets';
+
+export function MobileNavDrawer() {
+  const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations('Nav');
+  const locale = useLocale();
+  const direction = useDirection(); // 1 for LTR (EN), -1 for RTL (AR)
+  const shouldReduceMotion = useReducedMotion();
+
+  // Drawer slides from inline-end:
+  // EN (LTR): inline-end is the right edge → side="right"
+  // AR (RTL): inline-end is the left edge → side="left"
+  // Never hardcode side="right" — that breaks RTL.
+  const drawerSide = locale === 'ar' ? 'left' : 'right';
+
+  // Motion variants for the drawer panel
+  // Slides from 100% (inline-end edge) — direction multiplier handles RTL
+  const drawerVariants = {
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: animationPresets.navEnter,
+    },
+    closed: {
+      x: shouldReduceMotion ? 0 : `${100 * direction}%`,
+      opacity: shouldReduceMotion ? 0 : 1,
+      transition: animationPresets.navExit,
+    },
+  };
+
+  void drawerVariants; // defined for direction-aware pattern; Sheet handles CSS animation
+
+  return (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger
+        render={
+          <button
+            aria-label={isOpen ? t('closeMenu') : t('openMenu')}
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-white hover:opacity-60 transition-opacity duration-150 active:scale-[0.97]"
+          />
+        }
+      >
+        {/* Hamburger to X morph via AnimatePresence — 200ms ease-out */}
+        <AnimatePresence mode="wait" initial={false}>
+          {isOpen ? (
+            <motion.span
+              key="close"
+              initial={{opacity: 0, scale: 0.95}}
+              animate={{opacity: 1, scale: 1}}
+              exit={{opacity: 0, scale: 0.95}}
+              transition={{duration: 0.2, ease: [0.23, 1, 0.32, 1]}}
+            >
+              <X weight="bold" size={24} aria-hidden="true" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="open"
+              initial={{opacity: 0, scale: 0.95}}
+              animate={{opacity: 1, scale: 1}}
+              exit={{opacity: 0, scale: 0.95}}
+              transition={{duration: 0.2, ease: [0.23, 1, 0.32, 1]}}
+            >
+              <List weight="bold" size={24} aria-hidden="true" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </SheetTrigger>
+
+      <SheetContent
+        side={drawerSide}
+        showCloseButton={false}
+        className="w-[280px] bg-black border-s border-white/[0.12] p-0"
+      >
+        <nav
+          className="flex flex-col ps-6 pe-6 pt-8 gap-6"
+          aria-label="Mobile navigation"
+        >
+          <Link
+            href="/shop/tops"
+            onClick={() => setIsOpen(false)}
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+          >
+            {t('tops')}
+          </Link>
+          <Link
+            href="/shop/bottoms"
+            onClick={() => setIsOpen(false)}
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+          >
+            {t('bottoms')}
+          </Link>
+          <Link
+            href="/about"
+            onClick={() => setIsOpen(false)}
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+          >
+            {t('about')}
+          </Link>
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
+}
