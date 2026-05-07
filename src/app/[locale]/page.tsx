@@ -74,13 +74,13 @@ export default async function HomePage({ params }: HomePageProps) {
         <CategoryCard
           title={isRtl ? "القطع العلوية" : "Tops"}
           href="/shop/tops"
-          image="https://images.unsplash.com/photo-1578932750294-f5002425ba23?q=80&w=2070&auto=format&fit=crop"
+          image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
           locale={locale}
         />
         <CategoryCard
           title={isRtl ? "القطع السفلية" : "Bottoms"}
           href="/shop/bottoms"
-          image="https://images.unsplash.com/photo-1604176354204-926873ff349c?q=80&w=2080&auto=format&fit=crop"
+          image="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1972&auto=format&fit=crop"
           locale={locale}
         />
       </section>
@@ -117,9 +117,9 @@ function CategoryCard({ title, href, image, locale }: { title: string; href: str
         fill
         className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+      <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors duration-500" />
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <h3 className="text-5xl md:text-8xl font-medium text-black leading-tight mix-blend-difference invert">
+        <h3 className="text-5xl md:text-8xl font-medium text-black leading-tight">
           {title}
         </h3>
         <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
