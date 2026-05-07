@@ -16,12 +16,16 @@ A premium underground streetwear shopping experience that feels as intentional a
 - UI polished with typography, scroll reveals, and pure placeholder editorial treatment (images removed)
 - Ready for Backend Integration (Phase 5)
 
-## Next Milestone Goals
+## Current Milestone: v2.0 Backend Integration & Technical Foundations
 
-- Integrate Medusa v2 headless commerce
-- Implement Moyasar payment gateway
-- Swap mock products for live data
-- Execute real checkout flows
+**Goal:** Connect the ORKI frontend to a local database (pre-Supabase) to establish real data flows, authentication, and core ecommerce logic while explicitly deferring live payment gateways.
+
+**Target features:**
+- Setup local database schema and ORM (with strict parameterization and indexing)
+- Implement robust Authentication (httpOnly cookies, secure generic messaging, guest checkout support)
+- Connect Product Catalog to the local DB (inventory locking, out-of-stock "notify me" states)
+- Persistent Cart & Checkout flow (state machine: pending → confirmed → shipped etc.)
+- Infrastructure & Foundation (SEO meta tags, JSON-LD structured data, WCAG AA compliance, security headers, WebP image pipeline, legal/KVKK compliance)
 
 <details>
 <summary>Previous Requirements (Archived v1.0)</summary>
@@ -74,5 +78,22 @@ A premium underground streetwear shopping experience that feels as intentional a
 | Design latitude given to Claude | Logo + colors defined; fonts, layout, motion delegated to Claude | Validated |
 | Placeholder-first photography | Product images unavailable at build time — design with placeholder system | Validated |
 
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
 ---
-*Last updated: 2026-05-07 (v1.0 Completion)*
+*Last updated: 2026-05-08 (v2.0 Start)*

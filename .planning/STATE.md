@@ -1,25 +1,25 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: Frontend Complete
+milestone: v2.0
+milestone_name: Backend Integration & Technical Foundations
 current_phase: None
-status: complete
-stopped_at: Project Frontend 100% Complete
-last_updated: "2026-05-07T21:00:00.000Z"
-last_activity: 2026-05-07 — Milestone Audit passed; 100% requirements verified
+status: planning
+stopped_at: Defining requirements
+last_updated: "2026-05-08T00:00:00.000Z"
+last_activity: 2026-05-08 — Milestone v2.0 started
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 24
-  completed_plans: 24
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State: ORKI
 
 **Current Phase:** None
-**Status:** Milestone Complete
-**Last Updated:** 2026-05-07
+**Status:** Defining requirements
+**Last Updated:** 2026-05-08
 
 ## Project Reference
 
@@ -30,12 +30,12 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 
 ## Current Position
 
-Phase: 4 of 4 (Brand & Polish) — COMPLETE
-Plan: 04-01-PLAN — COMPLETE
-Status: Milestone "Frontend Complete" verified 100%
-Last activity: 2026-05-07 — Milestone Audit passed
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-05-08 — Milestone v2.0 started
 
-Progress: [██████████] 100% of Milestone v1.0
+Progress: [          ] 0% of Milestone v2.0
 
 ## Performance Metrics
 
@@ -55,15 +55,6 @@ Progress: [██████████] 100% of Milestone v1.0
 | Phase 4 Brand & Polish (complete) | 1/1 | ~30 min | ~30 min |
 
 *Updated after each plan completion*
-
-## Phase 4 Wave Structure (Complete)
-
-| Wave | Plans | Status | What it built |
-|------|-------|--------|---------------|
-| Wave 1 | 04-01 | Complete | Home page, transitions |
-| Wave 2 | 04-01 | Complete | Brand pages (About, Contact) |
-| Wave 3 | 04-01 | Complete | Animation polish (ScrollReveal, Reduced Motion) |
-| Wave 4 | 04-01 | Complete | Final Verification |
 
 ## Accumulated Context
 
