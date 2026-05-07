@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+
 import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import type { CartItem as CartItemType, Locale } from '@/types/domain'
@@ -15,13 +15,13 @@ export function CartItem({ item, locale }: CartItemProps) {
 
   return (
     <div className="flex gap-4 py-4 border-b border-white/10 group">
-      <div className="relative size-24 bg-[#1a1a1a] overflow-hidden">
-        <Image
-          src={item.product.images[0]}
-          alt={item.product.name[locale]}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+      <div className="relative size-24 bg-[#111111] overflow-hidden flex items-center justify-center select-none">
+        <span
+          className="font-semibold tracking-widest text-[10px] uppercase"
+          style={{color: 'rgba(255, 255, 255, 0.15)'}}
+        >
+          ORKI
+        </span>
       </div>
 
       <div className="flex-1 flex flex-col justify-between py-1">

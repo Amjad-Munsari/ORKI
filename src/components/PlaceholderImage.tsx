@@ -18,8 +18,6 @@ interface PlaceholderImageProps {
   aspectRatio: '3/4' | '4/5';
   /** Alt text for accessibility — never empty */
   alt: string;
-  /** Image source URL — if provided, the placeholder ghost mark is hidden */
-  src?: string;
   /** Above-fold images should set priority={true} to trigger eager loading */
   priority?: boolean;
   /** Optional additional className for the outer container */
@@ -29,7 +27,6 @@ interface PlaceholderImageProps {
 export function PlaceholderImage({
   aspectRatio,
   alt,
-  src,
   priority = false,
   className = '',
 }: PlaceholderImageProps) {
@@ -49,30 +46,28 @@ export function PlaceholderImage({
       />
 
       {/* Ghost ORKI wordmark — centered, intentionally muted at 15% opacity */}
-      {/* Signals this is a placeholder without looking broken. Hidden if real image is provided. */}
-      {!src && (
-        <div
-          className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
-          aria-hidden="true"
+      {/* Signals this is a placeholder without looking broken. */}
+      <div
+        className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
+        aria-hidden="true"
+      >
+        <span
+          className="font-semibold tracking-widest text-2xl uppercase"
+          style={{color: 'rgba(255, 255, 255, 0.15)'}}
         >
-          <span
-            className="font-semibold tracking-widest text-2xl uppercase"
-            style={{color: 'rgba(255, 255, 255, 0.15)'}}
-          >
-            ORKI
-          </span>
-        </div>
-      )}
+          ORKI
+        </span>
+      </div>
 
       {/* next/image with fill — wired now so Phase 2 only swaps src, zero layout changes.
           The 1×1 transparent data URI keeps next/image satisfied during Phase 1.
           priority prop is forwarded so above-fold slots get eager loading. */}
       <Image
-        src={src || PLACEHOLDER_SRC}
+        src={PLACEHOLDER_SRC}
         alt={alt}
         fill
         priority={priority}
-        className={`object-cover transition-opacity duration-300 ${src ? 'opacity-100' : 'opacity-0'}`}
+        className="object-cover opacity-0"
         sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
       />
     </div>

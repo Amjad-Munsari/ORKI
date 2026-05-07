@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+
 import { useCartStore } from '@/store/cartStore'
 import type { Locale } from '@/types/domain'
 
@@ -25,13 +25,13 @@ export function OrderSummary({ locale }: OrderSummaryProps) {
       <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
         {items.map((item) => (
           <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-4">
-            <div className="relative size-16 bg-white/5 overflow-hidden flex-shrink-0">
-              <Image
-                src={item.product.images[0]}
-                alt={item.product.name[locale]}
-                fill
-                className="object-cover"
-              />
+            <div className="relative size-16 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center select-none">
+              <span
+                className="font-semibold tracking-widest text-[8px] uppercase"
+                style={{color: 'rgba(255, 255, 255, 0.15)'}}
+              >
+                ORKI
+              </span>
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-[12px] font-bold uppercase text-white truncate">

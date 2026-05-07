@@ -45,7 +45,7 @@ export function ScrollReveal({
       transition: {
         duration: 0.8,
         delay,
-        ease: [0.21, 1.11, 0.81, 0.99], // Slight overshoot for premium feel
+        ease: [0.21, 1.11, 0.81, 0.99] as [number, number, number, number], // Slight overshoot for premium feel
       },
     },
   }

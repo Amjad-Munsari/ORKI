@@ -1,4 +1,3 @@
-import Image from 'next/image'
 
 interface AboutPageProps {
   params: Promise<{ locale: string }>
@@ -30,13 +29,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </p>
             </section>
 
-            <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg">
-              <Image
-                src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=2070&auto=format&fit=crop"
-                alt="Brand Vision"
-                fill
-                className="object-cover"
-              />
+            <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg bg-[#0a0a0a] flex items-center justify-center select-none">
+              <span
+                className="font-semibold tracking-[0.2em] text-[5vw] uppercase"
+                style={{color: 'rgba(255, 255, 255, 0.05)'}}
+              >
+                ORKI
+              </span>
             </div>
 
             <section className="space-y-8 max-w-xl">
@@ -52,13 +51,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
           </div>
 
           <div className="lg:col-span-5 lg:pt-48 space-y-24">
-            <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
-              <Image
-                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=2070&auto=format&fit=crop"
-                alt="Product Detail"
-                fill
-                className="object-cover"
-              />
+            <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#0d0d0d] flex items-center justify-center select-none">
+              <span
+                className="font-semibold tracking-[0.2em] text-[3vw] uppercase"
+                style={{color: 'rgba(255, 255, 255, 0.05)'}}
+              >
+                ORKI
+              </span>
             </div>
 
             <section className="space-y-8">
