@@ -12,7 +12,7 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 
 ## Phases
 
-- [ ] **Phase 1: Foundation** - RTL architecture, i18n routing, fonts, placeholder system, nav, and footer
+- [x] **Phase 1: Foundation** - RTL architecture, i18n routing, fonts, placeholder system, nav, and footer
 - [ ] **Phase 2: Core Shopping** - Shop, category, and product detail pages — full bilingual browse-to-cart flow
 - [ ] **Phase 3: Cart & Checkout** - Cart drawer, CartStore, full checkout flow with all payment methods and error states
 - [ ] **Phase 4: Brand & Polish** - Home page, About, Contact, page transitions, scroll animations, reduced-motion
@@ -46,7 +46,7 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 - [x] 01-06-PLAN.md — Footer, layout integration (Navbar+Footer), placeholder home page
 
 **Wave 3** *(blocked on Wave 2)*:
-- [ ] 01-07-PLAN.md — Lint + build gate, browser verification (RTL, fonts, placeholders, nav, responsive)
+- [x] 01-07-PLAN.md — Lint + build gate, browser verification (RTL, fonts, placeholders, nav, responsive)
 
 **Cross-cutting constraints:**
 - ESLint physical class ban established in Wave 0 — applies to all waves
@@ -116,7 +116,7 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 6/7 | In progress | - |
+| 1. Foundation | 7/7 | Complete | 2026-05-07 |
 | 2. Core Shopping | 0/TBD | Not started | - |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |
