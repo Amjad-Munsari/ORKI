@@ -10,7 +10,7 @@ export async function Navbar() {
 
   return (
     <header className="fixed top-0 z-50 w-full bg-white text-black border-b border-black/5">
-      <div className="max-w-[1440px] mx-auto px-8 h-14 flex items-center justify-between">
+      <div className="max-w-[1440px] mx-auto px-8 h-20 flex items-center justify-between">
         
         {/* Left Side: Navigation Links */}
         <nav className="hidden md:flex items-center gap-10 flex-1" aria-label="Main navigation">

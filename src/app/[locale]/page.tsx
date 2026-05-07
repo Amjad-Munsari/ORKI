@@ -70,20 +70,18 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Category Splat - Side-by-side Full Height */}
-      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px] bg-white">
+      <section className="w-full grid grid-cols-1 md:grid-cols-2 h-[100vh] min-h-[700px]">
         <CategoryCard
           title={isRtl ? "القطع العلوية" : "Tops"}
           href="/shop/tops"
-          image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
+          image="https://images.unsplash.com/photo-1578932750294-f5002425ba23?q=80&w=2070&auto=format&fit=crop"
           locale={locale}
-          darkText
         />
         <CategoryCard
           title={isRtl ? "القطع السفلية" : "Bottoms"}
           href="/shop/bottoms"
-          image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1974&auto=format&fit=crop"
+          image="https://images.unsplash.com/photo-1604176354204-926873ff349c?q=80&w=2080&auto=format&fit=crop"
           locale={locale}
-          darkText
         />
       </section>
 
@@ -109,30 +107,19 @@ export default async function HomePage({ params }: HomePageProps) {
   )
 }
 
-function CategoryCard({ 
-  title, 
-  href, 
-  image, 
-  locale,
-  darkText = false 
-}: { 
-  title: string; 
-  href: string; 
-  image: string; 
-  locale: string;
-  darkText?: boolean;
-}) {
+function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16 border-r border-black/5 last:border-r-0">
+    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
       <Image
         src={image}
         alt={title}
         fill
         className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
+      <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <h3 className={`text-5xl md:text-7xl font-medium leading-tight ${darkText ? 'text-black' : 'text-white'}`}>
+        <h3 className="text-5xl md:text-8xl font-medium text-black leading-tight mix-blend-difference invert">
           {title}
         </h3>
         <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
