@@ -23,7 +23,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="relative h-[90vh] w-full overflow-hidden flex items-end pb-24">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?q=80&w=1936&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=2070&auto=format&fit=crop"
             alt="ORKI Hero"
             fill
             priority
@@ -95,7 +95,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <CategoryCard
               title={isRtl ? 'القطع العلوية' : 'Tops'}
               href="/shop/tops"
-              image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1974&auto=format&fit=crop"
+              image="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=2070&auto=format&fit=crop"
               locale={locale}
             />
           </ScrollReveal>
@@ -103,7 +103,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <CategoryCard
               title={isRtl ? 'القطع السفلية' : 'Bottoms'}
               href="/shop/bottoms"
-              image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1974&auto=format&fit=crop"
+              image="https://images.unsplash.com/photo-1475178626620-a4d074967452?q=80&w=1972&auto=format&fit=crop"
               locale={locale}
             />
           </ScrollReveal>
