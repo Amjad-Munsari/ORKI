@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing';
 import { spaceGrotesk, ibmPlexArabic } from '@/lib/fonts';
 import { Navbar } from '@/components/nav/Navbar';
 import { Footer } from '@/components/footer/Footer';
+import { StoreHydration } from '@/store/StoreHydration';
 import '@/app/globals.css';
 
 type Props = {
@@ -41,6 +42,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     >
       <body className="bg-black text-white antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider>
+          <StoreHydration />
           <Navbar />
           <main className="flex-1">
             {children}
