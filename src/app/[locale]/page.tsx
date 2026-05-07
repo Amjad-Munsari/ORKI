@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
+
 import { Link } from '@/i18n/navigation'
 import { getAllProducts } from '@/lib/products'
 import { ProductCard } from '@/components/shop/ProductCard'
@@ -22,13 +22,14 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Editorial Hero */}
       <section className="relative h-screen w-full overflow-hidden flex items-end pb-24 md:pb-32">
         <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2070&auto=format&fit=crop"
-            alt="ORKI Hero"
-            fill
-            priority
-            className="object-cover"
-          />
+          <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center pointer-events-none">
+            <span
+              className="font-semibold tracking-[0.2em] text-[10vw] uppercase"
+              style={{color: 'rgba(255, 255, 255, 0.05)'}}
+            >
+              ORKI
+            </span>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
@@ -74,13 +75,13 @@ export default async function HomePage({ params }: HomePageProps) {
         <CategoryCard
           title={isRtl ? "القطع العلوية" : "Tops"}
           href="/shop/tops"
-          image="/images/products/hoodie.png"
+          image="/images/categories/tops-teaser.png"
           locale={locale}
         />
         <CategoryCard
           title={isRtl ? "القطع السفلية" : "Bottoms"}
           href="/shop/bottoms"
-          image="/images/products/jeans.png"
+          image="/images/categories/bottoms-teaser.png"
           locale={locale}
         />
       </section>
@@ -111,15 +112,17 @@ function CategoryCard({ title, href, image, locale }: { title: string; href: str
   const isRtl = locale === 'ar'
   return (
     <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
-      <Image
-        src={image}
-        alt={title}
-        fill
-        className="object-cover transition-transform duration-1000 group-hover:scale-105"
-      />
+      <div className="absolute inset-0 bg-[#0d0d0d] flex items-center justify-center pointer-events-none transition-transform duration-1000 group-hover:scale-105">
+        <span
+          className="font-semibold tracking-[0.2em] text-[8vw] md:text-[5vw] uppercase"
+          style={{color: 'rgba(255, 255, 255, 0.05)'}}
+        >
+          ORKI
+        </span>
+      </div>
       <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors duration-500" />
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <h3 className="text-5xl md:text-8xl font-medium text-black leading-tight">
+        <h3 className="text-5xl md:text-8xl font-medium text-white leading-tight">
           {title}
         </h3>
         <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
