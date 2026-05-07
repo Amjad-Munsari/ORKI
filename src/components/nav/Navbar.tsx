@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { ShoppingCart } from 'lucide-react'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { MobileNavDrawer } from './MobileNavDrawer'
+import { CategoryDropdown } from './CategoryDropdown'
 import { CartTrigger } from './CartTrigger'
 
 // async Server Component — getLocale() and getTranslations() are async
@@ -27,12 +28,7 @@ export async function Navbar() {
           className="hidden md:flex items-center gap-8"
           aria-label="Main navigation"
         >
-          <Link
-            href="/shop"
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"
-          >
-            {t('shop')}
-          </Link>
+          <CategoryDropdown label={t('shop')} />
           <Link
             href="/about"
             className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150"

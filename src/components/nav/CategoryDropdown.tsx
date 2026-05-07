@@ -9,7 +9,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 
-export function CategoryDropdown() {
+export function CategoryDropdown({ label }: { label?: string }) {
   const t = useTranslations('Nav')
 
   return (
@@ -19,9 +19,10 @@ export function CategoryDropdown() {
           <NavigationMenuTrigger
             className="bg-transparent text-white/60 hover:text-white hover:bg-transparent
                        data-popup-open:text-white data-popup-open:bg-transparent
-                       text-base font-normal px-0 h-auto min-h-[44px]"
+                       text-base font-normal px-0 h-auto min-h-[44px]
+                       [&_svg]:hidden" // Hide the arrow icon
           >
-            {t('categories')}
+            {label || t('categories')}
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul
