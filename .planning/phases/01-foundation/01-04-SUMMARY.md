@@ -110,6 +110,15 @@ None — no external service configuration required.
 - Plan 06 (placeholder home page) can import `PlaceholderImage` from `@/components/PlaceholderImage`
 - All three primitives pass `npm run lint && npm run build` — no blockers
 
+## Self-Check: PASSED
+
+- src/components/PlaceholderImage.tsx: FOUND
+- src/lib/animation-presets.ts: FOUND
+- src/hooks/useDirection.ts: FOUND
+- Task commit 13e8e43: FOUND
+- Task commit 1ed90e4: FOUND
+- Docs commit 36a3609: FOUND
+
 ---
 *Phase: 01-foundation*
 *Completed: 2026-05-07*

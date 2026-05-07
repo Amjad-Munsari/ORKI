@@ -1,7 +1,24 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+current_phase: 2 — Core Shopping
+status: planned
+stopped_at: Phase 2 planning complete — ready to execute
+last_updated: "2026-05-07T00:00:00.000Z"
+last_activity: 2026-05-07 — Plans 02-01 through 02-08 created and verified — Phase 2 ready to execute
+progress:
+  total_phases: 4
+  completed_phases: 1
+  total_plans: 15
+  completed_plans: 7
+  percent: 47
+---
+
 # Project State: ORKI
 
-**Current Phase:** 1 — Foundation
-**Status:** Complete
+**Current Phase:** 2 — Core Shopping
+**Status:** Planned (ready to execute)
 **Last Updated:** 2026-05-07
 
 ## Project Reference
@@ -9,31 +26,44 @@
 See: .planning/PROJECT.md (updated 2026-05-06)
 
 **Core value:** A premium underground streetwear shopping experience that feels as intentional as the brand itself — dark, minimal, and unapologetically cultural.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Core Shopping
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation) — COMPLETE
-Plan: 7 of 7 in current phase
-Status: Complete (01-01 through 01-07 complete)
-Last activity: 2026-05-07 — Plan 01-07 complete — Phase 1 verified and closed
+Phase: 2 of 4 (Core Shopping) — PLANNED, READY TO EXECUTE
+Plan: 0 of 8 in current phase (02-01 through 02-08 created)
+Status: Planning complete — all plans verified, all blockers resolved
+Last activity: 2026-05-07 — Plans 02-01 through 02-08 created and verified — Phase 2 ready to execute
 
-Progress: [███████░░░] ~25% (7/28 total plans estimated)
+Progress: [███░░░░░░░] ~47% planning (7 complete / 15 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~10 min (estimated across 01-01 through 01-04)
-- Total execution time: ~40 min (estimated)
+
+- Total plans completed: 7 (Phase 1)
+- Average duration: ~13 min/plan (Phase 1 estimated)
+- Total execution time: ~90 min (Phase 1 estimated)
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | Phase 1 Foundation (complete) | 7/7 | ~90 min | ~13 min |
+| Phase 2 Core Shopping (planned) | 0/8 | — | — |
 
 *Updated after each plan completion*
+
+## Phase 2 Wave Structure
+
+| Wave | Plans | Status | Dependencies |
+|------|-------|--------|-------------|
+| Wave 1 | 02-01, 02-02 | Ready (parallel) | None |
+| Wave 2 | 02-03 | Blocked | Wave 1 |
+| Wave 3 | 02-04, 02-05 | Blocked | Wave 1 + Wave 2 |
+| Wave 4 | 02-06 | Blocked | Wave 3 |
+| Wave 5 | 02-07 | Blocked | Wave 4 |
+| Wave 6 | 02-08 | Blocked | Wave 5 |
 
 ## Accumulated Context
 
@@ -55,6 +85,7 @@ Recent decisions affecting current work:
 - 01-06: Footer copyright uses t('copyright') single key — full string in translation JSON, no splitting or locale-conditional logic.
 - 01-06: Navbar and Footer placed inside NextIntlClientProvider so their client sub-components get intl context.
 - 01-06: Layout shell pattern established: body min-h-screen flex flex-col, Navbar top, main flex-1, Footer bottom.
+- 02: CategoryDropdown uses NavigationMenu (base-ui) with hover-intent; CartStore skipHydration + StoreHydration Client Component; PDPInfoPanel Client Component owns selectedSize state to keep PDP page as Server Component; JSON-LD XSS mitigation via .replace(/</g, '\\u003c').
 
 ### Pending Todos
 
@@ -73,5 +104,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-05-07
-Stopped at: Phase 2 context gathered — ready for planning
-Resume file: .planning/phases/02-core-shopping/02-CONTEXT.md
+Stopped at: Phase 2 planning complete — ready to execute
+Resume file: .planning/phases/02-core-shopping/02-01-PLAN.md
+Next command: /gsd-execute-phase 2
