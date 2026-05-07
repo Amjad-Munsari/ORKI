@@ -31,7 +31,7 @@ export function Footer() {
       {/* Main Footer Section */}
       <div className="max-w-[1440px] mx-auto px-8 py-24">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-32">
-          
+
           {/* Brand & Copyright */}
           <div className="flex-1 space-y-8">
             <h2 className="text-8xl md:text-[160px] font-bold tracking-[-0.05em] leading-none">
@@ -48,9 +48,9 @@ export function Footer() {
             <div className="space-y-6">
               <span className="text-xs font-semibold text-white/40 block">(Navigation)</span>
               <ul className="space-y-4">
-                <li><Link href="/" className="text-sm font-semibold hover:text-white/60 transition-colors">Home</Link></li>
-                <li><Link href="/shop/tops" className="text-sm font-semibold hover:text-white/60 transition-colors">Tops</Link></li>
-                <li><Link href="/shop/bottoms" className="text-sm font-semibold hover:text-white/60 transition-colors">Bottoms</Link></li>
+                <li><Link href="/" className="text-sm font-semibold hover:text-white/60 transition-colors">Index</Link></li>
+                <li><Link href="/shop/men" className="text-sm font-semibold hover:text-white/60 transition-colors">Men</Link></li>
+                <li><Link href="/shop/women" className="text-sm font-semibold hover:text-white/60 transition-colors">Women</Link></li>
                 <li><Link href="/about" className="text-sm font-semibold hover:text-white/60 transition-colors">Our Story</Link></li>
               </ul>
             </div>
