@@ -33,19 +33,27 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
 
         <div className="relative z-10 max-w-[1280px] mx-auto px-6 w-full">
-          <div className="max-w-4xl space-y-8">
-            <h1 className="text-6xl md:text-[100px] font-bold uppercase tracking-tighter leading-[0.9] text-white">
-              {isRtl ? 'الأصل / الحديث' : 'ORIGIN / MODERN'}
+          <div className="space-y-12">
+            <h1 className="text-7xl md:text-[140px] font-bold uppercase tracking-tighter leading-[0.85] text-white">
+              {isRtl ? (
+                <>
+                  الأصل <br /> الحديث
+                </>
+              ) : (
+                <>
+                  ORIGIN <br /> MODERN
+                </>
+              )}
             </h1>
-            <p className="text-sm md:text-lg uppercase tracking-widest text-white/80 font-bold max-w-md leading-relaxed">
-              {isRtl 
-                ? 'استكشف أول مجموعة من أوركي. تصاميم مستوحاة من ثقافة الشارع السعودي.' 
-                : 'Explore the debut collection from ORKI. Underground Saudi streetwear curated for the bold.'}
-            </p>
-            <div className="pt-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+              <p className="text-sm md:text-base uppercase tracking-widest text-white/60 font-bold max-w-sm leading-relaxed">
+                {isRtl 
+                  ? 'استكشف أول مجموعة من أوركي. تصاميم مستوحاة من ثقافة الشارع السعودي.' 
+                  : 'Explore the debut collection from ORKI. Underground Saudi streetwear curated for the bold.'}
+              </p>
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-4 h-16 px-10 bg-white text-black rounded-lg font-bold uppercase tracking-widest hover:bg-white/90 transition-colors group"
+                className="inline-flex items-center gap-6 h-16 px-12 bg-white text-black rounded-none font-bold uppercase tracking-widest hover:bg-white/90 transition-colors group"
               >
                 {isRtl ? 'تسوق الآن' : 'Shop Collection'}
                 {isRtl ? <ArrowLeft className="size-5" /> : <ArrowRight className="size-5" />}
@@ -138,7 +146,7 @@ export default async function HomePage({ params }: HomePageProps) {
 function CategoryCard({ title, href, image, locale }: { title: string; href: string; image: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-[600px] overflow-hidden">
+    <Link href={href} className="group relative h-[700px] overflow-hidden">
       <Image
         src={image}
         alt={title}
@@ -146,13 +154,13 @@ function CategoryCard({ title, href, image, locale }: { title: string; href: str
         className="object-cover transition-transform duration-1000 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-      <div className="absolute inset-0 p-12 flex flex-col justify-end items-start">
-        <h3 className="text-6xl md:text-7xl font-bold uppercase tracking-tighter text-white mb-6">
+      <div className="absolute inset-0 p-12 md:p-24 flex flex-col justify-end items-start">
+        <h3 className="text-7xl md:text-[120px] font-bold uppercase tracking-tighter text-white mb-8 leading-[0.8]">
           {title}
         </h3>
-        <span className="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-white">
+        <span className="flex items-center gap-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
           {isRtl ? 'استكشف المجموعة' : 'Explore Collection'}
-          {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
+          {isRtl ? <ArrowLeft className="size-5" /> : <ArrowRight className="size-5" />}
         </span>
       </div>
     </Link>
