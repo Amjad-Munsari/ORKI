@@ -1,7 +1,7 @@
 # Project State: ORKI
 
 **Current Phase:** 1 — Foundation
-**Status:** Executing — Plan 05 of 7 complete
+**Status:** Executing — Plan 06 of 7 complete
 **Last Updated:** 2026-05-07
 
 ## Project Reference
@@ -14,11 +14,11 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 5 of 7 in current phase
-Status: Executing (01-01 through 01-05 complete)
-Last activity: 2026-05-07 — Plans 01-01, 01-02, 01-03, 01-04, 01-05 complete
+Plan: 6 of 7 in current phase
+Status: Executing (01-01 through 01-06 complete)
+Last activity: 2026-05-07 — Plans 01-01, 01-02, 01-03, 01-04, 01-05, 01-06 complete
 
-Progress: [█████░░░░░] ~18% (5/28 total plans estimated)
+Progress: [██████░░░░] ~21% (6/28 total plans estimated)
 
 ## Performance Metrics
 
@@ -31,7 +31,7 @@ Progress: [█████░░░░░] ~18% (5/28 total plans estimated)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| Phase 1 Foundation (in progress) | 5/7 | ~65 min | ~13 min |
+| Phase 1 Foundation (in progress) | 6/7 | ~90 min | ~15 min |
 
 *Updated after each plan completion*
 
@@ -52,6 +52,9 @@ Recent decisions affecting current work:
 - 01-05: base-ui Dialog uses render prop (not Radix asChild) for SheetTrigger composition — confirmed base-ui API pattern for this project's shadcn setup.
 - 01-05: drawerSide derived from locale at runtime (locale === 'ar' ? 'left' : 'right') — never hardcoded, per Pitfall 7.
 - 01-05: ORKI brand name wrapped in <span dir="ltr"> in Navbar to prevent Arabic bidi algorithm from mirroring the brand name.
+- 01-06: Footer copyright uses t('copyright') single key — full string in translation JSON, no splitting or locale-conditional logic.
+- 01-06: Navbar and Footer placed inside NextIntlClientProvider so their client sub-components get intl context.
+- 01-06: Layout shell pattern established: body min-h-screen flex flex-col, Navbar top, main flex-1, Footer bottom.
 
 ### Pending Todos
 
@@ -70,5 +73,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-05-07
-Stopped at: Completed 01-05-PLAN.md (Navbar, LanguageSwitcher, MobileNavDrawer)
+Stopped at: Completed 01-06-PLAN.md (Footer, layout shell, placeholder home page)
 Resume file: None

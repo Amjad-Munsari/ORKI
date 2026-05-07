@@ -13,12 +13,12 @@
 - [ ] **FOUND-02**: Arabic locale renders full RTL layout using CSS logical properties throughout
 - [ ] **FOUND-03**: English and Arabic typefaces load via next/font with FOUT prevention
 - [x] **FOUND-04**: Placeholder image system uses intentional dark-field editorial treatment with locked aspect ratios (3:4 catalog, 4:5 PDP hero)
-- [ ] **FOUND-05**: All pages are mobile-responsive across standard breakpoints (375px, 768px, 1280px+)
+- [x] **FOUND-05**: All pages are mobile-responsive across standard breakpoints (375px, 768px, 1280px+)
 
 ### Navigation
 
 - [ ] **NAV-01**: Global navigation includes category links (Tops, Bottoms), About, and a language switcher (EN/AR)
-- [ ] **NAV-02**: Global footer includes policy links (Shipping, Returns) and Contact
+- [x] **NAV-02**: Global footer includes policy links (Shipping, Returns) and Contact
 - [ ] **NAV-03**: Cart icon in navigation displays live item count badge
 
 ### Shop
@@ -118,10 +118,10 @@ Updated: 2026-05-06 (roadmap created, all 38 requirements mapped).
 | FOUND-01 | Phase 1 | Pending |
 | FOUND-02 | Phase 1 | Pending |
 | FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| FOUND-05 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Complete |
+| FOUND-05 | Phase 1 | Complete |
 | NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
+| NAV-02 | Phase 1 | Complete |
 | NAV-03 | Phase 3 | Pending |
 | SHOP-01 | Phase 2 | Pending |
 | SHOP-02 | Phase 2 | Pending |

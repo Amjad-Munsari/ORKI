@@ -42,8 +42,8 @@ ORKI's frontend is built in four sequential phases, each phase unblocking the ne
 - [x] 01-04-PLAN.md — PlaceholderImage component, animation-presets.ts, useDirection hook
 
 **Wave 2** *(blocked on Wave 1)*:
-- [ ] 01-05-PLAN.md — Navbar, LanguageSwitcher, MobileNavDrawer (direction-aware Sheet)
-- [ ] 01-06-PLAN.md — Footer, layout integration (Navbar+Footer), placeholder home page
+- [x] 01-05-PLAN.md — Navbar, LanguageSwitcher, MobileNavDrawer (direction-aware Sheet)
+- [x] 01-06-PLAN.md — Footer, layout integration (Navbar+Footer), placeholder home page
 
 **Wave 3** *(blocked on Wave 2)*:
 - [ ] 01-07-PLAN.md — Lint + build gate, browser verification (RTL, fonts, placeholders, nav, responsive)
@@ -116,7 +116,7 @@ At this point, the project is ready to hand off for backend integration (Medusa 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 4/7 | In progress | - |
+| 1. Foundation | 6/7 | In progress | - |
 | 2. Core Shopping | 0/TBD | Not started | - |
 | 3. Cart & Checkout | 0/TBD | Not started | - |
 | 4. Brand & Polish | 0/TBD | Not started | - |
