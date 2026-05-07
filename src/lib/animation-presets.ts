@@ -23,6 +23,23 @@ export const animationPresets = {
     duration: 0.15,
     ease: [0.32, 0.72, 0, 1] as const,
   },
+  // Phase 2 additions
+  cardHover: {
+    duration: 0.3,
+    ease: [0, 0, 0.2, 1] as const, // CSS ease-out equivalent — smooth zoom for product card
+  },
+  badgePop: {
+    duration: 0.15,
+    ease: [0.34, 1.56, 0.64, 1] as const, // slight overshoot for tactile badge pop
+  },
+  dropdownOpen: {
+    duration: 0.15,
+    ease: [0.23, 1, 0.32, 1] as const, // reuse navEnter easing for category dropdown
+  },
+  successState: {
+    duration: 0.15,
+    ease: [0.23, 1, 0.32, 1] as const, // AddToCartButton label swap fade
+  },
 } as const;
 
 // Type helper for consumers

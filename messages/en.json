@@ -7,7 +7,9 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "switchToAr": "AR",
-    "switchToEn": "EN"
+    "switchToEn": "EN",
+    "categories": "Categories",
+    "cart": "Cart"
   },
   "Footer": {
     "shipping": "Shipping",
@@ -20,5 +22,27 @@
   },
   "Meta": {
     "siteTitle": "ORKI — Underground Streetwear"
+  },
+  "Shop": {
+    "tabAll": "All",
+    "tabTops": "Tops",
+    "tabBottoms": "Bottoms",
+    "productCount": "{count} Products",
+    "sortLabel": "Sort:",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "emptyHeading": "Nothing here yet.",
+    "emptyBody": "Browse all products or try a different category.",
+    "sizeLabel": "Size",
+    "sizeGuide": "Size Guide",
+    "addToCart": "Add to Cart",
+    "added": "Added",
+    "outOfStock": "Out of Stock",
+    "returnPolicy": "Free returns within 14 days. No questions asked.",
+    "relatedHeading": "You Might Also Like",
+    "someSizesSoldOut": "Some sizes sold out",
+    "sizeGuideTitle": "Size Guide",
+    "sizeGuideClose": "Close"
   }
 }

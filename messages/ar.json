@@ -7,7 +7,9 @@
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
     "switchToAr": "AR",
-    "switchToEn": "EN"
+    "switchToEn": "EN",
+    "categories": "الفئات",
+    "cart": "السلة"
   },
   "Footer": {
     "shipping": "الشحن",
@@ -20,5 +22,27 @@
   },
   "Meta": {
     "siteTitle": "أوركي — ملابس الشوارع"
+  },
+  "Shop": {
+    "tabAll": "الكل",
+    "tabTops": "التيشيرتات",
+    "tabBottoms": "البناطيل",
+    "productCount": "{count} منتجات",
+    "sortLabel": "ترتيب:",
+    "sortNewest": "الأحدث",
+    "sortPriceAsc": "السعر: من الأقل للأعلى",
+    "sortPriceDesc": "السعر: من الأعلى للأقل",
+    "emptyHeading": "لا يوجد شيء هنا بعد.",
+    "emptyBody": "تصفح جميع المنتجات أو جرّب فئة أخرى.",
+    "sizeLabel": "المقاس",
+    "sizeGuide": "دليل المقاسات",
+    "addToCart": "أضف إلى السلة",
+    "added": "تمت الإضافة",
+    "outOfStock": "نفد المخزون",
+    "returnPolicy": "إرجاع مجاني خلال 14 يوماً بدون أي أسئلة.",
+    "relatedHeading": "قد يعجبك أيضاً",
+    "someSizesSoldOut": "بعض المقاسات نفدت",
+    "sizeGuideTitle": "دليل المقاسات",
+    "sizeGuideClose": "إغلاق"
   }
 }
