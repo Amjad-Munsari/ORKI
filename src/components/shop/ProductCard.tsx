@@ -37,6 +37,7 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
           bg-[#111111] provides the near-black surface behind PlaceholderImage. */}
       <div className="relative overflow-hidden bg-[#111111]">
         <PlaceholderImage
+          src={product.images[0]}
           aspectRatio="3/4"
           alt={product.name[locale]}
           priority={priority}

@@ -47,6 +47,7 @@ export default async function ProductPage({ params }: Props) {
         <PDPLayout
           gallery={
             <PDPGallery
+              images={product.images}
               productName={product.name[locale]}
               locale={locale}
             />
