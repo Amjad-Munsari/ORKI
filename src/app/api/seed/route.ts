@@ -3,11 +3,21 @@ import { db } from '@/lib/db/client';
 import { products, productSizes, productImages } from '@/lib/db/schema';
 import { seedData } from '../../../../scripts/seed-data';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const existing = await db.select().from(products).limit(1);
-    if (existing.length > 0) {
-      return NextResponse.json({ ok: true, message: 'Already seeded — skipped.' });
+    const force = new URL(request.url).searchParams.get('force') === '1';
+
+    if (force) {
+      // Cascade deletes via FK rules clear sizes + images automatically.
+      await db.delete(products);
+    } else {
+      const existing = await db.select().from(products).limit(1);
+      if (existing.length > 0) {
+        return NextResponse.json({
+          ok: true,
+          message: 'Already seeded — skipped. Append ?force=1 to wipe and re-seed.',
+        });
+      }
     }
 
     for (const product of seedData) {
