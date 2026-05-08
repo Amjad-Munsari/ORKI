@@ -47,7 +47,23 @@ export async function GET() {
       message: `Seeded ${seedData.length} products.`,
     });
   } catch (err) {
-    console.error('Seed error:', err);
-    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
+    const e = err as { message?: string; cause?: unknown; stack?: string };
+    const cause = e.cause as { message?: string; code?: string; detail?: string; severity?: string; hint?: string } | undefined;
+    const payload = {
+      ok: false,
+      error: e.message ?? String(err),
+      cause: cause
+        ? {
+            message: cause.message,
+            code: cause.code,
+            detail: cause.detail,
+            severity: cause.severity,
+            hint: cause.hint,
+          }
+        : null,
+      stack: e.stack?.split('\n').slice(0, 5),
+    };
+    console.error('Seed error:', JSON.stringify(payload, null, 2));
+    return NextResponse.json(payload, { status: 500 });
   }
 }
