@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react'
 import { Link } from '@/i18n/navigation'
 import { motion, AnimatePresence } from 'motion/react'
-import { ChevronDown } from 'lucide-react'
 
 interface ShopDropdownProps {
   label: string

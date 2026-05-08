@@ -17,7 +17,7 @@
 import 'server-only';
 import { db } from '@/lib/db/client';
 import { products, productSizes, productImages } from '@/lib/db/schema';
-import { eq, inArray } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import type { Product, Size } from '@/types/domain';
 export { getStockState, type StockState } from './products-logic';
 
