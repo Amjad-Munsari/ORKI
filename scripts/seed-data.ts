@@ -12,8 +12,8 @@ type SeedProduct = {
   inStock: boolean;
 };
 
-const TOP_IMG = '/images/products/hoodie.png';
-const BOTTOM_IMG = '/images/products/jeans.png';
+const TOP_IMG = '/images/products/placeholder-hoodie.png';
+const BOTTOM_IMG = '/images/products/placeholder-hoodie.png';
 
 const fullStock: SeedSize[] = [
   { label: 'XS', inStock: true, stock: 12 },
