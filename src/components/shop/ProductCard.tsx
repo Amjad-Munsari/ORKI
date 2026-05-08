@@ -39,6 +39,7 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
         <PlaceholderImage
           aspectRatio="3/4"
           alt={product.name[locale]}
+          src={product.images[0]}
           priority={priority}
           // D-09, ANIM-03: image zoom on hover.
           // cardHover preset = 0.3s duration, ease-out — expressed as Tailwind duration-300 ease-out.

@@ -1,6 +1,6 @@
 import type { Locale } from '@/types/domain';
 
-type StockState = 'in-stock' | 'partial' | 'out-of-stock';
+type StockState = 'in-stock' | 'partial' | 'low-stock' | 'out-of-stock';
 
 interface StockStateBadgeProps {
   state: StockState;
@@ -14,24 +14,34 @@ interface StockStateBadgeProps {
 //   partial   → renders nothing on card, inline text on PDP
 //   out-of-stock → overlay bar on card, inline text on PDP
 export function StockStateBadge({ state, locale, context }: StockStateBadgeProps) {
-  // in-stock: never render anything (default state, no badge needed per UI-SPEC)
   if (state === 'in-stock') return null;
 
   if (context === 'card') {
-    // Only fully OOS shows badge on card. Partial OOS shows nothing on card (UI-SPEC D-09).
-    if (state !== 'out-of-stock') return null;
+    // Only OOS or Low Stock show badges on card. Partial OOS shows nothing (D-09).
+    if (state === 'partial') return null;
+    
     return (
       <div
         role="status"
-        className="absolute bottom-0 inset-inline-start-0 inset-inline-end-0 px-3 py-2
-                   bg-black/80 text-white text-xs font-normal"
+        className={`absolute bottom-0 inset-inline-start-0 inset-inline-end-0 px-3 py-2 text-xs font-normal
+                   ${state === 'out-of-stock' ? 'bg-black/80 text-white' : 'bg-white/10 text-white/80 backdrop-blur-sm'}`}
       >
-        {locale === 'ar' ? 'نفد المخزون' : 'Out of Stock'}
+        {state === 'out-of-stock' 
+          ? (locale === 'ar' ? 'نفد المخزون' : 'Out of Stock')
+          : (locale === 'ar' ? 'كمية محدودة' : 'Low Stock')}
       </div>
     );
   }
 
   // context === 'pdp'
+  if (state === 'low-stock') {
+    return (
+      <p role="status" className="text-sm text-white/80 mt-2 font-medium">
+        {locale === 'ar' ? 'الكمية محدودة - اطلب الآن' : 'Low stock - order now'}
+      </p>
+    );
+  }
+
   if (state === 'partial') {
     return (
       <p role="status" className="text-sm text-white/60 mt-2">

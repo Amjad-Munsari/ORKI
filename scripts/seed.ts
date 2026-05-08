@@ -12,7 +12,7 @@ config({ path: '.env.local' });
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import * as schema from '../src/lib/db/schema';
-import { products as seedData } from '../src/data/products';
+import { seedData } from './seed-data';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
@@ -54,6 +54,7 @@ async function seed() {
       await db.insert(schema.productSizes).values({
         productId: product.id,
         label: size.label,
+        stock: size.stock,
         inStock: size.inStock,
       });
     }

@@ -5,7 +5,9 @@ export type Locale = 'en' | 'ar';
 export type Direction = 'ltr' | 'rtl';
 
 export interface Size {
+  id: string;
   label: string; // 'XS' | 'S' | 'M' | 'L' | 'XL'
+  stock: number;
   inStock: boolean;
 }
 

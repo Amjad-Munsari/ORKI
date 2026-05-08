@@ -4,10 +4,39 @@ import { PDPLayout } from '@/components/pdp/PDPLayout'
 import { PDPGallery } from '@/components/pdp/PDPGallery'
 import { PDPInfoPanel } from '@/components/pdp/PDPInfoPanel'
 import { RelatedProducts } from '@/components/pdp/RelatedProducts'
+import type { Metadata } from 'next'
 import type { Locale } from '@/types/domain'
 
 type Props = {
   params: Promise<{ locale: Locale; category: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug, locale } = await params
+  const product = await getProductBySlug(slug)
+  
+  if (!product) return {}
+
+  const title = `${product.name[locale]} | ORKI`
+  const description = product.description[locale]
+  const image = product.images[0] || '/images/og-default.png'
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [image],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+  }
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -19,11 +48,12 @@ export default async function ProductPage({ params }: Props) {
   // JSON-LD Product schema — PDP-10
   // Native <script> tag (not next/script which is for executable JS)
   // .replace(/</g, '\\u003c') mitigates XSS via product name/description injection
-  const jsonLd = {
+  const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name.en,
-    description: product.description.en,
+    name: product.name[locale],
+    description: product.description[locale],
+    image: product.images,
     offers: {
       '@type': 'Offer',
       price: product.price,
@@ -34,12 +64,45 @@ export default async function ProductPage({ params }: Props) {
     },
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: locale === 'ar' ? 'المتجر' : 'Shop',
+        item: `https://orki.sa/${locale}/shop`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: product.category === 'tops' 
+          ? (locale === 'ar' ? 'بلايز' : 'Tops') 
+          : (locale === 'ar' ? 'بناطيل' : 'Bottoms'),
+        item: `https://orki.sa/${locale}/shop/${product.category}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.name[locale],
+        item: `https://orki.sa/${locale}/shop/${product.category}/${product.slug}`,
+      },
+    ],
+  }
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c'),
         }}
       />
 
@@ -48,6 +111,7 @@ export default async function ProductPage({ params }: Props) {
           gallery={
             <PDPGallery
               productName={product.name[locale]}
+              images={product.images}
               locale={locale}
             />
           }

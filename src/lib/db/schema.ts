@@ -16,6 +16,7 @@ import {
   uuid,
   index,
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -46,6 +47,11 @@ export const products = pgTable(
   ]
 );
 
+export const productsRelations = relations(products, ({ many }) => ({
+  sizes: many(productSizes),
+  images: many(productImages),
+}));
+
 // ─── Product Sizes ─────────────────────────────────────────────────────────────
 
 export const productSizes = pgTable('product_sizes', {
@@ -56,8 +62,16 @@ export const productSizes = pgTable('product_sizes', {
     .references(() => products.id, { onDelete: 'cascade' }),
   /** Size label: 'XS' | 'S' | 'M' | 'L' | 'XL' */
   label: text('label').notNull(),
+  stock: integer('stock').notNull().default(0),
   inStock: boolean('in_stock').notNull().default(true),
 });
+
+export const productSizesRelations = relations(productSizes, ({ one }) => ({
+  product: one(products, {
+    fields: [productSizes.productId],
+    references: [products.id],
+  }),
+}));
 
 // ─── Product Images ────────────────────────────────────────────────────────────
 
@@ -72,6 +86,13 @@ export const productImages = pgTable('product_images', {
   /** Lower number = shown first. Allows reordering without re-inserting. */
   sortOrder: integer('sort_order').notNull().default(0),
 });
+
+export const productImagesRelations = relations(productImages, ({ one }) => ({
+  product: one(products, {
+    fields: [productImages.productId],
+    references: [products.id],
+  }),
+}));
 
 // ─── Type Exports (Drizzle inference) ─────────────────────────────────────────
 

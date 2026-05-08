@@ -27,29 +27,38 @@ export { getStockState, type StockState } from './products-logic';
  * Maps Drizzle DB rows (joined) to the frontend Product domain type.
  * This is the only place where column names (nameEn) map to interface fields (name.en).
  */
+/**
+ * Row-to-domain mapper.
+ */
 function toProduct(
-  row: typeof products.$inferSelect,
-  sizes: (typeof productSizes.$inferSelect)[],
-  images: (typeof productImages.$inferSelect)[]
+  data: typeof products.$inferSelect & {
+    sizes: (typeof productSizes.$inferSelect)[];
+    images: (typeof productImages.$inferSelect)[];
+  }
 ): Product {
   return {
-    id: row.id,
-    slug: row.slug,
-    name: { en: row.nameEn, ar: row.nameAr },
-    description: { en: row.descriptionEn, ar: row.descriptionAr },
-    category: row.category as 'tops' | 'bottoms',
-    price: row.price,
-    currency: row.currency as 'SAR',
-    sizes: sizes
+    id: data.id,
+    slug: data.slug,
+    name: { en: data.nameEn, ar: data.nameAr },
+    description: { en: data.descriptionEn, ar: data.descriptionAr },
+    category: data.category as 'tops' | 'bottoms',
+    price: data.price,
+    currency: data.currency as 'SAR',
+    sizes: (data.sizes || [])
       .sort((a, b) => {
         const order = ['XS', 'S', 'M', 'L', 'XL'];
         return order.indexOf(a.label) - order.indexOf(b.label);
       })
-      .map((s): Size => ({ label: s.label, inStock: s.inStock })),
-    images: images
+      .map((s): Size => ({ 
+        id: s.id,
+        label: s.label, 
+        stock: s.stock,
+        inStock: s.inStock 
+      })),
+    images: (data.images || [])
       .sort((a, b) => a.sortOrder - b.sortOrder)
       .map((i) => i.url),
-    inStock: row.inStock,
+    inStock: data.inStock,
   };
 }
 
@@ -57,97 +66,78 @@ function toProduct(
 
 /**
  * Returns all products with their sizes and images.
- * Use in Server Components or Server Actions only.
  */
 export async function getAllProducts(): Promise<Product[]> {
-  const productRows = await db.select().from(products);
+  const result = await db.query.products.findMany({
+    with: {
+      sizes: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.sortOrder)],
+      },
+    },
+  });
   
-  const result: Product[] = [];
-  for (const row of productRows) {
-    const sizes = await db
-      .select()
-      .from(productSizes)
-      .where(eq(productSizes.productId, row.id));
-    const images = await db
-      .select()
-      .from(productImages)
-      .where(eq(productImages.productId, row.id))
-      .orderBy(productImages.sortOrder);
-    
-    result.push(toProduct(row, sizes, images));
-  }
-  
-  return result;
+  return result.map(toProduct);
 }
 
 /**
  * Returns a single product by slug, or undefined if not found.
- * Use in Server Components for PDP pages.
  */
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
-  const rows = await db
-    .select()
-    .from(products)
-    .where(eq(products.slug, slug))
-    .limit(1);
+  const result = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
+    with: {
+      sizes: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.sortOrder)],
+      },
+    },
+  });
 
-  if (rows.length === 0) return undefined;
-
-  const row = rows[0];
-  const sizes = await db
-    .select()
-    .from(productSizes)
-    .where(eq(productSizes.productId, row.id));
-  const images = await db
-    .select()
-    .from(productImages)
-    .where(eq(productImages.productId, row.id))
-    .orderBy(productImages.sortOrder);
-
-  return toProduct(row, sizes, images);
+  if (!result) return undefined;
+  return toProduct(result);
 }
 
 /**
  * Returns all products in a category.
- * Use in Server Components for catalog/category pages.
  */
 export async function getProductsByCategory(
   category: 'tops' | 'bottoms'
 ): Promise<Product[]> {
-  const productRows = await db
-    .select()
-    .from(products)
-    .where(eq(products.category, category));
-
-  const result: Product[] = [];
-  for (const row of productRows) {
-    const sizes = await db
-      .select()
-      .from(productSizes)
-      .where(eq(productSizes.productId, row.id));
-    const images = await db
-      .select()
-      .from(productImages)
-      .where(eq(productImages.productId, row.id))
-      .orderBy(productImages.sortOrder);
-    
-    result.push(toProduct(row, sizes, images));
-  }
+  const result = await db.query.products.findMany({
+    where: eq(products.category, category),
+    with: {
+      sizes: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.sortOrder)],
+      },
+    },
+  });
   
-  return result;
+  return result.map(toProduct);
 }
 
 /**
  * Returns related products (same category, excluding current product).
- * Use on PDP pages for recommendations.
  */
 export async function getRelatedProducts(
   currentId: string,
   category: 'tops' | 'bottoms',
   limit = 4
 ): Promise<Product[]> {
-  const all = await getProductsByCategory(category);
-  return all.filter((p) => p.id !== currentId).slice(0, limit);
+  const result = await db.query.products.findMany({
+    where: (products, { and, eq, ne }) => 
+      and(eq(products.category, category), ne(products.id, currentId)),
+    limit,
+    with: {
+      sizes: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.sortOrder)],
+      },
+    },
+  });
+
+  return result.map(toProduct);
 }
 
 

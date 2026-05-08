@@ -3,13 +3,15 @@ import type { Locale } from '@/types/domain'
 
 interface PDPGalleryProps {
   productName: string
+  images: string[]
   locale: Locale
 }
 
-export function PDPGallery({ productName, locale }: PDPGalleryProps) {
+export function PDPGallery({ productName, images, locale }: PDPGalleryProps) {
   const imageSlots = [
     {
       n: 1,
+      src: images[0],
       alt: locale === 'ar' ? `${productName} — صورة 1` : `${productName} — image 1`,
       priority: true,
     },
@@ -22,6 +24,7 @@ export function PDPGallery({ productName, locale }: PDPGalleryProps) {
           key={slot.n}
           aspectRatio="4/5"
           alt={slot.alt}
+          src={slot.src}
           priority={slot.priority}
         />
       ))}

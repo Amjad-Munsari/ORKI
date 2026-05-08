@@ -32,12 +32,27 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
       <p className="text-sm text-white/60">{formattedPrice}</p>
 
       {!isFullyOOS && (
-        <SizeSelector
-          sizes={product.sizes}
-          selectedSize={selectedSize}
-          onSizeChange={setSelectedSize}
-          locale={locale}
-        />
+        <>
+          <SizeSelector
+            sizes={product.sizes}
+            selectedSize={selectedSize}
+            onSizeChange={setSelectedSize}
+            locale={locale}
+          />
+          {selectedSize && (() => {
+            const size = product.sizes.find(s => s.label === selectedSize);
+            if (size && size.stock > 0 && size.stock <= 5) {
+              return (
+                <p className="text-xs text-white/80 font-mono uppercase tracking-widest -mt-4 animate-in fade-in slide-in-from-top-1">
+                  {locale === 'ar' 
+                    ? `متبقي ${size.stock} قطع فقط` 
+                    : `ONLY ${size.stock} LEFT`}
+                </p>
+              );
+            }
+            return null;
+          })()}
+        </>
       )}
 
       {isFullyOOS ? (

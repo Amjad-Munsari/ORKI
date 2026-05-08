@@ -3,6 +3,7 @@
 
 import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
+import { PlaceholderImage } from '@/components/PlaceholderImage'
 import type { CartItem as CartItemType, Locale } from '@/types/domain'
 
 interface CartItemProps {
@@ -15,13 +16,13 @@ export function CartItem({ item, locale }: CartItemProps) {
 
   return (
     <div className="flex gap-4 py-4 border-b border-white/10 group">
-      <div className="relative size-24 bg-[#111111] overflow-hidden flex items-center justify-center select-none">
-        <span
-          className="font-semibold tracking-widest text-[10px] uppercase"
-          style={{color: 'rgba(255, 255, 255, 0.15)'}}
-        >
-          ORKI
-        </span>
+      <div className="size-24 overflow-hidden flex-shrink-0">
+        <PlaceholderImage
+          aspectRatio="3/4"
+          alt={item.product.name[locale]}
+          src={item.product.images[0]}
+          className="w-full h-full"
+        />
       </div>
 
       <div className="flex-1 flex flex-col justify-between py-1">
