@@ -8,6 +8,7 @@ export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
     url: (process.env.STORAGE_URL ?? process.env.DATABASE_URL)!,
+    ssl: process.env.NODE_ENV === 'production' || Boolean(process.env.STORAGE_URL),
   },
   verbose: true,
   strict: false,
