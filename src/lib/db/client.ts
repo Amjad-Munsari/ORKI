@@ -20,7 +20,7 @@ const globalForDb = globalThis as unknown as {
 
 const conn =
   globalForDb.conn ??
-  postgres(env.DATABASE_URL, {
+  postgres(env.DB_URL!, {
     // Use a single connection in dev (HMR safe), pool in production
     max: env.NODE_ENV === 'production' ? 10 : 1,
     // Fail fast if DB is unreachable — do not hang silently

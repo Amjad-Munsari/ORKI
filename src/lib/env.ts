@@ -8,23 +8,35 @@
  */
 import { z } from 'zod';
 
-const envSchema = z.object({
-  DATABASE_URL: z.string().url({
+const envSchema = z
+  .object({
+    // Production (Vercel/Neon) uses STORAGE_URL; local dev uses DATABASE_URL.
+    // Whichever is present wins — STORAGE_URL takes priority.
+    STORAGE_URL: z.string().url().optional(),
+    DATABASE_URL: z.string().url().optional(),
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
+  })
+  .transform((data) => ({
+    DB_URL: data.STORAGE_URL ?? data.DATABASE_URL,
+    NODE_ENV: data.NODE_ENV,
+  }))
+  .refine((data) => Boolean(data.DB_URL), {
     message:
-      'DATABASE_URL must be a valid PostgreSQL connection URL ' +
-      '(e.g. postgresql://user:pass@localhost:5432/orki_dev)',
-  }),
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
-});
+      'A PostgreSQL connection URL is required. Set STORAGE_URL (Vercel/Neon) or DATABASE_URL (local dev).',
+  });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('❌ Invalid environment variables:');
-  console.error(parsed.error.format());
-  process.exit(1);
+  const formatted = parsed.error.format();
+  console.error('❌ Invalid environment variables:', JSON.stringify(formatted, null, 2));
+  throw new Error(
+    `Missing or invalid environment variables:\n${Object.keys(formatted)
+      .filter((k) => k !== '_errors')
+      .join(', ')}`
+  );
 }
 
 export const env = parsed.data;
