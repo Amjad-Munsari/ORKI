@@ -16,7 +16,7 @@ export function PDPLayout({ gallery, info }: PDPLayoutProps) {
         sticky top-16: sticks 64px from viewport top (Navbar height = h-16 from Phase 1).
         self-start: required — without it the grid stretches the element to row height and sticky fails.
       */}
-      <div className="sticky top-16 self-start">
+      <div className="sticky top-20 self-start">
         {info}
       </div>
     </div>

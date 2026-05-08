@@ -4,26 +4,32 @@ import { Search } from 'lucide-react'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CartTrigger } from './CartTrigger'
+import { ShopDropdown } from './ShopDropdown'
 
 export async function Navbar() {
   const t = await getTranslations('Nav')
 
   return (
     <header className="fixed top-0 z-50 w-full bg-white text-black border-b border-black/5">
-      <div className="max-w-[1440px] mx-auto px-8 h-[80px] grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center">
+      <div className="w-full px-12 h-[80px] grid grid-cols-3 items-stretch">
 
         {/* Left Side: Navigation Links */}
-        <nav className="hidden md:flex items-center gap-10 justify-start" aria-label="Main navigation">
+        <nav className="hidden md:flex h-full items-center gap-12 justify-start" aria-label="Main navigation">
+          <ShopDropdown 
+            label={t('shop')} 
+            items={[
+              { href: '/shop/tops', label: t('tops') },
+              { href: '/shop/bottoms', label: t('bottoms') },
+            ]} 
+          />
           {[
-            { href: '/shop/tops', label: 'Tops' },
-            { href: '/shop/bottoms', label: 'Bottoms' },
-            { href: '/about', label: 'Our Story' },
-            { href: '/contact', label: 'Contact' },
+            { href: '/about', label: t('about') },
+            { href: '/contact', label: t('contact') },
           ].map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="text-sm font-semibold tracking-tight hover:opacity-60 transition-opacity leading-none"
+              className="h-full flex items-center text-sm font-medium tracking-tight hover:opacity-60 transition-opacity whitespace-nowrap"
             >
               {label}
             </Link>
@@ -31,26 +37,30 @@ export async function Navbar() {
         </nav>
 
         {/* Center: Logo */}
-        <div className="flex items-center justify-start md:justify-center">
+        <div className="h-full flex items-center justify-center">
           <Link
             href="/"
-            className="text-2xl font-bold tracking-[-0.05em] hover:opacity-80 transition-opacity leading-none"
+            className="text-2xl font-bold tracking-[0.05em] hover:opacity-80 transition-opacity flex items-center"
           >
             <span dir="ltr">ORKI</span>
           </Link>
         </div>
 
         {/* Right Side: Icons & Lang */}
-        <div className="flex items-center gap-6 justify-end">
+        <div className="h-full flex items-center gap-12 justify-end">
           <button
             aria-label="Search"
-            className="flex items-center justify-center min-h-[44px] min-w-[44px] hover:opacity-60 transition-opacity"
+            className="h-full flex items-center justify-center hover:opacity-60 transition-opacity"
           >
             <Search className="size-5" strokeWidth={2.5} />
           </button>
-          <CartTrigger ariaLabel={t('cart')} />
-          <LanguageSwitcher />
-          <div className="md:hidden">
+          <div className="h-full flex items-center justify-center">
+            <CartTrigger ariaLabel={t('cart')} />
+          </div>
+          <div className="h-full flex items-center justify-center">
+            <LanguageSwitcher />
+          </div>
+          <div className="md:hidden h-full flex items-center justify-center">
             <MobileNavDrawer />
           </div>
         </div>

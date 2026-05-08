@@ -19,16 +19,15 @@
 3. Environment variables successfully load and connect to DB
 4. Dependencies pass audit and are locked
 
-### Phase 6: Authentication & Security Core
-**Goal:** Implement secure user authentication and fundamental API security.
-**Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09
+### Phase 6: Admin Dashboard & Product Management
+**Goal:** Build internal tools for managing the product catalog and inventory.
 **Success Criteria:**
-1. User can register and log in via httpOnly cookies
-2. Invalid login returns generic message and locks after repeated failures
-3. API endpoints reject unauthenticated or unvalidated requests
-4. Security headers and CSRF protections are verified active
+1. Secure `/admin` route group accessible (initially bypassed or simple check)
+2. Product table with CRUD operations (Create, Read, Update, Delete)
+3. Inventory management (bulk update stock states)
+4. Image management (upload/assignment to products)
 
-### Phase 7: Product Catalog & Inventory
+### Phase 7: Product Catalog & Dynamic Inventory
 **Goal:** Connect the frontend catalog to the database with inventory controls and SEO.
 **Requirements:** ECOM-01, ECOM-05, ECOM-06, SEO-01, SEO-04, SEO-05, SEO-06, SEO-07, SEO-08, SEO-09, SEO-10, PERF-01, PERF-02
 **Success Criteria:**
@@ -56,6 +55,15 @@
 2. Privacy policy, T&C, and Cookie banners are active
 3. N+1 database query checks pass
 4. sitemap.xml automatically generates
+
+### Phase 10: Authentication & Security Core (DEFERRED)
+**Goal:** Implement secure user authentication and fundamental API security.
+**Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09
+**Success Criteria:**
+1. User can register and log in via httpOnly cookies
+2. Invalid login returns generic message and locks after repeated failures
+3. API endpoints reject unauthenticated or unvalidated requests
+4. Security headers and CSRF protections are verified active
 
 ---
 

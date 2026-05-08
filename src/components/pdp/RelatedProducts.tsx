@@ -8,8 +8,8 @@ interface RelatedProductsProps {
   locale: Locale
 }
 
-export function RelatedProducts({ currentProductId, category, locale }: RelatedProductsProps) {
-  const related = getRelatedProducts(currentProductId, category, 4)
+export async function RelatedProducts({ currentProductId, category, locale }: RelatedProductsProps) {
+  const related = await getRelatedProducts(currentProductId, category, 4)
 
   if (related.length === 0) return null
 

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { SizeSelector } from './SizeSelector'
 import { AddToCartButton } from './AddToCartButton'
 import { StockStateBadge } from '@/components/shop/StockStateBadge'
-import { getStockState } from '@/lib/products'
+import { getStockState } from '@/lib/products-logic'
 import type { Product, Locale } from '@/types/domain'
 
 interface PDPInfoPanelProps {

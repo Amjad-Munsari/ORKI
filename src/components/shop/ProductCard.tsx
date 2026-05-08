@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/navigation';
 import { PlaceholderImage } from '@/components/PlaceholderImage';
 import { StockStateBadge } from '@/components/shop/StockStateBadge';
-import { getStockState } from '@/lib/products';
+import { getStockState } from '@/lib/products-logic';
 import type { Product, Locale } from '@/types/domain';
 
 interface ProductCardProps {

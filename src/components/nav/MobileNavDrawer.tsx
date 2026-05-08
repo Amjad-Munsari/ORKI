@@ -91,16 +91,39 @@ export function MobileNavDrawer() {
           <Link
             href="/shop"
             onClick={() => setIsOpen(false)}
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            className="text-lg font-bold text-white hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
           >
             {t('shop')}
           </Link>
+          <div className="flex flex-col gap-4 ps-4 border-s border-white/10">
+            <Link
+              href="/shop/tops"
+              onClick={() => setIsOpen(false)}
+              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            >
+              {t('tops')}
+            </Link>
+            <Link
+              href="/shop/bottoms"
+              onClick={() => setIsOpen(false)}
+              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            >
+              {t('bottoms')}
+            </Link>
+          </div>
           <Link
             href="/about"
             onClick={() => setIsOpen(false)}
             className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
           >
             {t('about')}
+          </Link>
+          <Link
+            href="/contact"
+            onClick={() => setIsOpen(false)}
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+          >
+            {t('contact')}
           </Link>
         </nav>
       </SheetContent>

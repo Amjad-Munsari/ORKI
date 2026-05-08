@@ -13,7 +13,7 @@ type Props = {
 export default async function ProductPage({ params }: Props) {
   const { locale, slug } = await params
 
-  const product = getProductBySlug(slug)
+  const product = await getProductBySlug(slug)
   if (!product) notFound()
 
   // JSON-LD Product schema — PDP-10

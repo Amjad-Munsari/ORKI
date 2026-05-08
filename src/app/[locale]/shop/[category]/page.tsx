@@ -20,7 +20,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     notFound()
   }
 
-  let products = getProductsByCategory(category)
+  let products = await getProductsByCategory(category)
 
   if (sort === 'price-asc') {
     products = [...products].sort((a, b) => a.price - b.price)

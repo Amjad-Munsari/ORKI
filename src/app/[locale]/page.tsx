@@ -16,7 +16,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
   const isRtl = locale === 'ar'
   
-  const products = getAllProducts()
+  const products = await getAllProducts()
   const featuredProducts = products.slice(0, 4)
 
   return (

@@ -15,7 +15,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
   const { category = 'all', sort = 'newest' } = await searchParams
 
   // Server-side filtering — unknown category values are ignored (returns all)
-  let products = getAllProducts()
+  let products = await getAllProducts()
   if (category === 'tops' || category === 'bottoms') {
     products = products.filter(p => p.category === category)
   }

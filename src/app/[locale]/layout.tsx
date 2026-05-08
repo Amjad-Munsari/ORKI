@@ -48,7 +48,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Navbar />
           <CartDrawer locale={locale as Locale} />
           <PageTransition>
-            <main className="flex-1">
+            <main className="flex-1 pt-20">
               {children}
             </main>
           </PageTransition>
