@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
-current_phase: None
-status: planning
-stopped_at: Defining requirements
+current_phase: 5
+status: active
+stopped_at: Phase 5 context gathered
 last_updated: "2026-05-08T00:00:00.000Z"
-last_activity: 2026-05-08 — Milestone v2.0 started
+last_activity: 2026-05-08 — Phase 5 context captured (Drizzle + local Postgres)
 progress:
   total_phases: 5
   completed_phases: 0
@@ -17,8 +17,8 @@ progress:
 
 # Project State: ORKI
 
-**Current Phase:** None
-**Status:** Defining requirements
+**Current Phase:** 5 — Local Database & ORM Setup
+**Status:** Context captured — ready for planning
 **Last Updated:** 2026-05-08
 
 ## Project Reference
@@ -26,14 +26,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-06)
 
 **Core value:** A premium underground streetwear shopping experience that feels as intentional as the brand itself — dark, minimal, and unapologetically cultural.
-**Current focus:** Ready for Milestone Archive / v2 Planning
+**Current focus:** Phase 5 — wiring Drizzle ORM + local Postgres to existing abstraction layer
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-05-08 — Milestone v2.0 started
+Phase: 5 — Local Database & ORM Setup
+Plan: Context captured, no plans yet
+Status: Ready for /gsd-plan-phase 5
+Last activity: 2026-05-08 — Phase 5 context captured (Drizzle + local Postgres)
 
 Progress: [          ] 0% of Milestone v2.0
 
@@ -83,7 +83,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-05-07
-Stopped at: Milestone Audit Complete
-Resume file: .planning/MILESTONE-AUDIT.md
-Next command: /gsd-complete-milestone
+Last session: 2026-05-08
+Stopped at: Phase 5 context captured
+Resume file: .planning/phases/05-local-db-orm/05-CONTEXT.md
+Next command: /gsd-plan-phase 5
