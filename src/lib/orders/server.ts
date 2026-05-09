@@ -1,0 +1,540 @@
+import 'server-only';
+import { revalidatePath } from 'next/cache';
+import { eq, inArray, sql, and } from 'drizzle-orm';
+import { db } from '@/lib/db/client';
+import {
+  productSizes,
+  orders,
+  orderItems,
+  orderEvents,
+  cartItems,
+} from '@/lib/db/schema';
+import type {
+  Order,
+  OrderItem,
+  OrderEvent,
+  OrderStatus,
+  Locale,
+} from '@/types/domain';
+import { getOrCreateCart } from '@/lib/cart/session';
+import { getCart } from '@/lib/cart/server';
+import { computeOrderTotals } from './pricing';
+import { generateOrderReference } from './reference';
+import { assertTransition, canTransition } from './state-machine';
+import { OrderError, type OrderErrorCode } from './errors';
+import { simulatePayment } from './payment';
+import { checkoutSchema, type CheckoutInput } from '@/lib/checkout/schemas';
+
+/**
+ * Canonical Server Action result envelope. The client maps `code` + `messageKey`
+ * via next-intl. Raw errors / SQL / stack are NEVER serialized — UNKNOWN code
+ * carries the user-friendly fallback while the full error is logged server-side
+ * with a request id for forensic correlation.
+ */
+type ActionResult<T = unknown> =
+  | { ok: true; data: T }
+  | {
+      ok: false;
+      code: OrderErrorCode | 'INSUFFICIENT_STOCK';
+      fields?: Record<string, string>;
+      messageKey: string;
+    };
+
+function errorMessageKey(
+  code: OrderErrorCode | 'INSUFFICIENT_STOCK'
+): string {
+  switch (code) {
+    case 'STOCK_UNAVAILABLE':
+    case 'INSUFFICIENT_STOCK':
+      return 'Checkout.errors.stockUnavailable';
+    case 'PAYMENT_DECLINED':
+      return 'Checkout.errors.paymentDeclined';
+    case 'CART_EMPTY':
+      return 'Checkout.errors.cartEmpty';
+    case 'PRODUCT_NOT_FOUND':
+      return 'Checkout.errors.unknown';
+    case 'VALIDATION':
+      return 'Checkout.errors.validation';
+    default:
+      return 'Checkout.errors.unknown';
+  }
+}
+
+function newRequestId(): string {
+  return (
+    globalThis.crypto?.randomUUID?.() ??
+    Math.random().toString(36).slice(2)
+  );
+}
+
+/**
+ * The ONLY path to creating an Order row. Re-validates input with zod, resolves
+ * the cart from the session cookie, opens a Drizzle transaction, locks the
+ * relevant productSizes rows with `SELECT ... FOR UPDATE`, decrements stock,
+ * inserts the order + items + events, simulates payment, transitions
+ * pending → confirmed, deletes cart_items, and returns the public reference.
+ *
+ * Failure paths (validation, empty cart, stock, payment, db) preserve the cart
+ * (UX-08) and return a typed error code with a localized message key.
+ */
+export async function submitCheckout(
+  input: CheckoutInput
+): Promise<ActionResult<{ reference: string; orderId: string }>> {
+  const requestId = newRequestId();
+
+  // 1. Server-side re-validation (UX-06: never trust the client).
+  const parsed = checkoutSchema.safeParse(input);
+  if (!parsed.success) {
+    const fields: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const path = issue.path.join('.');
+      if (!fields[path]) fields[path] = issue.message;
+    }
+    return {
+      ok: false,
+      code: 'VALIDATION',
+      fields,
+      messageKey: 'Checkout.errors.validation',
+    };
+  }
+  const { shipping, payment } = parsed.data;
+
+  // 2. Resolve the active cart.
+  const session = await getOrCreateCart();
+  const cart = await getCart(session.id);
+  if (!cart || cart.items.length === 0) {
+    return {
+      ok: false,
+      code: 'CART_EMPTY',
+      messageKey: 'Checkout.errors.cartEmpty',
+    };
+  }
+
+  // 3. Authoritative server-side totals — the client total is informational.
+  const totals = computeOrderTotals(
+    cart.items.map((i) => ({
+      // products.price is whole-SAR; halalas everywhere on order rows.
+      unitPriceCents: i.product.price * 100,
+      quantity: i.quantity,
+    }))
+  );
+
+  let createdReference = '';
+  let createdOrderId = '';
+
+  try {
+    await db.transaction(async (tx) => {
+      // 4. Pessimistic lock on every size row we are about to decrement.
+      //    Phase 7 did NOT implement this; Phase 8 owns the lock.
+      const sizeIds = cart.items.map((i) => i.sizeId);
+      const lockedSizes = await tx
+        .select()
+        .from(productSizes)
+        .where(inArray(productSizes.id, sizeIds))
+        .for('update');
+
+      // 5. Verify stock for every cart item against the locked rows.
+      for (const item of cart.items) {
+        const size = lockedSizes.find((s) => s.id === item.sizeId);
+        if (!size || size.stock < item.quantity) {
+          throw new OrderError(
+            'STOCK_UNAVAILABLE',
+            `size ${item.sizeId}`,
+            {
+              sizeId: item.sizeId,
+              requested: item.quantity,
+              available: size?.stock ?? 0,
+            }
+          );
+        }
+      }
+
+      // 6. Decrement stock atomically.
+      for (const item of cart.items) {
+        await tx
+          .update(productSizes)
+          .set({ stock: sql`${productSizes.stock} - ${item.quantity}` })
+          .where(eq(productSizes.id, item.sizeId));
+      }
+
+      // 7. Insert the order row in 'pending' state with reference-collision retry.
+      let reference = '';
+      let orderRow: { id: string } | undefined;
+      const MAX_REF_ATTEMPTS = 3;
+      for (let attempt = 0; attempt < MAX_REF_ATTEMPTS; attempt++) {
+        reference = generateOrderReference();
+        try {
+          const [row] = await tx
+            .insert(orders)
+            .values({
+              reference,
+              email: shipping.email,
+              locale: cart.locale,
+              status: 'pending',
+              subtotalCents: totals.subtotalCents,
+              shippingCents: totals.shippingCents,
+              vatCents: totals.vatCents,
+              totalCents: totals.totalCents,
+              shippingFirstName: shipping.firstName,
+              shippingLastName: shipping.lastName,
+              shippingPhone: shipping.phone,
+              shippingCity: shipping.city,
+              shippingDistrict: shipping.district,
+              shippingAddress: shipping.address,
+              shippingApartment: shipping.apartment || null,
+              paymentMethod: payment.method,
+            })
+            .returning();
+          orderRow = row;
+          break;
+        } catch (insertErr) {
+          // Unique-constraint collision on reference — try again with a new one.
+          const msg = (insertErr as Error)?.message ?? '';
+          const isUniqueViolation =
+            msg.includes('duplicate key') ||
+            msg.includes('unique constraint') ||
+            msg.includes('orders_reference');
+          if (!isUniqueViolation || attempt === MAX_REF_ATTEMPTS - 1) {
+            throw insertErr;
+          }
+        }
+      }
+      if (!orderRow) {
+        throw new OrderError(
+          'UNKNOWN',
+          'failed to insert order after retries'
+        );
+      }
+      createdReference = reference;
+      createdOrderId = orderRow.id;
+
+      // 8. Insert order items — snapshot product name, size, unit price.
+      await tx.insert(orderItems).values(
+        cart.items.map((item) => ({
+          orderId: orderRow!.id,
+          productId: item.productId,
+          sizeLabel: item.sizeLabel,
+          productNameEn: item.product.name.en,
+          productNameAr: item.product.name.ar,
+          unitPriceCents: item.product.price * 100,
+          quantity: item.quantity,
+        }))
+      );
+
+      // 9. Audit: order created.
+      await tx.insert(orderEvents).values({
+        orderId: orderRow.id,
+        type: 'created',
+        metadata: { actor: 'system', requestId },
+      });
+
+      // 10. Simulate payment. Failure throws — Drizzle rolls the txn back.
+      const paymentResult = await simulatePayment({
+        phone: shipping.phone,
+        method: payment.method,
+      });
+      if (!paymentResult.success) {
+        // Note: this event row will roll back along with the order, by design.
+        // We rely on server logs (the OrderError throw below logs the requestId)
+        // for forensic data. See RESEARCH.md "No `failed` terminal state".
+        await tx.insert(orderEvents).values({
+          orderId: orderRow.id,
+          type: 'payment_failed',
+          metadata: { code: paymentResult.code, requestId },
+        });
+        throw new OrderError(
+          'PAYMENT_DECLINED',
+          `payment ${paymentResult.code}`,
+          { code: paymentResult.code, requestId }
+        );
+      }
+
+      // 11. Transition pending → confirmed (validated by the state machine).
+      assertTransition('pending', 'confirmed');
+      await tx
+        .update(orders)
+        .set({ status: 'confirmed', updatedAt: new Date() })
+        .where(eq(orders.id, orderRow.id));
+      await tx.insert(orderEvents).values({
+        orderId: orderRow.id,
+        type: 'confirmed',
+        metadata: {
+          fromStatus: 'pending',
+          toStatus: 'confirmed',
+          actor: 'system',
+          requestId,
+        },
+      });
+
+      // 12. Clear cart items only after payment is confirmed (UX-08).
+      await tx.delete(cartItems).where(eq(cartItems.cartId, cart.id));
+    });
+  } catch (err) {
+    if (err instanceof OrderError) {
+      console.error(
+        `[submitCheckout][${requestId}] OrderError:`,
+        err.code,
+        err.details
+      );
+      return {
+        ok: false,
+        code: err.code,
+        messageKey: errorMessageKey(err.code),
+      };
+    }
+    console.error(`[submitCheckout][${requestId}] UNKNOWN:`, err);
+    return {
+      ok: false,
+      code: 'UNKNOWN' as const,
+      messageKey: 'Checkout.errors.unknown',
+    };
+  }
+
+  revalidatePath('/[locale]/checkout', 'page');
+  revalidatePath('/[locale]/admin/orders', 'page');
+
+  return {
+    ok: true,
+    data: { reference: createdReference, orderId: createdOrderId },
+  };
+}
+
+/**
+ * Public-reference lookup used by the customer confirmation page and admin
+ * order-detail page. Returns null when the reference is not found.
+ */
+export async function getOrderByReference(
+  reference: string
+): Promise<Order | null> {
+  const row = await db.query.orders.findFirst({
+    where: eq(orders.reference, reference),
+    with: {
+      items: true,
+      events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
+    },
+  });
+  return row ? toOrder(row) : null;
+}
+
+/**
+ * Admin-list helper. Newest-placed first.
+ */
+export async function getAllOrders(): Promise<Order[]> {
+  const rows = await db.query.orders.findMany({
+    with: {
+      items: true,
+      events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
+    },
+    orderBy: (o, { desc: d }) => [d(o.placedAt)],
+  });
+  return rows.map(toOrder);
+}
+
+/**
+ * Admin state-machine transition. Validates via canTransition, writes one
+ * order_events row, and (only for pre-ship cancellations) restores stock by
+ * adding each order item's quantity back into the matching productSizes row.
+ *
+ * Stock-restoration policy (CONTEXT.md "Order state machine"):
+ *   pending → cancelled       → restore
+ *   confirmed → cancelled     → restore
+ *   shipped → cancelled       → DO NOT restore (goods in transit)
+ *   * → refunded              → DO NOT restore (refund is bookkeeping)
+ *
+ * Email side effects are wired in Plan 08-07.
+ */
+export async function transitionOrderStatus(
+  orderId: string,
+  to: OrderStatus,
+  opts: {
+    actor?: string;
+    trackingNumber?: string;
+    reason?: string;
+  } = {}
+): Promise<ActionResult<null>> {
+  const requestId = newRequestId();
+  try {
+    return await db.transaction(async (tx) => {
+      const [current] = await tx
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId));
+      if (!current) {
+        return {
+          ok: false as const,
+          code: 'PRODUCT_NOT_FOUND' as const,
+          messageKey: 'Checkout.errors.unknown',
+        };
+      }
+      const fromStatus = current.status as OrderStatus;
+      if (!canTransition(fromStatus, to)) {
+        return {
+          ok: false as const,
+          code: 'VALIDATION' as const,
+          messageKey: 'Checkout.errors.validation',
+        };
+      }
+
+      // Stock-restoration on cancel: only for pre-ship cancellations.
+      const restoreStock =
+        to === 'cancelled' &&
+        (fromStatus === 'pending' || fromStatus === 'confirmed');
+      if (restoreStock) {
+        const items = await tx
+          .select()
+          .from(orderItems)
+          .where(eq(orderItems.orderId, orderId));
+        for (const it of items) {
+          // Match the productSizes row by (productId, sizeLabel) snapshot —
+          // size IDs are not denormalized into order_items.
+          const sized = await tx
+            .select()
+            .from(productSizes)
+            .where(
+              and(
+                eq(productSizes.productId, it.productId),
+                eq(productSizes.label, it.sizeLabel)
+              )
+            )
+            .for('update');
+          const size = sized[0];
+          if (size) {
+            await tx
+              .update(productSizes)
+              .set({
+                stock: sql`${productSizes.stock} + ${it.quantity}`,
+              })
+              .where(eq(productSizes.id, size.id));
+          }
+        }
+      }
+
+      const updates: Record<string, unknown> = {
+        status: to,
+        updatedAt: new Date(),
+      };
+      if (to === 'shipped' && opts.trackingNumber) {
+        updates.trackingNumber = opts.trackingNumber;
+      }
+
+      await tx.update(orders).set(updates).where(eq(orders.id, orderId));
+      await tx.insert(orderEvents).values({
+        orderId,
+        type: to,
+        metadata: {
+          fromStatus,
+          toStatus: to,
+          actor: opts.actor ?? 'admin',
+          reason: opts.reason,
+          trackingNumber: opts.trackingNumber,
+          stockRestored: restoreStock,
+          requestId,
+        },
+      });
+
+      revalidatePath('/[locale]/admin/orders', 'page');
+      return { ok: true as const, data: null };
+    });
+  } catch (err) {
+    console.error(
+      `[transitionOrderStatus][${requestId}]`,
+      orderId,
+      to,
+      err
+    );
+    return {
+      ok: false,
+      code: 'UNKNOWN',
+      messageKey: 'Checkout.errors.unknown',
+    };
+  }
+}
+
+// ─── Row → Domain mapping ─────────────────────────────────────────────────────
+
+interface OrderRowWithJoins {
+  id: string;
+  reference: string;
+  userId: string | null;
+  email: string;
+  locale: string;
+  status: string;
+  subtotalCents: number;
+  shippingCents: number;
+  vatCents: number;
+  totalCents: number;
+  currency: string;
+  shippingFirstName: string;
+  shippingLastName: string;
+  shippingPhone: string;
+  shippingCity: string;
+  shippingDistrict: string;
+  shippingAddress: string;
+  shippingApartment: string | null;
+  paymentMethod: string;
+  trackingNumber: string | null;
+  placedAt: Date;
+  updatedAt: Date;
+  items?: Array<{
+    id: string;
+    productId: string;
+    sizeLabel: string;
+    productNameEn: string;
+    productNameAr: string;
+    unitPriceCents: number;
+    quantity: number;
+  }>;
+  events?: Array<{
+    id: string;
+    type: string;
+    metadata: unknown;
+    createdAt: Date;
+  }>;
+}
+
+function toOrder(row: OrderRowWithJoins): Order {
+  return {
+    id: row.id,
+    reference: row.reference,
+    userId: row.userId,
+    email: row.email,
+    locale: (row.locale as Locale) ?? 'en',
+    status: row.status as OrderStatus,
+    subtotalCents: row.subtotalCents,
+    shippingCents: row.shippingCents,
+    vatCents: row.vatCents,
+    totalCents: row.totalCents,
+    currency: 'SAR',
+    shipping: {
+      firstName: row.shippingFirstName,
+      lastName: row.shippingLastName,
+      phone: row.shippingPhone,
+      city: row.shippingCity,
+      district: row.shippingDistrict,
+      address: row.shippingAddress,
+      apartment: row.shippingApartment,
+    },
+    paymentMethod: row.paymentMethod,
+    trackingNumber: row.trackingNumber,
+    items: (row.items ?? []).map(
+      (it): OrderItem => ({
+        id: it.id,
+        productId: it.productId,
+        sizeLabel: it.sizeLabel,
+        productName: { en: it.productNameEn, ar: it.productNameAr },
+        unitPriceCents: it.unitPriceCents,
+        quantity: it.quantity,
+      })
+    ),
+    events: (row.events ?? []).map(
+      (ev): OrderEvent => ({
+        id: ev.id,
+        type: ev.type,
+        metadata: (ev.metadata as Record<string, unknown> | null) ?? null,
+        createdAt: ev.createdAt,
+      })
+    ),
+    placedAt: row.placedAt,
+    updatedAt: row.updatedAt,
+  };
+}
