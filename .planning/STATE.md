@@ -4,9 +4,9 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 8
 status: active
-stopped_at: Phase 8 Plan 03 (orders pure libs) executed — state machine, halalas pricing, ORK- ref generator + Vitest projects config
+stopped_at: Phase 8 Plan 05 (submitCheckout server action) executed — FOR UPDATE stock lock + state-machine pending→confirmed + admin transition + simulatePayment
 last_updated: "2026-05-10T00:00:00.000Z"
-last_activity: 2026-05-10 — Phase 8 Plan 03: Pure order libs (state machine, pricing, reference, errors) + Vitest 4 projects config (node + jsdom). 24 unit tests added, server-only mocked under vitest.
+last_activity: 2026-05-10 — Phase 8 Plan 05: submitCheckout Server Action wired with SELECT … FOR UPDATE inside db.transaction (Phase 8 owns the stock lock), assertTransition('pending','confirmed') + order_events audit, payment-failure rollback (cart preserved per UX-08), admin transitionOrderStatus with conditional stock restore. 3 new pre-flight tests added; full FOR UPDATE concurrency suite owned by Plan 08-09.
 progress:
   total_phases: 5
   completed_phases: 2
