@@ -22,6 +22,8 @@ export async function simulatePayment(input: {
   phone: string;
   method: string;
 }): Promise<PaymentResult> {
+  // Cash on Delivery never hits a payment rail.
+  if (input.method === 'cod') return { success: true };
   // Normalize phone to digits only and inspect last 3.
   const digits = input.phone.replace(/\D/g, '');
   const tail = digits.slice(-3);

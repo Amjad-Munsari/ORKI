@@ -43,22 +43,22 @@ export const shippingSchema = z.object({
 
 /**
  * Canonical payment-method codes accepted by the checkout flow.
- * MUST stay in lock-step with the enum below — the enum is the runtime
- * gate, this tuple is the type-level export. Keep ordering identical.
+ * MUST stay in lock-step with both `paymentSelectionSchema` (runtime gate)
+ * and `PaymentGrid.tsx`'s `PaymentMethod` (UI surface). Keep ordering identical.
  *
- * Note: kept narrower than PaymentGrid.tsx's PaymentMethod (which still
- * includes 'card' and 'cod') because Phase 8 server-side checkout only
- * accepts the four real-rail methods. PaymentGrid will be reconciled in
- * Plan 08-06 (form rewire).
+ * `card` and `cod` were added during Phase 8 UI build to match KSA market
+ * expectations (generic Visa/Mastercard + Cash on Delivery alongside the
+ * three local rails: mada, STC Pay, Apple Pay). `cod` skips payment
+ * simulation in `simulatePayment` and goes straight to confirmed.
  */
-export const PAYMENT_METHODS = ['mada', 'visa', 'applepay', 'stcpay'] as const;
+export const PAYMENT_METHODS = ['card', 'mada', 'stcpay', 'applepay', 'cod'] as const;
 export type PaymentMethodCode = (typeof PAYMENT_METHODS)[number];
 
 // Zod 4 enum custom error API — pinned form. Per zod v4 changelog, the
 // legacy `errorMap` parameter is replaced by a unified `error` parameter
 // that accepts a string OR a function returning { message }.
 export const paymentSelectionSchema = z.object({
-  method: z.enum(['mada', 'visa', 'applepay', 'stcpay'], {
+  method: z.enum(['card', 'mada', 'stcpay', 'applepay', 'cod'], {
     error: () => ({ message: 'Checkout.errors.payment.required' }),
   }),
 });
