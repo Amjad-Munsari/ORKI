@@ -76,6 +76,13 @@
       "returnsPolicy": "30-Day Returns",
       "sslEncryption": "SSL Encrypted"
     },
+    "payment": {
+      "card": "Credit Card",
+      "mada": "mada",
+      "stcpay": "stc pay",
+      "applepay": "Apple Pay",
+      "cod": "Cash on Delivery"
+    },
     "errors": {
       "required": "This field is required",
       "tooLong": "This value is too long",

@@ -76,6 +76,13 @@
       "returnsPolicy": "إرجاع خلال 30 يوم",
       "sslEncryption": "اتصال مشفر SSL"
     },
+    "payment": {
+      "card": "بطاقة ائتمان",
+      "mada": "مدى",
+      "stcpay": "stc pay",
+      "applepay": "Apple Pay",
+      "cod": "الدفع عند الاستلام"
+    },
     "errors": {
       "required": "هذا الحقل مطلوب",
       "tooLong": "القيمة طويلة جداً",

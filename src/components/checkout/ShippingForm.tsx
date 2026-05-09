@@ -1,132 +1,210 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import type { Locale } from '@/types/domain'
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { shippingSchema, type ShippingInput } from '@/lib/checkout/schemas';
 
-export interface ShippingFormData {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  city: string
-  district: string
-  address: string
-  apartment: string
+interface Props {
+  defaultValues?: Partial<ShippingInput>;
+  onValid: (data: ShippingInput) => void;
+  formId?: string;
 }
 
-interface ShippingFormProps {
-  locale: Locale
-  onSubmit: (data: ShippingFormData) => void
+export type ShippingFormData = ShippingInput;
+
+const inputClass =
+  'w-full bg-transparent border-b border-white/20 py-3 min-h-[44px] text-white placeholder:text-white/10 ' +
+  'focus:outline-none focus:border-white transition-colors duration-300 rounded-none';
+
+function ariaProps(id: string, error: string | undefined) {
+  return {
+    'aria-invalid': error ? ('true' as const) : undefined,
+    'aria-describedby': error ? `${id}-error` : undefined,
+  };
 }
 
-export function ShippingForm({ locale, onSubmit }: ShippingFormProps) {
-  const isRtl = locale === 'ar'
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    city: '',
-    district: '',
-    address: '',
-    apartment: ''
-  })
+export function ShippingForm({
+  defaultValues,
+  onValid,
+  formId = 'checkout-shipping-form',
+}: Props) {
+  const t = useTranslations('Checkout');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setFocus,
+  } = useForm<ShippingInput>({
+    resolver: zodResolver(shippingSchema),
+    defaultValues,
+    mode: 'onBlur',
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
+  useEffect(() => {
+    const firstError = Object.keys(errors)[0] as
+      | keyof ShippingInput
+      | undefined;
+    if (firstError) setFocus(firstError);
+  }, [errors, setFocus]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-12">
+    <form
+      id={formId}
+      onSubmit={handleSubmit(onValid)}
+      noValidate
+      className="space-y-12"
+      aria-label={t('step1')}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-        <Input
-          label={isRtl ? 'الاسم الأول' : 'First Name'}
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          label={isRtl ? 'اسم العائلة' : 'Last Name'}
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          label={isRtl ? 'البريد الإلكتروني' : 'Email Address'}
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
+        <Field
+          id="firstName"
+          label={t('firstName')}
+          error={errors.firstName?.message}
+        >
+          <input
+            id="firstName"
+            {...register('firstName')}
+            {...ariaProps('firstName', errors.firstName?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="lastName"
+          label={t('lastName')}
+          error={errors.lastName?.message}
+        >
+          <input
+            id="lastName"
+            {...register('lastName')}
+            {...ariaProps('lastName', errors.lastName?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="email"
+          label={t('email')}
+          error={errors.email?.message}
           className="md:col-span-2"
-        />
-        <Input
-          label={isRtl ? 'رقم الجوال' : 'Phone Number'}
-          name="phone"
-          type="tel"
-          placeholder="+966 5X XXX XXXX"
-          value={formData.phone}
-          onChange={handleChange}
-          required
+        >
+          <input
+            id="email"
+            type="email"
+            {...register('email')}
+            {...ariaProps('email', errors.email?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="phone"
+          label={t('phone')}
+          error={errors.phone?.message}
           className="md:col-span-2"
-        />
-        <Input
-          label={isRtl ? 'المدينة' : 'City'}
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          label={isRtl ? 'الحي' : 'District'}
-          name="district"
-          value={formData.district}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          label={isRtl ? 'العنوان' : 'Street Address'}
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          required
+        >
+          <input
+            id="phone"
+            type="tel"
+            placeholder={t('phonePlaceholder')}
+            {...register('phone')}
+            {...ariaProps('phone', errors.phone?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field id="city" label={t('city')} error={errors.city?.message}>
+          <input
+            id="city"
+            {...register('city')}
+            {...ariaProps('city', errors.city?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="district"
+          label={t('district')}
+          error={errors.district?.message}
+        >
+          <input
+            id="district"
+            {...register('district')}
+            {...ariaProps('district', errors.district?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="address"
+          label={t('address')}
+          error={errors.address?.message}
           className="md:col-span-2"
-        />
-        <Input
-          label={isRtl ? 'الشقة / الفيلا (اختياري)' : 'Apartment / Villa (Optional)'}
-          name="apartment"
-          value={formData.apartment}
-          onChange={handleChange}
+        >
+          <input
+            id="address"
+            {...register('address')}
+            {...ariaProps('address', errors.address?.message)}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id="apartment"
+          label={t('apartment')}
+          error={errors.apartment?.message}
           className="md:col-span-2"
-        />
+        >
+          <input
+            id="apartment"
+            {...register('apartment')}
+            {...ariaProps('apartment', errors.apartment?.message)}
+            className={inputClass}
+          />
+        </Field>
       </div>
     </form>
-  )
+  );
 }
 
-function Input({ 
-  label, 
-  className, 
-  ...props 
-}: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
+interface FieldProps {
+  id: string;
+  label: string;
+  error: string | undefined;
+  className?: string;
+  children: React.ReactNode;
+}
+
+function Field({ id, label, error, className, children }: FieldProps) {
+  const t = useTranslations('Checkout');
+  // Schemas store error keys as full dotted paths like "Checkout.errors.required".
+  // Strip the namespace prefix so useTranslations('Checkout') can resolve them.
+  let resolvedError: string | undefined;
+  if (error) {
+    if (error.startsWith('Checkout.')) {
+      const stripped = error.replace(/^Checkout\./, '');
+      try {
+        resolvedError = t(stripped as never);
+      } catch {
+        resolvedError = error;
+      }
+    } else {
+      resolvedError = error;
+    }
+  }
   return (
     <div className={className}>
-      <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-2 font-bold">
+      <label
+        htmlFor={id}
+        className="block text-[10px] uppercase tracking-widest text-white/40 mb-2 font-bold"
+      >
         {label}
       </label>
-      <input
-        {...props}
-        className="w-full bg-transparent border-b border-white/20 py-3 text-white placeholder:text-white/10 
-                   focus:outline-none focus:border-white transition-colors duration-300 rounded-none"
-      />
+      {children}
+      {resolvedError && (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-red-400 text-xs mt-2"
+        >
+          {resolvedError}
+        </p>
+      )}
     </div>
-  )
+  );
 }
