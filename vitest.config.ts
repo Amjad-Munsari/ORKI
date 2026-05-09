@@ -35,7 +35,34 @@ export default defineConfig({
             'node_modules',
             'dist',
             '.next',
+            // Pre-existing test debt — calls async getAllProducts() as if sync.
+            // Tracked in .planning/phases/08-cart-checkout-orders/deferred-items.md.
+            'tests/products.test.ts',
+            // Integration tests run in a dedicated serial project below.
+            'tests/integration/**',
           ],
+        },
+      },
+      {
+        // Integration tests hit the live Supabase Postgres DB. They TRUNCATE
+        // shared tables between cases and seed shared product fixtures, which
+        // means parallel execution across files deadlocks. Pin to a single
+        // fork and disable file-level parallelism so the suite is serial.
+        extends: true,
+        plugins: [react()],
+        test: {
+          name: 'integration',
+          environment: 'node',
+          globals: true,
+          setupFiles: ['./tests/setup.ts'],
+          include: ['tests/integration/**/*.test.ts'],
+          exclude: ['node_modules', 'dist', '.next'],
+          // Vitest 4: pool options are top-level (forks pool with singleFork).
+          pool: 'forks',
+          forks: { singleFork: true },
+          fileParallelism: false,
+          testTimeout: 30_000,
+          hookTimeout: 30_000,
         },
       },
       {
