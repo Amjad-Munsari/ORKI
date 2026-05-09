@@ -19,6 +19,7 @@ must_haves:
     - "Cart-merge integration test confirms migrateLocalStorageCart sums quantities into the DB cart"
     - "Transitions integration test exercises every legal state-machine transition end-to-end"
     - "08-UAT.md exists with bilingual happy-path checklist + payment-failure recovery + RTL + screen-reader scenarios"
+    - "08-UAT.md includes a dedicated scenario for the optimistic-add-before-server-hydration race (per Revision 4) covering Plan 08-02's pre-hydration code path"
     - "All tests run via `npm test` and exit 0"
   artifacts:
     - path: "tests/integration/concurrent-stock.test.ts"
@@ -29,7 +30,8 @@ must_haves:
     - path: "tests/helpers/factories.ts"
       provides: "Factories for product/cart/order rows used by integration tests"
     - path: ".planning/phases/08-cart-checkout-orders/08-UAT.md"
-      provides: "Bilingual UAT checklist for the human verifier"
+      provides: "Bilingual UAT checklist for the human verifier; includes optimistic-add-before-hydration scenario"
+      contains: "before server hydration"
   key_links:
     - from: "tests/integration/concurrent-stock.test.ts"
       to: "src/lib/orders/server.ts submitCheckout"
@@ -40,7 +42,7 @@ must_haves:
 <objective>
 Lock in the phase's correctness with three integration tests against the live DB (the same DB Plan 08-01 pushed to), plus a written UAT checklist for the human verifier. The concurrent-stock test is the most important — it proves the FOR UPDATE lock added in Plan 08-05 actually works end-to-end.
 
-Purpose: Provide automated regression coverage for the highest-risk areas (race condition, cart merge, state transitions) and a structured UAT script for the parts that aren't easily automated (RTL, screen reader, mobile tap targets).
+Purpose: Provide automated regression coverage for the highest-risk areas (race condition, cart merge, state transitions) and a structured UAT script for the parts that aren't easily automated (RTL, screen reader, mobile tap targets, optimistic-add pre-hydration race surfaced by Plan 08-02).
 
 Output: Failing tests if anything regresses. A documented UAT pass for the user to sign off.
 </objective>
@@ -402,12 +404,13 @@ Output: Failing tests if anything regresses. A documented UAT pass for the user 
 </task>
 
 <task type="auto" tdd="false">
-  <name>Task 2: Write 08-UAT.md checklist (bilingual happy-path, payment-failure, RTL, screen reader, mobile)</name>
+  <name>Task 2: Write 08-UAT.md checklist (bilingual happy-path, payment-failure, RTL, screen reader, mobile, optimistic-add-pre-hydration)</name>
   <files>.planning/phases/08-cart-checkout-orders/08-UAT.md</files>
   <read_first>
     - .planning/phases/08-cart-checkout-orders/08-CONTEXT.md "Tests" section ("E2E (manual UAT this phase, automated deferred): mobile flow, RTL flow, payment-failure recovery, screen-reader pass.")
     - .planning/phases/07-product-catalog/07-UAT.md (existing UAT format reference, if it exists)
     - .planning/REQUIREMENTS.md (every UX-XX, ECOM-XX referenced in the checklist)
+    - .planning/phases/08-cart-checkout-orders/08-02-cart-persistence-PLAN.md (the optimistic-add-before-hydration code path that Scenario 9 covers — per Revision 4)
   </read_first>
   <behavior>
     - File is markdown with one `## Scenario` section per scenario.
@@ -422,7 +425,10 @@ Output: Failing tests if anything regresses. A documented UAT pass for the user 
       7. Trust signals visible above place-order button (UX-07)
       8. Email arrival in EN and AR (ECOM-03) — if RESEND_API_KEY set
       9. Admin: ship → email, cancel-pre-ship → stock restored, refund (ECOM-02, ECOM-04)
+      10. Email graceful degradation when RESEND_API_KEY is unset (ECOM-03)
+      11. **(Per Revision 4) Optimistic-add-to-cart before server hydration completes** — covers Plan 08-02's pre-hydration code path: rapid double-add in a fresh session must converge to a stable server-id state with no duplicate DB rows and no console errors.
     - File ends with a sign-off line.
+    - The file MUST contain the literal phrase "before server hydration" at least once (Revision 4 grep gate).
   </behavior>
   <action>
     Create `.planning/phases/08-cart-checkout-orders/08-UAT.md`:
@@ -586,6 +592,39 @@ Output: Failing tests if anything regresses. A documented UAT pass for the user 
 
     ---
 
+    ## Scenario 9 — Rapid add-to-cart before server hydration completes (UX-08, Plan 08-02 race)
+
+    **Per Revision 4 of plan-checker feedback. Covers the optimistic-add-before-server-hydration code path surfaced by Plan 08-02 (cart persistence): the client must show items immediately while the DB cart is still being hydrated for a brand-new session, and after hydration the items must end up with stable server `id` fields with NO duplicate DB rows.**
+
+    **Pre-conditions:**
+    - Dev server running (`npm run dev`).
+    - Open a fresh incognito / private browser session — no `orki_sid` cookie set yet.
+    - DevTools → Application → Cookies: confirm no `orki_sid` cookie exists for `localhost:3000`.
+    - DevTools → Application → Local Storage: clear `orki-cart` (Zustand persisted key) if present.
+    - Have a SQL query handy to verify DB state, e.g. via `psql $DATABASE_URL -c "select * from cart_items where cart_id in (select id from carts order by created_at desc limit 1);"` (or equivalent admin/inventory inspection).
+
+    **Steps:**
+    1. Navigate to a product detail page (e.g. `/en/shop/<some-slug>`). Pick a size.
+    2. Click "Add to Cart" TWICE within 200ms — use a deliberate fast double-click (you can practice with DevTools → Performance throttling: "Fast 4G" to make the underlying server roundtrip slower and the race more visible).
+    3. **Immediately** (within ~100ms of the second click) open the cart drawer. Verify the cart drawer shows **2 items of that product/size** (or a single line with quantity 2, depending on the UI shape) — this is the OPTIMISTIC state, displayed BEFORE the server confirms.
+    4. Wait ~1 second for server hydration to complete (watch the Network tab for the `getOrCreateCart` and `addItem` requests to settle).
+    5. Inspect localStorage `orki-cart` and verify each cart item now has a stable, non-temporary server `id` field (UUID-shaped, not `temp_*` or similar). Items SHOULD have synchronized with their server-side row IDs.
+    6. Refresh the page.
+    7. Re-open the cart drawer. Verify the items are still present, with the same product, size, and total quantity = 2.
+    8. Open DevTools console — verify NO errors logged during steps 1-7 (warnings about hydration race are acceptable; uncaught exceptions are NOT).
+    9. Run the SQL query: `select count(*) from cart_items where cart_id = (select id from carts where session_id = '<value of orki_sid cookie>')`. Expected: **exactly 1 row** with `quantity = 2` (the upsert-sum behavior from Plan 08-02), NOT two duplicate rows.
+
+    **Expected:**
+    - Cart drawer shows 2 items immediately (optimistic, before server hydration completes).
+    - After ~1s, items have stable server IDs (verified by inspecting localStorage OR by behavior — refresh preserves them).
+    - Page refresh preserves both items.
+    - Zero uncaught console errors during the rapid-add window.
+    - DB has exactly ONE `cart_items` row with `quantity = 2`, NOT two duplicate rows (the upsert-on-conflict behavior from Plan 08-02 must dedup correctly even when the second `addItem` fires before the first one's `id` has been written back).
+
+    **Result:** _____
+
+    ---
+
     ## Sign-off
 
     Tested by: __________________ Date: __________
@@ -594,16 +633,17 @@ Output: Failing tests if anything regresses. A documented UAT pass for the user 
     ```
   </action>
   <verify>
-    <automated>test -f .planning/phases/08-cart-checkout-orders/08-UAT.md; grep -c "Scenario " .planning/phases/08-cart-checkout-orders/08-UAT.md; grep -cE "UX-(01|02|03|04|05|06|07|08|09)" .planning/phases/08-cart-checkout-orders/08-UAT.md; grep -cE "ECOM-(02|03|04)" .planning/phases/08-cart-checkout-orders/08-UAT.md</automated>
+    <automated>test -f .planning/phases/08-cart-checkout-orders/08-UAT.md &amp;&amp; grep -c "## Scenario " .planning/phases/08-cart-checkout-orders/08-UAT.md &amp;&amp; grep -cE "UX-(01|02|03|04|05|06|07|08|09)" .planning/phases/08-cart-checkout-orders/08-UAT.md &amp;&amp; grep -cE "ECOM-(02|03|04)" .planning/phases/08-cart-checkout-orders/08-UAT.md &amp;&amp; test "$(grep -c 'before server hydration' .planning/phases/08-cart-checkout-orders/08-UAT.md)" -ge 1</automated>
   </verify>
   <acceptance_criteria>
     - `test -f .planning/phases/08-cart-checkout-orders/08-UAT.md`
-    - `grep -c "## Scenario " .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs at least 8
+    - `grep -c "## Scenario " .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs at least 9 (was 8; +1 for Scenario 9 per Revision 4)
     - `grep -cE "UX-0[1-9]" .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs at least 9 (one per requirement)
     - `grep -cE "ECOM-0[2-4]" .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs at least 3
+    - **(Revision 4)** `grep -c "before server hydration" .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs at least 1 (the new Scenario 9 grep gate)
     - `grep -c "Sign-off" .planning/phases/08-cart-checkout-orders/08-UAT.md` outputs 1
   </acceptance_criteria>
-  <done>UAT checklist exists with all phase requirements addressed.</done>
+  <done>UAT checklist exists with all phase requirements addressed, including the optimistic-add-before-server-hydration race scenario added per Revision 4.</done>
 </task>
 
 </tasks>
@@ -611,10 +651,11 @@ Output: Failing tests if anything regresses. A documented UAT pass for the user 
 <verification>
 - `npm test` exits 0 with all unit + integration tests passing
 - 08-UAT.md exists and references every UX-01..09, ECOM-02..04 requirement
+- 08-UAT.md contains the literal phrase "before server hydration" (Revision 4 — Scenario 9 covers Plan 08-02's pre-hydration race)
 </verification>
 
 <success_criteria>
-Phase 8 has automated regression coverage on the riskiest paths and a written UAT checklist for the human verifier. The user can confidently sign off on Phase 8.
+Phase 8 has automated regression coverage on the riskiest paths and a written UAT checklist for the human verifier. The user can confidently sign off on Phase 8. The optimistic-add-before-server-hydration race surfaced by Plan 08-02 is covered by a dedicated UAT scenario (Revision 4).
 </success_criteria>
 
 <output>

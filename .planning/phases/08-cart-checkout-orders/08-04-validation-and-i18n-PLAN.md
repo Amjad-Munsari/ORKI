@@ -7,6 +7,7 @@ depends_on: [08-01]
 files_modified:
   - src/lib/checkout/schemas.ts
   - src/lib/checkout/schemas.test.ts
+  - src/lib/checkout/__tests__/schemas.test.ts
   - messages/en.json
   - messages/ar.json
   - package.json
@@ -20,10 +21,14 @@ must_haves:
     - "messages/en.json and messages/ar.json contain matching key trees under Checkout.* and Order.* and Email.* namespaces"
     - "Zod's safeParse on a valid payload returns { success: true, data }; on invalid returns a field map mappable to RHF errors"
     - "Saudi phone regex /^\\+?966\\s?5\\d(\\s?\\d{3}){2}$/ is a single shared constant — no drift"
+    - "paymentSelectionSchema rejects unknown methods with the i18n key 'Checkout.errors.payment.required' — verified by a dedicated bilingual i18n test"
   artifacts:
     - path: "src/lib/checkout/schemas.ts"
       provides: "shippingSchema, paymentSelectionSchema, checkoutSchema, ShippingInput, PaymentSelection, CheckoutInput types"
       contains: "z.object"
+    - path: "src/lib/checkout/__tests__/schemas.test.ts"
+      provides: "Dedicated bilingual i18n payment-enum error key test (canonical __tests__ path)"
+      contains: "Checkout.errors.payment.required"
     - path: "messages/en.json"
       provides: "Checkout, Order, Email namespaces"
       contains: "\"errors\""
@@ -124,8 +129,13 @@ Output: Validation library + complete bilingual message catalog. No runtime code
     export const PAYMENT_METHODS = ['card', 'mada', 'stcpay', 'applepay', 'cod'] as const;
     export type PaymentMethodCode = (typeof PAYMENT_METHODS)[number];
 
+    // Zod 4 enum custom error API — pinned form. Per zod v4 changelog, the
+    // legacy `errorMap` parameter is replaced by a unified `error` parameter
+    // that accepts a string OR a function returning { message }.
     export const paymentSelectionSchema = z.object({
-      method: z.enum(PAYMENT_METHODS, { errorMap: () => ({ message: 'Checkout.errors.payment.required' }) }),
+      method: z.enum(['mada', 'visa', 'applepay', 'stcpay'], {
+        error: () => ({ message: 'Checkout.errors.payment.required' }),
+      }),
     });
 
     export const checkoutSchema = z.object({
@@ -138,7 +148,7 @@ Output: Validation library + complete bilingual message catalog. No runtime code
     export type CheckoutInput = z.infer<typeof checkoutSchema>;
     ```
 
-    Note: zod 4 uses a slightly different API for `enum` errorMap; if `errorMap` syntax differs, fall back to `z.enum([...]).refine` or use `z.enum([...], { error: () => 'Checkout.errors.payment.required' })`. Verify against the installed zod 4.x docs at runtime — keep the error message KEY exactly as `'Checkout.errors.payment.required'`.
+    Note (PINNED — no fallback): use exactly `z.enum(['mada','visa','applepay','stcpay'], { error: () => ({ message: 'Checkout.errors.payment.required' }) })`. This is the zod 4 form for an enum-level custom error message. Do NOT substitute `errorMap`, `.refine`, or any other shape.
 
     Create `src/lib/checkout/schemas.test.ts`:
 
@@ -268,10 +278,71 @@ Output: Validation library + complete bilingual message catalog. No runtime code
     - `grep -c "Checkout.errors.email" src/lib/checkout/schemas.ts` outputs 1
     - `grep -c "Checkout.errors.phone.ksa" src/lib/checkout/schemas.ts` outputs 1
     - `grep -c "KSA_PHONE_PATTERN" src/lib/checkout/schemas.ts` outputs at least 2
+    - `grep -c "error: () => ({ message: 'Checkout.errors.payment.required' })" src/lib/checkout/schemas.ts` outputs 1 (pinned zod 4 enum API form)
+    - `grep -c "errorMap" src/lib/checkout/schemas.ts` outputs 0 (legacy zod 3 API must NOT be used)
     - `npx vitest run src/lib/checkout/schemas.test.ts` exits 0 with at least 10 tests passing
     - `npx tsc --noEmit` exits 0
   </acceptance_criteria>
   <done>Schemas file is the contract; tests pass; types compile.</done>
+</task>
+
+<task type="auto" tdd="true">
+  <name>Task 1b: Add canonical __tests__ payment-enum bilingual i18n test</name>
+  <files>src/lib/checkout/__tests__/schemas.test.ts</files>
+  <read_first>
+    - src/lib/checkout/schemas.ts (just-created — paymentSelectionSchema must export the i18n key 'Checkout.errors.payment.required')
+  </read_first>
+  <behavior>
+    - A dedicated test file at the canonical `__tests__` path proves paymentSelectionSchema emits the bilingual i18n key (NOT a raw English string) for unknown payment methods.
+    - File contains at least 3 tests covering: (1) the exact 'bitcoin' rejection produces the i18n key, (2) accepts a known method, (3) reports the issue at path `method`.
+    - The string 'Checkout.errors.payment.required' appears at least once in the file (used by the assertion).
+  </behavior>
+  <action>
+    Create the directory `src/lib/checkout/__tests__/` and write `src/lib/checkout/__tests__/schemas.test.ts` with EXACTLY these tests (the first assertion is the contract pinned by the revision):
+
+    ```typescript
+    import { describe, it, expect } from 'vitest';
+    import { paymentSelectionSchema } from '../schemas';
+
+    describe('paymentSelectionSchema (i18n contract)', () => {
+      it('emits the bilingual i18n key for unknown methods', () => {
+        // Pinned by phase-8 plan-checker revision 1: this is the contract,
+        // not a coincidence. Both EN and AR rendering go through this key.
+        expect(paymentSelectionSchema.safeParse({ method: 'bitcoin' }).error?.issues[0]?.message)
+          .toBe('Checkout.errors.payment.required');
+      });
+
+      it('accepts a canonical method (mada)', () => {
+        const r = paymentSelectionSchema.safeParse({ method: 'mada' });
+        expect(r.success).toBe(true);
+      });
+
+      it('reports the issue at path "method" with the i18n key', () => {
+        const r = paymentSelectionSchema.safeParse({ method: 'bitcoin' });
+        expect(r.success).toBe(false);
+        if (!r.success) {
+          const issue = r.error.issues[0];
+          expect(issue.path).toEqual(['method']);
+          expect(issue.message).toBe('Checkout.errors.payment.required');
+        }
+      });
+    });
+    ```
+
+    Run `npx vitest run src/lib/checkout/__tests__/schemas.test.ts` — must exit 0 with 3 tests passing.
+
+    NOTE: this file is INTENTIONALLY a duplicate-cover of a single contract bullet; it is the canonical `__tests__` path that downstream plans (Plan 08-05 server validation, Plan 08-06 client RHF) grep against to confirm the i18n key never silently regresses to a raw English string.
+  </action>
+  <verify>
+    <automated>npx vitest run src/lib/checkout/__tests__/schemas.test.ts 2>&amp;1 | tail -10</automated>
+  </verify>
+  <acceptance_criteria>
+    - `test -f src/lib/checkout/__tests__/schemas.test.ts`
+    - `npx vitest run src/lib/checkout/__tests__/schemas.test.ts` exits 0 with at least 3 tests
+    - `grep -c "Checkout.errors.payment.required" src/lib/checkout/__tests__/schemas.test.ts` outputs at least 1
+    - `grep -c "paymentSelectionSchema.safeParse({ method: 'bitcoin' })" src/lib/checkout/__tests__/schemas.test.ts` outputs at least 1
+  </acceptance_criteria>
+  <done>The canonical __tests__ payment-enum bilingual i18n test exists, passes, and pins the i18n key contract.</done>
 </task>
 
 <task type="auto" tdd="false">
@@ -549,11 +620,12 @@ Output: Validation library + complete bilingual message catalog. No runtime code
 
 <verification>
 - `npx vitest run src/lib/checkout/schemas.test.ts` passes
+- `npx vitest run src/lib/checkout/__tests__/schemas.test.ts` passes (canonical i18n contract test)
 - JSON files parse and key trees match
 </verification>
 
 <success_criteria>
-Plan 08-05 (server submitCheckout) imports `checkoutSchema` from `@/lib/checkout/schemas` and re-validates client input. Plan 08-06 (form rewire) uses `shippingSchema` with `zodResolver`. All error messages render through next-intl.
+Plan 08-05 (server submitCheckout) imports `checkoutSchema` from `@/lib/checkout/schemas` and re-validates client input. Plan 08-06 (form rewire) uses `shippingSchema` with `zodResolver`. All error messages render through next-intl, including the bilingual payment-enum key pinned by the canonical __tests__ test.
 </success_criteria>
 
 <output>

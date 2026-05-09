@@ -19,6 +19,8 @@ must_haves:
     - "Admin can transition an order via OrderStateControls; only legal transitions per state-machine.ts are enabled"
     - "Stock is restored automatically on cancellation when status was pending or confirmed (handled in transitionOrderStatus from Plan 08-05)"
     - "AdminLayout side nav includes a link to /admin/orders"
+    - "Admin order pages render in the actual request locale (EN or AR) — NO hardcoded `'en' as const` (per Revision 3)"
+    - "OrdersTable receives the locale from its parent Server Component and passes it to formatSAR"
   artifacts:
     - path: "src/app/[locale]/admin/orders/page.tsx"
       provides: "Server Component admin orders list"
@@ -43,7 +45,7 @@ Add the admin orders area: list at `/admin/orders` and detail at `/admin/orders/
 
 Purpose: ECOM-02 (state machine usable end-to-end), ECOM-04 (refund/cancellation core architecture exposed via admin UI).
 
-Output: Admin can manage the order lifecycle without touching the DB directly.
+Output: Admin can manage the order lifecycle without touching the DB directly. All currency formatting honors the actual request locale (EN or AR) via `await getLocale()` from `next-intl/server` — no hardcoded `'en' as const` (per Revision 3).
 </objective>
 
 <execution_context>
@@ -86,17 +88,19 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
   <behavior>
     /admin/orders/page.tsx (Server Component):
     - `export const dynamic = 'force-dynamic'`
-    - Calls `getAllOrders()` and renders a header similar to inventory page + `<OrdersTable initialOrders={orders} />`.
+    - Resolves the actual request locale via `await getLocale()` from `next-intl/server` (per Revision 3 — option (a)). NO `'en' as const`.
+    - Calls `getAllOrders()` and renders a header similar to inventory page + `<OrdersTable initialOrders={orders} locale={loc} />` (locale passed as prop).
 
     /admin/orders/[reference]/page.tsx (Server Component):
     - `export const dynamic = 'force-dynamic'`
     - Reads `params.reference`. Calls `getOrderByReference`. If null → notFound().
-    - Renders order summary (reference, email, status, placedAt, totals via formatSAR), shipping address, line items table, and the events audit log (chronological).
+    - Resolves locale via `await getLocale()` from `next-intl/server` (per Revision 3). NO `'en' as const`.
+    - Renders order summary (reference, email, status, placedAt, totals via `formatSAR(_, loc)` where `loc` is the awaited locale), shipping address, line items table, and the events audit log (chronological).
     - Renders `<OrderStateControls order={order} />` (client component) for the transition buttons.
 
     OrdersTable.tsx:
-    - `'use client'`. Props: `{ initialOrders: Order[] }`. Mirror InventoryTable structure (search by reference / email / status, sortable headers optional). Each row click navigates to `/admin/orders/${row.reference}` (use `next/link` or `useRouter().push`).
-    - Columns: Reference (mono), Email, Placed (date), Total (formatSAR with locale='en' since admin is currently EN-only; can resolve to actual locale later), Status (colored chip), Items count.
+    - `'use client'`. Props: `{ initialOrders: Order[]; locale: 'en' | 'ar' }` (per Revision 3 — locale comes from parent, no hardcode). Mirror InventoryTable structure (search by reference / email / status, sortable headers optional). Each row click navigates to `/admin/orders/${row.reference}` (use `next/link` or `useRouter().push`).
+    - Columns: Reference (mono), Email, Placed (date), Total (formatSAR with the locale prop), Status (colored chip), Items count.
 
     OrderStateControls.tsx:
     - `'use client'`. Props: `{ order: Order }`.
@@ -110,18 +114,20 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
     AdminLayout.tsx:
     - Add a link to `/admin/orders` next to the existing inventory link. Keep logical CSS only.
 
-    Acceptance: pages render at runtime (404 not allowed for valid references), buttons disable based on legal transitions, `npx next build` exits 0.
+    Acceptance: pages render at runtime (404 not allowed for valid references), buttons disable based on legal transitions, `npx next build` exits 0, NO `'en' as const` appears in any of the four admin orders files (per Revision 3).
   </behavior>
   <action>
     Create `src/app/[locale]/admin/orders/page.tsx`:
 
     ```tsx
+    import { getLocale } from 'next-intl/server';
     import { getAllOrders } from '@/lib/orders/server';
     import OrdersTable from '@/components/admin/OrdersTable';
 
     export const dynamic = 'force-dynamic';
 
     export default async function AdminOrdersPage() {
+      const loc = await getLocale() as 'en' | 'ar';
       const orders = await getAllOrders();
       return (
         <div className="space-y-8">
@@ -129,7 +135,7 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
             <h1 className="text-4xl font-black uppercase tracking-tighter italic">Orders</h1>
             <p className="text-sm font-mono opacity-50 mt-1 uppercase">Order lifecycle, fulfillment, and audit log</p>
           </div>
-          <OrdersTable initialOrders={orders} />
+          <OrdersTable initialOrders={orders} locale={loc} />
         </div>
       );
     }
@@ -139,6 +145,7 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
 
     ```tsx
     import { notFound } from 'next/navigation';
+    import { getLocale } from 'next-intl/server';
     import { getOrderByReference } from '@/lib/orders/server';
     import { formatSAR } from '@/lib/orders/pricing';
     import OrderStateControls from '@/components/admin/OrderStateControls';
@@ -153,7 +160,8 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
       if (!order) notFound();
 
       const placed = new Date(order.placedAt).toISOString();
-      const loc = 'en' as const; // admin shell is EN-only this phase
+      // Per Revision 3: real request locale, never hardcoded.
+      const loc = await getLocale() as 'en' | 'ar';
 
       return (
         <div className="space-y-8 text-white">
@@ -191,7 +199,7 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
             <ul className="divide-y divide-white/10 border border-white/10">
               {order.items.map(item => (
                 <li key={item.id} className="flex justify-between p-4 text-sm">
-                  <span>{item.productName.en} ({item.sizeLabel}) × {item.quantity}</span>
+                  <span>{loc === 'ar' ? item.productName.ar : item.productName.en} ({item.sizeLabel}) × {item.quantity}</span>
                   <span className="tabular-nums">{formatSAR(item.unitPriceCents * item.quantity, loc)}</span>
                 </li>
               ))}
@@ -225,9 +233,9 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
     import { formatSAR } from '@/lib/orders/pricing';
     import type { Order } from '@/types/domain';
 
-    interface Props { initialOrders: Order[]; }
+    interface Props { initialOrders: Order[]; locale: 'en' | 'ar'; }
 
-    export default function OrdersTable({ initialOrders }: Props) {
+    export default function OrdersTable({ initialOrders, locale }: Props) {
       const [search, setSearch] = useState('');
       const router = useRouter();
 
@@ -266,7 +274,7 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
                 <span className="font-mono text-sm">{o.reference}</span>
                 <span className="text-sm truncate">{o.email}</span>
                 <span className="text-xs opacity-60">{new Date(o.placedAt).toISOString().slice(0, 10)}</span>
-                <span className="text-sm tabular-nums">{formatSAR(o.totalCents, 'en')}</span>
+                <span className="text-sm tabular-nums">{formatSAR(o.totalCents, locale)}</span>
                 <span className="text-[10px] uppercase tracking-widest">{o.status}</span>
                 <span className="text-xs opacity-60">{o.items.length}</span>
               </button>
@@ -353,37 +361,51 @@ Output: Admin can manage the order lifecycle without touching the DB directly.
     Update `src/components/admin/AdminLayout.tsx`. Find the navigation list (look for the existing inventory link). Add an `Orders` entry with `href="/admin/orders"`. Use the same nav-item styling as the existing entries. Keep logical CSS (the existing layout already uses `border-e-2`).
 
     Run `npx next build`.
+
+    NOTE on bracketed paths in shell commands (Revision 3): Bash treats unquoted `[...]` as a character-class glob. ALL `test -f` and `grep` commands targeting the route paths below MUST single-quote the path so the brackets are literal. Examples:
+
+    - `test -f 'src/app/[locale]/admin/orders/page.tsx'` ✓
+    - `test -f 'src/app/[locale]/admin/orders/[reference]/page.tsx'` ✓
+    - `grep -c "await getLocale()" 'src/app/[locale]/admin/orders/page.tsx'` ✓
+    - `test -f src/app/[locale]/admin/orders/page.tsx` ✗ (would be interpreted as a glob)
   </action>
   <verify>
-    <automated>test -f src/app/[locale]/admin/orders/page.tsx; test -f src/app/[locale]/admin/orders/[reference]/page.tsx; test -f src/components/admin/OrdersTable.tsx; test -f src/components/admin/OrderStateControls.tsx; grep -c "canTransition" src/components/admin/OrderStateControls.tsx; grep -c "transitionOrderAction" src/components/admin/OrderStateControls.tsx; grep -c "/admin/orders" src/components/admin/AdminLayout.tsx; npx next build 2>&amp;1 | tail -3</automated>
+    <automated>test -f 'src/app/[locale]/admin/orders/page.tsx' &amp;&amp; test -f 'src/app/[locale]/admin/orders/[reference]/page.tsx' &amp;&amp; test -f 'src/components/admin/OrdersTable.tsx' &amp;&amp; test -f 'src/components/admin/OrderStateControls.tsx' &amp;&amp; grep -c "canTransition" 'src/components/admin/OrderStateControls.tsx' &amp;&amp; grep -c "transitionOrderAction" 'src/components/admin/OrderStateControls.tsx' &amp;&amp; grep -c "/admin/orders" 'src/components/admin/AdminLayout.tsx' &amp;&amp; test "$(grep -c 'await getLocale()' 'src/app/[locale]/admin/orders/page.tsx')" -ge 1 &amp;&amp; test "$(grep -rc \"'en' as const\" 'src/app/[locale]/admin/orders/' || echo 0)" -eq 0 &amp;&amp; npx next build 2>&amp;1 | tail -3</automated>
   </verify>
   <acceptance_criteria>
-    - `test -f src/app/[locale]/admin/orders/page.tsx`
-    - `test -f src/app/[locale]/admin/orders/[reference]/page.tsx`
-    - `test -f src/components/admin/OrdersTable.tsx`
-    - `test -f src/components/admin/OrderStateControls.tsx`
-    - `grep -c "getAllOrders" src/app/[locale]/admin/orders/page.tsx` outputs at least 1
-    - `grep -c "getOrderByReference" src/app/[locale]/admin/orders/\[reference\]/page.tsx` outputs at least 1
-    - `grep -c "notFound" src/app/[locale]/admin/orders/\[reference\]/page.tsx` outputs at least 1
-    - `grep -c "canTransition" src/components/admin/OrderStateControls.tsx` outputs at least 1
-    - `grep -c "transitionOrderAction" src/components/admin/OrderStateControls.tsx` outputs at least 1
-    - `grep -c "useTransition" src/components/admin/OrderStateControls.tsx` outputs 1
-    - `grep -c "/admin/orders" src/components/admin/AdminLayout.tsx` outputs at least 1
-    - `grep -E "\\b(ml-|mr-|pl-|pr-|left-|right-)" src/app/[locale]/admin/orders/page.tsx src/app/[locale]/admin/orders/\[reference\]/page.tsx src/components/admin/OrdersTable.tsx src/components/admin/OrderStateControls.tsx | wc -l` outputs 0
+    - `test -f 'src/app/[locale]/admin/orders/page.tsx'` exits 0 (single-quoted, per Revision 3)
+    - `test -f 'src/app/[locale]/admin/orders/[reference]/page.tsx'` exits 0 (single-quoted, per Revision 3)
+    - `test -f 'src/components/admin/OrdersTable.tsx'` exits 0
+    - `test -f 'src/components/admin/OrderStateControls.tsx'` exits 0
+    - `grep -c "getAllOrders" 'src/app/[locale]/admin/orders/page.tsx'` outputs at least 1
+    - `grep -c "getOrderByReference" 'src/app/[locale]/admin/orders/[reference]/page.tsx'` outputs at least 1
+    - `grep -c "notFound" 'src/app/[locale]/admin/orders/[reference]/page.tsx'` outputs at least 1
+    - `grep -c "canTransition" 'src/components/admin/OrderStateControls.tsx'` outputs at least 1
+    - `grep -c "transitionOrderAction" 'src/components/admin/OrderStateControls.tsx'` outputs at least 1
+    - `grep -c "useTransition" 'src/components/admin/OrderStateControls.tsx'` outputs 1
+    - `grep -c "/admin/orders" 'src/components/admin/AdminLayout.tsx'` outputs at least 1
+    - **(Revision 3a — real locale)** `grep -c "await getLocale()" 'src/app/[locale]/admin/orders/page.tsx'` outputs at least 1
+    - **(Revision 3a — real locale)** `grep -c "await getLocale()" 'src/app/[locale]/admin/orders/[reference]/page.tsx'` outputs at least 1
+    - **(Revision 3a — real locale)** `grep -rc "'en' as const" 'src/app/[locale]/admin/orders/'` outputs 0 (no hardcoded locale anywhere under admin/orders)
+    - **(Revision 3a — real locale)** `grep -c "'en' as const" 'src/components/admin/OrdersTable.tsx'` outputs 0
+    - `grep -E "\\b(ml-|mr-|pl-|pr-|left-|right-)" 'src/app/[locale]/admin/orders/page.tsx' 'src/app/[locale]/admin/orders/[reference]/page.tsx' 'src/components/admin/OrdersTable.tsx' 'src/components/admin/OrderStateControls.tsx' | wc -l` outputs 0 (single-quoted bracketed paths, per Revision 3b)
     - `npx next build` exits 0
   </acceptance_criteria>
-  <done>Admin can navigate to /admin/orders, view list, click into detail, transition orders. Buttons disable based on canTransition. Stock restoration on pre-ship cancel works (verified in Plan 08-09 integration test).</done>
+  <done>Admin can navigate to /admin/orders, view list, click into detail, transition orders. Buttons disable based on canTransition. Stock restoration on pre-ship cancel works (verified in Plan 08-09 integration test). Locale is resolved from the actual request via `await getLocale()` in both Server Components — no hardcoded `'en' as const` anywhere under admin/orders.</done>
 </task>
 
 </tasks>
 
 <verification>
 - `npx next build` exits 0
-- Manual UAT: visit /admin/orders, click an order → detail page renders with line items + events; click "Mark Shipped" → status updates and a `shipped` event appears in the audit log; if RESEND_API_KEY set, an `email_sent.shipped` event also appears
+- `grep -rc "'en' as const" 'src/app/[locale]/admin/orders/'` outputs 0 (Revision 3a)
+- `grep -c "await getLocale()" 'src/app/[locale]/admin/orders/page.tsx'` outputs at least 1 (Revision 3a)
+- All bracketed-path verify commands are single-quoted (Revision 3b)
+- Manual UAT: visit /en/admin/orders and /ar/admin/orders separately — currency formatting matches the locale (Western numerals everywhere per project SAR rule, but the formatter is invoked with the actual locale, not a hardcoded one). Click an order → detail page renders with line items + events; click "Mark Shipped" → status updates and a `shipped` event appears in the audit log; if RESEND_API_KEY set, an `email_sent.shipped` event also appears.
 </verification>
 
 <success_criteria>
-ECOM-02 lifecycle is fully exposed in admin UI. ECOM-04 refund/cancellation is callable from the admin without DB tooling.
+ECOM-02 lifecycle is fully exposed in admin UI. ECOM-04 refund/cancellation is callable from the admin without DB tooling. The admin shell honors the actual request locale (no silent EN-only scope reduction, per Revision 3a). All shell verify commands quote bracketed paths properly (Revision 3b).
 </success_criteria>
 
 <output>
