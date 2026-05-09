@@ -45,5 +45,104 @@
     "someSizesSoldOut": "بعض المقاسات نفدت",
     "sizeGuideTitle": "دليل المقاسات",
     "sizeGuideClose": "إغلاق"
+  },
+  "Checkout": {
+    "title": "إتمام الشراء",
+    "step1": "معلومات الشحن",
+    "step2": "طريقة الدفع",
+    "stepProgress": "الخطوة {current} من {total}",
+    "edit": "تعديل",
+    "continueToPayment": "الاستمرار للدفع",
+    "placeOrder": "تأكيد الطلب",
+    "processing": "جاري المعالجة...",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الجوال",
+    "phonePlaceholder": "+966 5X XXX XXXX",
+    "city": "المدينة",
+    "district": "الحي",
+    "address": "العنوان",
+    "apartment": "الشقة / الفيلا (اختياري)",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "vat": "ضريبة القيمة المضافة (15%)",
+    "total": "الإجمالي",
+    "freeShipping": "مجاني",
+    "summary": "ملخص الطلب",
+    "termsAcknowledgement": "بإتمام هذا الطلب، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.",
+    "trust": {
+      "secureCheckout": "دفع آمن",
+      "returnsPolicy": "إرجاع خلال 30 يوم",
+      "sslEncryption": "اتصال مشفر SSL"
+    },
+    "errors": {
+      "required": "هذا الحقل مطلوب",
+      "tooLong": "القيمة طويلة جداً",
+      "email": "يرجى إدخال بريد إلكتروني صحيح",
+      "phone": {
+        "ksa": "أدخل رقم جوال سعودي (5X XXX XXXX 966+)"
+      },
+      "address": {
+        "short": "يرجى إدخال عنوان كامل"
+      },
+      "payment": {
+        "required": "يرجى اختيار طريقة دفع"
+      },
+      "stockUnavailable": "بعض المنتجات نفدت للتو. يرجى مراجعة السلة.",
+      "paymentDeclined": "تم رفض الدفع. سلتك محفوظة — يرجى تجربة طريقة أخرى.",
+      "cartEmpty": "سلتك فارغة.",
+      "validation": "يرجى تصحيح الحقول المُظللة والمحاولة مرة أخرى.",
+      "unknown": "حدث خطأ. يرجى المحاولة لاحقاً أو التواصل مع الدعم."
+    }
+  },
+  "Order": {
+    "confirmedTitle": "تم تأكيد طلبك",
+    "thanks": "شكراً لتسوقك معنا",
+    "reference": "رقم الطلب",
+    "emailSent": "لقد أرسلنا بريداً إلكترونياً لتأكيد الطلب مع كافة التفاصيل.",
+    "backHome": "العودة للرئيسية",
+    "continueShopping": "استمر في التسوق",
+    "support": "إذا كان لديك أي أسئلة، يرجى التواصل مع فريق الدعم لدينا.",
+    "status": {
+      "pending": "قيد الانتظار",
+      "confirmed": "مؤكد",
+      "shipped": "تم الشحن",
+      "delivered": "تم التسليم",
+      "cancelled": "ملغي",
+      "refunded": "مسترد"
+    }
+  },
+  "Email": {
+    "confirmation": {
+      "subject": "تم تأكيد طلبك من ORKI",
+      "title": "تم تأكيد طلبك",
+      "greeting": "شكراً لطلبك يا {name}.",
+      "referenceLabel": "رقم الطلب",
+      "totalLabel": "الإجمالي",
+      "footer": "لأي استفسار، يمكنك الرد على هذا البريد أو التواصل مع support@orki.sa."
+    },
+    "shipped": {
+      "subject": "طلبك من ORKI في الطريق إليك",
+      "title": "تم شحن الطلب",
+      "greeting": "أخبار سارة يا {name} — طلبك في الطريق إليك.",
+      "referenceLabel": "رقم الطلب",
+      "trackingLabel": "رقم التتبع",
+      "footer": "لأي استفسار، يمكنك الرد على هذا البريد أو التواصل مع support@orki.sa."
+    },
+    "cancelled": {
+      "subject": "تم إلغاء طلبك من ORKI",
+      "title": "تم إلغاء الطلب",
+      "greeting": "مرحباً {name}، تم إلغاء طلبك.",
+      "referenceLabel": "رقم الطلب",
+      "footer": "لأي استفسار، يمكنك الرد على هذا البريد أو التواصل مع support@orki.sa."
+    },
+    "refunded": {
+      "subject": "تم استرداد المبلغ من طلبك",
+      "title": "تم استرداد المبلغ",
+      "greeting": "مرحباً {name}، تم معالجة استردادك.",
+      "referenceLabel": "رقم الطلب",
+      "footer": "لأي استفسار، يمكنك الرد على هذا البريد أو التواصل مع support@orki.sa."
+    }
   }
 }

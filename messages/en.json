@@ -45,5 +45,104 @@
     "someSizesSoldOut": "Some sizes sold out",
     "sizeGuideTitle": "Size Guide",
     "sizeGuideClose": "Close"
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "step1": "Shipping Information",
+    "step2": "Payment Method",
+    "stepProgress": "Step {current} of {total}",
+    "edit": "Edit",
+    "continueToPayment": "Continue to Payment",
+    "placeOrder": "Complete Purchase",
+    "processing": "Processing...",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "phonePlaceholder": "+966 5X XXX XXXX",
+    "city": "City",
+    "district": "District",
+    "address": "Street Address",
+    "apartment": "Apartment / Villa (Optional)",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "vat": "VAT (15%)",
+    "total": "Total",
+    "freeShipping": "Free",
+    "summary": "Order Summary",
+    "termsAcknowledgement": "By completing this order, you agree to our Terms of Service and Privacy Policy.",
+    "trust": {
+      "secureCheckout": "Secure Checkout",
+      "returnsPolicy": "30-Day Returns",
+      "sslEncryption": "SSL Encrypted"
+    },
+    "errors": {
+      "required": "This field is required",
+      "tooLong": "This value is too long",
+      "email": "Please enter a valid email",
+      "phone": {
+        "ksa": "Enter a Saudi mobile number (+966 5X XXX XXXX)"
+      },
+      "address": {
+        "short": "Please enter a more complete address"
+      },
+      "payment": {
+        "required": "Please select a payment method"
+      },
+      "stockUnavailable": "One or more items just sold out. Please review your cart.",
+      "paymentDeclined": "Payment was declined. Your cart is preserved — please try another method.",
+      "cartEmpty": "Your cart is empty.",
+      "validation": "Please correct the highlighted fields and try again.",
+      "unknown": "Something went wrong. Please try again or contact support."
+    }
+  },
+  "Order": {
+    "confirmedTitle": "Order Confirmed",
+    "thanks": "Thank you for your order",
+    "reference": "Order Reference",
+    "emailSent": "We've sent a confirmation email with all the details.",
+    "backHome": "Back to Home",
+    "continueShopping": "Continue Shopping",
+    "support": "If you have any questions, please contact our support team.",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    }
+  },
+  "Email": {
+    "confirmation": {
+      "subject": "Your ORKI order is confirmed",
+      "title": "Order Confirmed",
+      "greeting": "Thanks for your order, {name}.",
+      "referenceLabel": "Order Reference",
+      "totalLabel": "Total",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "shipped": {
+      "subject": "Your ORKI order is on the way",
+      "title": "Order Shipped",
+      "greeting": "Good news, {name} — your order is on the way.",
+      "referenceLabel": "Order Reference",
+      "trackingLabel": "Tracking",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "cancelled": {
+      "subject": "Your ORKI order has been cancelled",
+      "title": "Order Cancelled",
+      "greeting": "Hi {name}, your order has been cancelled.",
+      "referenceLabel": "Order Reference",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "refunded": {
+      "subject": "Your ORKI order has been refunded",
+      "title": "Order Refunded",
+      "greeting": "Hi {name}, your refund has been processed.",
+      "referenceLabel": "Order Reference",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    }
   }
 }
