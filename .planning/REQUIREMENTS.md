@@ -30,9 +30,9 @@
 
 ## Business Logic (ECOM)
 - [ ] **ECOM-01**: Inventory must use optimistic locking or stock reservation to prevent overselling
-- [ ] **ECOM-02**: Orders must follow an explicit state machine: pending → confirmed → shipped → delivered → refunded/cancelled
+- [x] **ECOM-02**: Orders must follow an explicit state machine: pending → confirmed → shipped → delivered → refunded/cancelled
 - [ ] **ECOM-03**: Transactional emails (order confirmation, shipping, password reset) must use a reliable provider (e.g., Resend/Postmark)
-- [ ] **ECOM-04**: Refund and cancellation logic must be designed into the core system architecture
+- [x] **ECOM-04**: Refund and cancellation logic must be designed into the core system architecture
 - [ ] **ECOM-05**: Out-of-stock products must stay live with a "notify me" option (no deletion)
 - [ ] **ECOM-06**: Ensure all frequently queried fields (email, order_id, product_id, user_id) have appropriate database indexes
 
