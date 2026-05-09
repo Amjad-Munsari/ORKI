@@ -4,9 +4,9 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 8
 status: active
-stopped_at: Phase 8 Plan 02 (cart persistence) executed — DB-backed cart live
+stopped_at: Phase 8 Plan 03 (orders pure libs) executed — state machine, halalas pricing, ORK- ref generator + Vitest projects config
 last_updated: "2026-05-10T00:00:00.000Z"
-last_activity: 2026-05-10 — Phase 8 Plan 02: Postgres-backed cart wired (orki_sid cookie, Server Actions, Zustand hydrated from /api/cart, localStorage migration one-shot).
+last_activity: 2026-05-10 — Phase 8 Plan 03: Pure order libs (state machine, pricing, reference, errors) + Vitest 4 projects config (node + jsdom). 24 unit tests added, server-only mocked under vitest.
 progress:
   total_phases: 5
   completed_phases: 2
