@@ -4,15 +4,13 @@ Out-of-scope discoveries during plan execution. Track here, do not fix in this p
 
 ## From Plan 08-03 (orders pure libs)
 
-### `tests/products.test.ts` fails with "server-only" import error
+### `tests/products.test.ts` still fails — env-var validation under vitest
 - **File:** `tests/products.test.ts` (committed in 74b3538, Plan 02-02)
-- **Error:** `This module cannot be imported from a Client Component module. It should only be used from a Server Component.`
-- **Cause:** The test imports `src/lib/products.ts` which now starts with `import 'server-only'`. The `server-only` package throws under vitest because there is no React Server Component runtime.
-- **Why deferred:** Pre-dates this plan (Phase 2). Fix belongs in a dedicated test-infra plan that mocks `server-only` in the vitest setup, e.g.:
-  ```ts
-  vi.mock('server-only', () => ({}));
-  ```
-- **Status:** Not blocking Plan 08-03. Plan 08-03's own tests (state-machine, pricing, reference) do not import server-only.
+- **Original error:** `This module cannot be imported from a Client Component module. It should only be used from a Server Component.` (server-only)
+- **Plan 08-03 partial fix:** Added `vi.mock('server-only', () => ({}))` to `tests/setup.ts` — clears the server-only barrier.
+- **Remaining error:** `Missing or invalid environment variables` (thrown from `src/lib/env.ts:35` when `src/lib/db/client.ts` is loaded). Vitest doesn't load `.env` by default and the test doesn't mock `@/lib/db/client`.
+- **Why deferred:** Belongs in a dedicated test-infra plan. Either: (a) extend `tests/setup.ts` to load `.env.test` via `dotenv`, or (b) mock `@/lib/db/client` and `@/lib/env` per-test.
+- **Status:** Not blocking Plan 08-03. Plan 08-03's own tests (state-machine, pricing, reference) pass cleanly.
 
 ## From Plan 08-04 (validation + i18n)
 
