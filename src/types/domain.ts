@@ -24,8 +24,91 @@ export interface Product {
   inStock: boolean;
 }
 
+/**
+ * Client-side cart item — backed by Zustand store + localStorage (Phase 3 contract).
+ * DO NOT change shape — many components consume it.
+ * Phase 8 introduces ServerCartItem (below) for the DB-backed cart shape.
+ */
 export interface CartItem {
   product: Product;
   selectedSize: string;
   quantity: number;
+}
+
+// ─── Phase 8: Cart, Checkout & Orders domain types ───────────────────────────
+
+export type OrderStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled'
+  | 'refunded';
+
+/**
+ * Server-side cart item shape — what `/api/cart` returns and what server actions
+ * operate on. Joined with the product. Distinct from the Phase 3 client `CartItem`
+ * which the Zustand store uses.
+ */
+export interface ServerCartItem {
+  id: string;
+  productId: string;
+  sizeId: string;
+  sizeLabel: string;
+  quantity: number;
+  product: Product; // joined
+}
+
+export interface Cart {
+  id: string;
+  sessionId: string;
+  userId: string | null;
+  locale: Locale;
+  items: ServerCartItem[];
+  updatedAt: Date;
+}
+
+export interface OrderItem {
+  id: string;
+  productId: string;
+  sizeLabel: string;
+  productName: { en: string; ar: string };
+  unitPriceCents: number;
+  quantity: number;
+}
+
+export interface OrderEvent {
+  id: string;
+  type: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: Date;
+}
+
+export interface Order {
+  id: string;
+  reference: string;
+  userId: string | null;
+  email: string;
+  locale: Locale;
+  status: OrderStatus;
+  subtotalCents: number;
+  shippingCents: number;
+  vatCents: number;
+  totalCents: number;
+  currency: 'SAR';
+  shipping: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    city: string;
+    district: string;
+    address: string;
+    apartment: string | null;
+  };
+  paymentMethod: string;
+  trackingNumber: string | null;
+  items: OrderItem[];
+  events: OrderEvent[];
+  placedAt: Date;
+  updatedAt: Date;
 }
