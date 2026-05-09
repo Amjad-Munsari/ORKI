@@ -33,12 +33,12 @@ export default async function AdminLayout({
             <span className="font-bold uppercase tracking-tight">Products</span>
             <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
-          <Link 
-            href="/admin/orders" 
-            className="p-3 border-2 border-transparent hover:border-white/10 transition-all flex justify-between items-center group opacity-30 cursor-not-allowed"
+          <Link
+            href="/admin/orders"
+            className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
           >
             <span className="font-bold uppercase tracking-tight">Orders</span>
-            <span className="text-[8px] font-mono">PHASE 8</span>
+            <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
         </nav>
 

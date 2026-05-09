@@ -1,4 +1,12 @@
-import 'server-only';
+/**
+ * Pure state-machine helpers. Safe to import from BOTH client and server —
+ * intentionally NOT marked `'server-only'`. The admin `OrderStateControls`
+ * (Client Component) needs `canTransition` / `legalNextStates` to gate
+ * transition buttons; the server `transitionOrderStatus` uses the same
+ * functions inside a transaction.
+ *
+ * No I/O, no cookies, no DB — pure transitions over an in-memory matrix.
+ */
 import type { OrderStatus } from '@/types/domain';
 import { IllegalTransitionError } from './errors';
 
