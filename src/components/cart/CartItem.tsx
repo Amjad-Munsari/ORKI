@@ -1,10 +1,18 @@
 'use client'
 
-
+import { useTransition } from 'react'
 import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { PlaceholderImage } from '@/components/PlaceholderImage'
-import type { CartItem as CartItemType, Locale } from '@/types/domain'
+import {
+  updateQtyAction,
+  removeItemAction,
+} from '@/app/actions/cart'
+import type {
+  CartItem as CartItemType,
+  Locale,
+  ServerCartItem,
+} from '@/types/domain'
 
 interface CartItemProps {
   item: CartItemType
@@ -12,7 +20,55 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, locale }: CartItemProps) {
-  const { updateQuantity, removeItem } = useCartStore()
+  const updateQuantity = useCartStore((s) => s.updateQuantity)
+  const removeItem = useCartStore((s) => s.removeItem)
+  const setItems = useCartStore((s) => s.setItems)
+  const [, startTransition] = useTransition()
+
+  /** Refetch from the server when an action fails — reconciles optimistic UI. */
+  const refetch = async () => {
+    try {
+      const res = await fetch('/api/cart', { cache: 'no-store' })
+      const json = (await res.json()) as {
+        ok?: boolean
+        cart?: { items?: ServerCartItem[] } | null
+      }
+      if (json?.ok && json.cart) {
+        setItems(
+          (json.cart.items ?? []).map((si) => ({
+            id: si.id,
+            sizeId: si.sizeId,
+            product: si.product,
+            selectedSize: si.sizeLabel,
+            quantity: si.quantity,
+          }))
+        )
+      }
+    } catch {
+      /* leave optimistic state in place */
+    }
+  }
+
+  const handleDelta = (delta: 1 | -1) => {
+    // Optimistic local update first.
+    updateQuantity(item.product.id, item.selectedSize, delta)
+    // Pre-hydration items have no server id yet — skip server sync.
+    if (!item.id) return
+    const newQty = Math.max(0, item.quantity + delta)
+    startTransition(async () => {
+      const result = await updateQtyAction(item.id!, newQty)
+      if (!result.ok) await refetch()
+    })
+  }
+
+  const handleRemove = () => {
+    removeItem(item.product.id, item.selectedSize)
+    if (!item.id) return
+    startTransition(async () => {
+      const result = await removeItemAction(item.id!)
+      if (!result.ok) await refetch()
+    })
+  }
 
   return (
     <div className="flex gap-4 py-4 border-b border-white/10 group">
@@ -32,7 +88,7 @@ export function CartItem({ item, locale }: CartItemProps) {
               {item.product.name[locale]}
             </h3>
             <button
-              onClick={() => removeItem(item.product.id, item.selectedSize)}
+              onClick={handleRemove}
               className="text-white/40 hover:text-white transition-colors p-1 -me-1"
               aria-label="Remove item"
             >
@@ -47,7 +103,7 @@ export function CartItem({ item, locale }: CartItemProps) {
         <div className="flex justify-between items-center">
           <div className="flex items-center bg-white/5 rounded-full px-2 py-1">
             <button
-              onClick={() => updateQuantity(item.product.id, item.selectedSize, -1)}
+              onClick={() => handleDelta(-1)}
               className="p-1 hover:text-white text-white/60 transition-colors"
               aria-label="Decrease quantity"
             >
@@ -57,7 +113,7 @@ export function CartItem({ item, locale }: CartItemProps) {
               {item.quantity}
             </span>
             <button
-              onClick={() => updateQuantity(item.product.id, item.selectedSize, 1)}
+              onClick={() => handleDelta(1)}
               className="p-1 hover:text-white text-white/60 transition-colors"
               aria-label="Increase quantity"
             >

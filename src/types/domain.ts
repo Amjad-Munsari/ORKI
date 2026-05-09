@@ -25,11 +25,18 @@ export interface Product {
 }
 
 /**
- * Client-side cart item — backed by Zustand store + localStorage (Phase 3 contract).
- * DO NOT change shape — many components consume it.
- * Phase 8 introduces ServerCartItem (below) for the DB-backed cart shape.
+ * Client-side cart item — backed by Zustand store.
+ * Phase 3 originally stored these in localStorage; Phase 8 hydrates from
+ * /api/cart so `id` (cart_items.id) and `sizeId` are now carried alongside
+ * `selectedSize` (the human label) so client components can call Server
+ * Actions by id. Both are optional to preserve backward compatibility for
+ * any code path that still constructs items locally before hydration.
  */
 export interface CartItem {
+  /** cart_items.id — present on hydrated items, absent on optimistic adds. */
+  id?: string;
+  /** product_sizes.id — present on hydrated items. */
+  sizeId?: string;
   product: Product;
   selectedSize: string;
   quantity: number;
