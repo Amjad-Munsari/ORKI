@@ -26,11 +26,11 @@ export { getStockState, type StockState } from './products-logic';
 /**
  * Maps Drizzle DB rows (joined) to the frontend Product domain type.
  * This is the only place where column names (nameEn) map to interface fields (name.en).
+ *
+ * Exported so server-side cart/order layers can reuse the canonical mapper
+ * without duplicating row→domain logic. (Phase 8)
  */
-/**
- * Row-to-domain mapper.
- */
-function toProduct(
+export function toProduct(
   data: typeof products.$inferSelect & {
     sizes: (typeof productSizes.$inferSelect)[];
     images: (typeof productImages.$inferSelect)[];
@@ -86,6 +86,24 @@ export async function getAllProducts(): Promise<Product[]> {
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
   const result = await db.query.products.findFirst({
     where: eq(products.slug, slug),
+    with: {
+      sizes: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.sortOrder)],
+      },
+    },
+  });
+
+  if (!result) return undefined;
+  return toProduct(result);
+}
+
+/**
+ * Returns a single product by its primary id, or undefined if not found.
+ */
+export async function getProductById(id: string): Promise<Product | undefined> {
+  const result = await db.query.products.findFirst({
+    where: eq(products.id, id),
     with: {
       sizes: true,
       images: {
