@@ -20,3 +20,20 @@ Out-of-scope discoveries during plan execution. Track here, do not fix in this p
 - **Cause:** Pre-existing, unrelated to validation/i18n work. Surfaces under `npx tsc --noEmit` from the whole-repo type-check.
 - **Why deferred:** Belongs in a dedicated test-infra plan alongside the `server-only` mock fix.
 - **Status:** Plan 08-04's own files (`src/lib/checkout/schemas.ts`, `src/lib/checkout/schemas.test.ts`, `src/lib/checkout/__tests__/schemas.test.ts`) type-check cleanly.
+
+## From Plan 08-06 (checkout UI rewire)
+
+### Plan 08-08 untracked files break `npx next build`
+- **Files:** `src/app/[locale]/admin/orders/page.tsx`, `src/app/[locale]/admin/orders/[reference]/page.tsx`, `src/components/admin/OrdersTable.tsx`, `src/components/admin/OrderStateControls.tsx` (all untracked at the start of plan 08-06).
+- **Errors:**
+  1. `OrderStateControls.tsx` is a `'use client'` component that imports from `@/lib/orders/state-machine`, but `state-machine.ts` was marked `import 'server-only'` — webpack rejects: *"You're importing a component that needs 'server-only'. That only works in a Server Component"*.
+  2. `src/app/actions/orders.ts` re-exported sync functions from a `'use server'` module, which Next 15 forbids: *"Only async functions are allowed to be exported in a 'use server' file"*. Latent until the admin orders page tried to import the actions.
+- **Why this is plan 08-08's responsibility:** The four files are scaffolding for the admin orders dashboard. Plan 08-06 did not author or commit any of them.
+- **Suggested fix (for 08-08 executor):**
+  - Remove `import 'server-only'` from `src/lib/orders/state-machine.ts` — it's a pure module with no I/O, no DB, no cookies. Add a JSDoc note explaining it is intentionally NOT server-only.
+  - Wrap the re-exports in `src/app/actions/orders.ts` as async forwarders:
+    ```ts
+    export async function submitCheckoutAction(input: CheckoutInput) { return submitCheckout(input); }
+    export async function transitionOrderAction(...) { return transitionOrderStatus(...); }
+    ```
+- **Status:** Plan 08-06's checkout pages compile cleanly with `npx next build` once the untracked 08-08 files are set aside. During the build run, three files were auto-modified (state-machine.ts, actions/orders.ts, admin/layout.tsx) implementing the fixes described above; plan 08-06 deliberately did NOT commit those changes — they belong to 08-08.

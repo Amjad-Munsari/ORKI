@@ -4,9 +4,9 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 8
 status: active
-stopped_at: Phase 8 Plan 05 (submitCheckout server action) executed — FOR UPDATE stock lock + state-machine pending→confirmed + admin transition + simulatePayment
+stopped_at: Phase 8 Plan 06 (checkout UI rewire) executed — RHF+zod ShippingForm with full ARIA, CheckoutSteps + TrustSignals, halalas OrderSummary, Server-Component confirmation page reading by ?ref
 last_updated: "2026-05-10T00:00:00.000Z"
-last_activity: 2026-05-10 — Phase 8 Plan 05: submitCheckout Server Action wired with SELECT … FOR UPDATE inside db.transaction (Phase 8 owns the stock lock), assertTransition('pending','confirmed') + order_events audit, payment-failure rollback (cart preserved per UX-08), admin transitionOrderStatus with conditional stock restore. 3 new pre-flight tests added; full FOR UPDATE concurrency suite owned by Plan 08-09.
+last_activity: 2026-05-10 — Phase 8 Plan 06: ShippingForm rewired to react-hook-form + zodResolver(shippingSchema) with full WCAG 2.1 AA ARIA (aria-invalid, aria-describedby, role=alert, focus-first-invalid). New CheckoutSteps (aria-current=step + aria-live=polite) and TrustSignals (UX-07) components. PaymentGrid hardened with min-h-[88px] tap targets and focus-visible rings. OrderSummary computes halalas via computeOrderTotals + formatSAR (4 lines: subtotal/shipping or Free/VAT/total). checkout/page.tsx posts to submitCheckoutAction inside useTransition, routes to /checkout/confirmation?ref=ORK-XXXXXX on success, preserves cart on failure. confirmation/page.tsx is now a Server Component reading by reference; cart-clear useEffect removed.
 progress:
   total_phases: 5
   completed_phases: 2

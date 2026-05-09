@@ -18,15 +18,15 @@
 - [ ] **SEC-09**: Log suspicious activity (repeated failures, unusual order sizes) and trigger alerts
 
 ## Usability (UX)
-- [ ] **UX-01**: Checkout must support guest checkout (no forced account creation)
-- [ ] **UX-02**: Checkout flow must be completable in minimum steps with a visible progress indicator
-- [ ] **UX-03**: Total cost (including tax/shipping) must be explicitly shown before final confirmation step
-- [ ] **UX-04**: Ensure fully functional mobile experience (minimum 44x44px tap targets, no hover-only interactions)
-- [ ] **UX-05**: Form validation errors must highlight specific fields and preserve entered data
-- [ ] **UX-06**: Raw technical error messages must never be exposed to the user
-- [ ] **UX-07**: Trust signals (security badges, return policy) must be visible near the checkout button
+- [x] **UX-01**: Checkout must support guest checkout (no forced account creation)
+- [x] **UX-02**: Checkout flow must be completable in minimum steps with a visible progress indicator
+- [x] **UX-03**: Total cost (including tax/shipping) must be explicitly shown before final confirmation step
+- [x] **UX-04**: Ensure fully functional mobile experience (minimum 44x44px tap targets, no hover-only interactions)
+- [x] **UX-05**: Form validation errors must highlight specific fields and preserve entered data
+- [x] **UX-06**: Raw technical error messages must never be exposed to the user
+- [x] **UX-07**: Trust signals (security badges, return policy) must be visible near the checkout button
 - [ ] **UX-08**: Clear recovery path provided if payment/checkout fails mid-process (preserve cart state)
-- [ ] **UX-09**: Meet WCAG 2.1 AA accessibility standards (keyboard navigation, screen reader support, color contrast)
+- [x] **UX-09**: Meet WCAG 2.1 AA accessibility standards (keyboard navigation, screen reader support, color contrast)
 
 ## Business Logic (ECOM)
 - [ ] **ECOM-01**: Inventory must use optimistic locking or stock reservation to prevent overselling
