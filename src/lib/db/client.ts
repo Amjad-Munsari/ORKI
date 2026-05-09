@@ -23,7 +23,7 @@ const conn =
   postgres(env.DB_URL!, {
     max: env.NODE_ENV === 'production' ? 10 : 1,
     connect_timeout: 10,
-    ssl: env.NODE_ENV === 'production' ? 'require' : false,
+    ssl: 'require',
   });
 
 if (env.NODE_ENV !== 'production') {
