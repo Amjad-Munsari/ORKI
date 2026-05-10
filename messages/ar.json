@@ -10,7 +10,9 @@
     "switchToAr": "AR",
     "switchToEn": "EN",
     "categories": "الفئات",
-    "cart": "السلة"
+    "cart": "السلة",
+    "signIn": "تسجيل الدخول",
+    "account": "الحساب"
   },
   "Footer": {
     "shipping": "الشحن",
@@ -469,5 +471,25 @@
       "linkInvalid": "هذا الرابط غير صالح أو منتهي الصلاحية.",
       "unknown": "حدث خطأ ما. حاول مرة أخرى."
     }
+  },
+  "Account": {
+    "eyebrow": "الحساب",
+    "heading": "طلباتك",
+    "signedInAs": "تم تسجيل الدخول باسم <email>{email}</email>",
+    "referenceLabel": "المرجع",
+    "pagination": "التنقل بين الصفحات",
+    "nextPage": "طلبات أقدم",
+    "prevPage": "طلبات أحدث",
+    "empty": {
+      "eyebrow": "لا توجد طلبات بعد",
+      "heading": "لا شيء هنا بعد.",
+      "body": "عند إتمام أول طلب لك، سيظهر هنا.",
+      "cta": "تصفّح المتجر"
+    },
+    "backToAccount": "العودة إلى الحساب",
+    "signOut": "تسجيل الخروج",
+    "signingOut": "جارٍ تسجيل الخروج...",
+    "userMenu": "قائمة الحساب — تم تسجيل الدخول باسم {email}",
+    "account": "الحساب"
   }
 }

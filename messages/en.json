@@ -10,7 +10,9 @@
     "switchToAr": "AR",
     "switchToEn": "EN",
     "categories": "Categories",
-    "cart": "Cart"
+    "cart": "Cart",
+    "signIn": "Sign in",
+    "account": "Account"
   },
   "Footer": {
     "shipping": "Shipping",
@@ -469,5 +471,25 @@
       "linkInvalid": "This link is invalid or has expired.",
       "unknown": "Something went wrong. Try again."
     }
+  },
+  "Account": {
+    "eyebrow": "Account",
+    "heading": "Your orders",
+    "signedInAs": "Signed in as <email>{email}</email>",
+    "referenceLabel": "Reference",
+    "pagination": "Pagination",
+    "nextPage": "Older orders",
+    "prevPage": "Newer orders",
+    "empty": {
+      "eyebrow": "No orders yet",
+      "heading": "Nothing here yet.",
+      "body": "Once you place an order it'll show up here.",
+      "cta": "Browse the shop"
+    },
+    "backToAccount": "Back to account",
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "userMenu": "Account menu — signed in as {email}",
+    "account": "Account"
   }
 }
