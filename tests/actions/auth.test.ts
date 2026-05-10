@@ -13,18 +13,21 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock the SSR Supabase factory BEFORE the action import — it picks up the mock.
-const createClientMock = vi.fn(async () => {
-  throw new Error(
-    'createClient should NOT be called when zod validation fails (SEC-02)'
-  );
-});
+// Mocks must be declared via vi.hoisted so they're initialized before vi.mock
+// factory bodies run (vi.mock is hoisted to the top of the file).
+const { createClientMock, writeAuthEventMock } = vi.hoisted(() => ({
+  createClientMock: vi.fn(async () => {
+    throw new Error(
+      'createClient should NOT be called when zod validation fails (SEC-02)'
+    );
+  }),
+  writeAuthEventMock: vi.fn(async () => undefined),
+}));
+
 vi.mock('@/lib/supabase/server', () => ({
   createClient: createClientMock,
 }));
 
-// Mock the audit writer so unit tests don't try to talk to the DB.
-const writeAuthEventMock = vi.fn(async () => undefined);
 vi.mock('@/lib/auth/audit', () => ({
   writeAuthEvent: writeAuthEventMock,
 }));
@@ -45,7 +48,6 @@ describe('SEC-02 zod gate — Supabase NEVER called on invalid input', () => {
   describe('signUpAction', () => {
     it('rejects invalid email and does not call Supabase', async () => {
       const result = await signUpAction({
-        // @ts-expect-error testing runtime rejection
         email: 'not-an-email',
         password: 'long-enough',
         acceptTerms: true,
@@ -85,7 +87,6 @@ describe('SEC-02 zod gate — Supabase NEVER called on invalid input', () => {
   describe('signInAction', () => {
     it('rejects invalid email', async () => {
       const result = await signInAction({
-        // @ts-expect-error
         email: 'nope',
         password: 'whatever',
       });
@@ -107,7 +108,6 @@ describe('SEC-02 zod gate — Supabase NEVER called on invalid input', () => {
   describe('requestPasswordResetAction', () => {
     it('rejects invalid email', async () => {
       const result = await requestPasswordResetAction({
-        // @ts-expect-error
         email: 'nope',
       });
       expect(result.ok).toBe(false);

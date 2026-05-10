@@ -9,7 +9,9 @@
  * are identifiable for cleanup (per runtime_notes — Supabase email confirm
  * is OFF, so signUp returns a session immediately).
  */
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach } from 'vitest';
+import { resetCookieJar } from '../setup/next-cookies-mock';
+
 import {
   hasSupabaseEnv,
   adminClient,
@@ -20,6 +22,10 @@ import { signUpAction } from '@/app/actions/auth';
 
 describe.skipIf(!hasSupabaseEnv || !hasDbUrl)('signUpAction', () => {
   let createdUserId: string | null = null;
+
+  beforeEach(() => {
+    resetCookieJar();
+  });
 
   afterEach(async () => {
     if (createdUserId) {

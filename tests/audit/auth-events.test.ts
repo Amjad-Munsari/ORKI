@@ -23,7 +23,9 @@
  *    updateUser call performed via signed-in session (createTestUser yields a
  *    confirmed user; we sign them in and call setPasswordAction).
  */
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach } from 'vitest';
+import { resetCookieJar } from '../setup/next-cookies-mock';
+
 import {
   hasSupabaseEnv,
   createTestUser,
@@ -49,6 +51,10 @@ async function rowsFor(email: string, event: string) {
 
 describe.skipIf(!hasSupabaseEnv || !hasDbUrl)('writeAuthEvent coverage (SEC-09)', () => {
   let createdUserId: string | null = null;
+
+  beforeEach(() => {
+    resetCookieJar();
+  });
 
   afterEach(async () => {
     if (createdUserId) {
