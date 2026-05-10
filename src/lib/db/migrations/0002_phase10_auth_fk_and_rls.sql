@@ -12,9 +12,9 @@
 -- public.carts.user_id and public.orders.user_id. Without that, the
 -- USING ::uuid cast below will raise and roll back.
 --
--- This file is split into sections separated by `--> statement-breakpoint`
--- exactly like 0001_phase8_cart_orders.sql, so the Drizzle migration runner
--- executes one statement at a time.
+-- This file is split into sections separated by the drizzle statement
+-- breakpoint marker (see 0001_phase8_cart_orders.sql for the exact form),
+-- so the Drizzle migration runner executes one statement at a time.
 -- ──────────────────────────────────────────────────────────────────────────────
 
 -- ─── Section 1: drop old indexes on text columns ────────────────────────────
