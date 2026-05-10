@@ -53,8 +53,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     startTransition(async () => {
       const result = await submitCheckoutAction({
         shipping: shippingData,
-        // Cast: server schema validates the method; envelope returned on bad input.
-        payment: { method: paymentMethod as 'mada' | 'visa' | 'applepay' | 'stcpay' },
+        // `paymentMethod` is already typed as PaymentMethod which matches the
+        // server-side PaymentMethodCode union (card | mada | stcpay | applepay | cod).
+        payment: { method: paymentMethod },
       });
       if (!result.ok) {
         const raw = result.messageKey;
