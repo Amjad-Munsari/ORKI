@@ -14,25 +14,37 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params
   const product = await getProductBySlug(slug)
-  
+
   if (!product) return {}
 
-  const title = `${product.name[locale]} | ORKI`
+  // Bare title — root layout's title.template ('%s | ORKI') applies the suffix
+  // exactly once. OG/Twitter are NOT subject to title.template, so compose explicitly.
+  const title = product.name[locale]
+  const fullTitle = `${title} | ORKI`
   const description = product.description[locale]
   const image = product.images[0] || '/images/og-default.png'
+  const path = `/shop/${product.category}/${product.slug}`
 
   return {
     title,
     description,
+    alternates: {
+      canonical: `https://orki.sa/${locale}${path}`,
+      languages: {
+        en:          `https://orki.sa/en${path}`,
+        ar:          `https://orki.sa/ar${path}`,
+        'x-default': `https://orki.sa/en${path}`,
+      },
+    },
     openGraph: {
-      title,
+      title: fullTitle,
       description,
       images: [image],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: fullTitle,
       description,
       images: [image],
     },
