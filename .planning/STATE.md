@@ -4,21 +4,21 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
 status: executing
-stopped_at: Phase 10 Plan 03 complete — five auth Server Actions landed (signUp/signIn/signOut/requestPasswordReset/setPassword) with zod gate, anti-enumeration error mapper, audit log; Wave 1 done, Wave 2 (UI) next
-last_updated: "2026-05-10T23:55:00.000Z"
-last_activity: 2026-05-10 -- Phase 10 Plan 03 executed (5 tasks, 5 commits); src/app/actions/auth.ts + src/lib/auth/{schemas,errors,audit,admin-allowlist}.ts; 19 vitest tests passing (1 skipped lockout); SEC-02 zod-gate + SEC-06 anti-enumeration + SEC-09 audit-log enforced
+stopped_at: Phase 10 Plan 04 complete — auth UI surface landed (4 route-group pages, 4 client form components + lifted Field helper, /api/auth/callback recovery handler, Auth namespace 50 keys EN+AR, Playwright password-reset spec); Wave 2 done, Wave 3 (UserMenu + cart-merge) next
+last_updated: "2026-05-10T23:45:00.000Z"
+last_activity: 2026-05-10 -- Phase 10 Plan 04 executed (6 tasks, 6 commits); src/components/auth/{Login,Signup,ForgotPassword,ResetPassword}Form.tsx + src/components/forms/Field.tsx + src/app/[locale]/(auth)/* + src/app/api/auth/callback/route.ts + Auth i18n namespace; SEC-06 anti-enumeration enforced in ForgotPasswordForm + ResetPasswordForm session-gate; 18 vitest test files passing
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 28
-  completed_plans: 20
-  percent: 71
+  completed_plans: 21
+  percent: 75
 ---
 
 # Project State: ORKI
 
 **Current Phase:** 10
-**Status:** Phase 10 in progress — Waves 0-1 complete (Plans 01, 02, 03); Wave 2 (auth UI, Plan 10-04) next
+**Status:** Phase 10 in progress — Waves 0-2 complete (Plans 01, 02, 03, 04); Wave 3 (UserMenu + cart-merge, Plan 10-05) next
 **Last Updated:** 2026-05-10
 
 ## Project Reference
@@ -31,24 +31,24 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 10 (authentication-and-security-core) — IN PROGRESS
-Plan: 4 of 7 (next: 10-04 auth UI pages + RHF forms — Wave 2)
+Plan: 5 of 7 (next: 10-05 UserMenu + cart-merge — Wave 3)
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
 - [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
 - [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; gap closure 09-07 + 09-08 merged; verification pending]
-- [~] Phase 10: Authentication & Security Core [executing — 3/7 plans complete; Wave 0 foundations + schema + Wave 1 actions landed]
+- [~] Phase 10: Authentication & Security Core [executing — 4/7 plans complete; Waves 0-2 landed (foundations, schema, actions, UI surface)]
 
-Last activity: 2026-05-10 -- Phase 10 Plan 03 complete (five auth Server Actions with AuthActionResult envelope + anti-enumeration mapper + zod gate + audit log; 19 vitest passing, 1 skipped lockout)
+Last activity: 2026-05-10 -- Phase 10 Plan 04 complete (auth UI surface — 4 route-group pages, 4 client form components + lifted Field helper, /api/auth/callback recovery handler, Auth i18n namespace 50 keys EN+AR, Playwright password-reset spec)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 24
+- Total plans completed: 25
 - Average duration: ~15 min/plan (estimated)
-- Total execution time: ~360 min (estimated)
+- Total execution time: ~390 min (estimated)
 
 **By Phase:**
 

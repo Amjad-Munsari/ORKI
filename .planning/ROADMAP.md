@@ -81,7 +81,7 @@ Plans:
 - [x] 10-01-PLAN.md — Wave 0: Supabase client factories (browser/SSR/admin) + combined Supabase-refresh + next-intl middleware + ESLint admin fence + Playwright config + shared test fixture + Wave-0 smoke test
 - [x] 10-02-PLAN.md — Wave 0: Schema migration (FK to auth.users + RLS policies) + auth_events audit table
 - [x] 10-03-PLAN.md — Wave 1: Auth Server Actions (signup/signin/signout/password-reset) with zod + audit + error mapping
-- [ ] 10-04-PLAN.md — Wave 2: Auth UI pages (login / signup / forgot-password / reset-password) + RHF forms
+- [x] 10-04-PLAN.md — Wave 2: Auth UI pages (login / signup / forgot-password / reset-password) + RHF forms
 - [ ] 10-05-PLAN.md — Wave 2: Account area + cart-merge on first sign-in + UserMenu in Navbar
 - [ ] 10-06-PLAN.md — Wave 2: Admin gate (email allowlist) + audit-log surface
 - [ ] 10-07-PLAN.md — Wave 3: Security headers + CSP + final verification + production-bundle service-role-key grep
