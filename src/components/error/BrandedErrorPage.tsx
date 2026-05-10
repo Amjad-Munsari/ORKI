@@ -27,8 +27,9 @@ export interface BrandedErrorPageProps {
  *  - `error` → role="alert" (accessible live-region announce on render)
  *  - `404` → no role attribute (UI-SPEC §Accessibility line 304)
  *
- * The `errorDigest` is rendered only when `process.env.NODE_ENV === 'development'`
- * — production users never see internal IDs (T-09-05-01 mitigation).
+ * The `errorDigest` is rendered whenever truthy. Next.js generates `digest`
+ * as a non-reversible hash specifically so production users can quote it to
+ * support without leaking internal data — this is the intended use.
  */
 export function BrandedErrorPage({
   variant,
@@ -75,7 +76,7 @@ export function BrandedErrorPage({
           {heading}
         </h1>
         <p className="text-lg text-white/60">{body}</p>
-        {errorDigest && process.env.NODE_ENV === 'development' && (
+        {errorDigest && (
           <p className="text-xs text-white/40">Error ID: {errorDigest}</p>
         )}
         <div className="flex gap-4 justify-center pt-4">
