@@ -477,9 +477,6 @@
     "heading": "Your orders",
     "signedInAs": "Signed in as <email>{email}</email>",
     "referenceLabel": "Reference",
-    "pagination": "Pagination",
-    "nextPage": "Older orders",
-    "prevPage": "Newer orders",
     "empty": {
       "eyebrow": "No orders yet",
       "heading": "Nothing here yet.",

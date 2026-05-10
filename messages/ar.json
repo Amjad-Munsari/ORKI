@@ -477,9 +477,6 @@
     "heading": "طلباتك",
     "signedInAs": "تم تسجيل الدخول باسم <email>{email}</email>",
     "referenceLabel": "المرجع",
-    "pagination": "التنقل بين الصفحات",
-    "nextPage": "طلبات أقدم",
-    "prevPage": "طلبات أحدث",
     "empty": {
       "eyebrow": "لا توجد طلبات بعد",
       "heading": "لا شيء هنا بعد.",
