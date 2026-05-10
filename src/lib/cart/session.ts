@@ -27,12 +27,14 @@ export async function getOrCreateCart(
   const jar = await cookies(); // Next 15 async API
   let sessionId = jar.get(COOKIE_NAME)?.value;
 
+  let resolvedCart: { id: string; sessionId: string; locale: Locale } | null = null;
+
   if (sessionId) {
     const existing = await db.query.carts.findFirst({
       where: eq(carts.sessionId, sessionId),
     });
     if (existing) {
-      return {
+      resolvedCart = {
         id: existing.id,
         sessionId,
         locale: (existing.locale as Locale) ?? locale,
@@ -44,20 +46,59 @@ export async function getOrCreateCart(
     sessionId = nanoid(32);
   }
 
-  const [cart] = await db
-    .insert(carts)
-    .values({ sessionId, locale })
-    .returning();
+  if (!resolvedCart) {
+    const [cart] = await db
+      .insert(carts)
+      .values({ sessionId, locale })
+      .returning();
 
-  jar.set(COOKIE_NAME, sessionId, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: COOKIE_MAX_AGE,
-  });
+    jar.set(COOKIE_NAME, sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: COOKIE_MAX_AGE,
+    });
 
-  return { id: cart.id, sessionId, locale };
+    resolvedCart = { id: cart.id, sessionId, locale };
+  }
+
+  // Phase 10: first-sign-in merge hook (defensive — covers paths that don't go
+  // through signInAction, e.g. social-login callbacks landed in a future plan
+  // or a direct cookie restoration after Supabase token refresh). Triggers
+  // on every authenticated request whose resolved cart still lacks a userId.
+  try {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const existing = await db.query.carts.findFirst({
+        where: eq(carts.id, resolvedCart.id),
+      });
+      if (existing && !existing.userId) {
+        const { mergeGuestCartIntoUserCart } = await import('./merge-on-signin');
+        await mergeGuestCartIntoUserCart(user.id, resolvedCart.sessionId);
+        // Re-fetch in case the merge re-pointed userId or deleted the guest cart.
+        const refreshed = await db.query.carts.findFirst({
+          where: eq(carts.userId, user.id),
+        });
+        if (refreshed) {
+          resolvedCart = {
+            id: refreshed.id,
+            sessionId: refreshed.sessionId,
+            locale: (refreshed.locale as Locale) ?? locale,
+          };
+        }
+      }
+    }
+  } catch (err) {
+    // Defensive — never block cart resolution on auth or merge failure.
+    console.error('[getOrCreateCart][merge-hook]', err);
+  }
+
+  return resolvedCart;
 }
 
 /**

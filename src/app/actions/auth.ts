@@ -14,10 +14,11 @@
  *   5. revalidatePath('/', 'layout') on auth-state change so Navbar UserMenu
  *      re-renders.
  *
- * Cart-merge integration is owned by Plan 10-05 (extends signInAction at the
- * `// TODO(10-05)` marker below).
+ * Cart-merge integration landed in Plan 10-05 — signInAction calls
+ * mergeGuestCartIntoUserCart immediately after a successful sign-in.
  */
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { writeAuthEvent } from '@/lib/auth/audit';
@@ -139,8 +140,24 @@ export async function signInAction(
       email: data.user.email ?? parsed.data.email,
     });
 
-    // TODO(10-05): mergeGuestCartIntoUserCart(data.user.id, sessionId) —
-    // Plan 10-05 owns the merge SQL and replaces this comment with the call.
+    // Plan 10-05: best-effort guest-cart merge. Read the orki_sid cookie to
+    // identify the guest cart; dynamic import keeps the auth-actions module
+    // bundle free of cart-server code at module load. Merge MUST happen after
+    // writeAuthEvent (audit trail is the source of truth) and BEFORE
+    // revalidatePath so the next render of Navbar / cart surfaces sees the
+    // merged cart. The merge swallows its own errors internally — auth
+    // success never depends on merge success.
+    try {
+      const sidCookie = (await cookies()).get('orki_sid')?.value ?? null;
+      const { mergeGuestCartIntoUserCart } = await import(
+        '@/lib/cart/merge-on-signin'
+      );
+      await mergeGuestCartIntoUserCart(data.user.id, sidCookie);
+    } catch (mergeErr) {
+      // Defence-in-depth: even though mergeGuestCartIntoUserCart swallows its
+      // own errors, the dynamic import or cookie read could still throw.
+      console.error('[signInAction][cart-merge]', mergeErr);
+    }
 
     revalidatePath('/', 'layout');
     return { ok: true, data: { userId: data.user.id } };
