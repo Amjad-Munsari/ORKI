@@ -109,7 +109,7 @@ export default async function AdminLayout({
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="text-right">
+            <div className="text-end">
               <div className="text-[10px] font-mono uppercase opacity-40">Signed in as</div>
               <div className="text-xs font-bold tracking-tight" dir="ltr">{user.email}</div>
             </div>
