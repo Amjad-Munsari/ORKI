@@ -67,17 +67,29 @@ export async function getOrCreateCart(
   // through signInAction, e.g. social-login callbacks landed in a future plan
   // or a direct cookie restoration after Supabase token refresh). Triggers
   // on every authenticated request whose resolved cart still lacks a userId.
-  try {
-    const { createClient } = await import('@/lib/supabase/server');
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      const existing = await db.query.carts.findFirst({
-        where: eq(carts.id, resolvedCart.id),
-      });
-      if (existing && !existing.userId) {
+  //
+  // WR-09 (Phase 10 review): the merge has nothing to do once the cart is
+  // already user-bound. Gate the hook on `userId === null` first to skip the
+  // entire Supabase Auth round-trip on the hot path. This also tightens
+  // failure semantics: if Supabase Auth has a blip during a guest's request
+  // we still log the error rather than silently fall through.
+  const cartRow = await db.query.carts.findFirst({
+    where: eq(carts.id, resolvedCart.id),
+    columns: { userId: true },
+  });
+  if (cartRow && cartRow.userId === null) {
+    try {
+      const { createClient } = await import('@/lib/supabase/server');
+      const supabase = await createClient();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      if (userError) {
+        // Surface Supabase Auth outages in ops dashboards instead of letting
+        // them disappear into the catch-all below.
+        console.error('[getOrCreateCart][merge-hook] auth.getUser error', userError);
+      } else if (user) {
         const { mergeGuestCartIntoUserCart } = await import('./merge-on-signin');
         await mergeGuestCartIntoUserCart(user.id, resolvedCart.sessionId);
         // Re-fetch in case the merge re-pointed userId or deleted the guest cart.
@@ -92,10 +104,10 @@ export async function getOrCreateCart(
           };
         }
       }
+    } catch (err) {
+      // Defensive — never block cart resolution on auth or merge failure.
+      console.error('[getOrCreateCart][merge-hook]', err);
     }
-  } catch (err) {
-    // Defensive — never block cart resolution on auth or merge failure.
-    console.error('[getOrCreateCart][merge-hook]', err);
   }
 
   return resolvedCart;
