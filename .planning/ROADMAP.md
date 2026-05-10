@@ -50,11 +50,20 @@
 ### Phase 9: Performance, Legal & Polish
 **Goal:** Ensure compliance, Web Vitals performance, and final infrastructure requirements.
 **Requirements:** LGL-01, LGL-02, LGL-03, LGL-04, PERF-03, PERF-04, PERF-05, PERF-06, SEO-02, SEO-03
+**Plans:** 6 plans
 **Success Criteria:**
 1. Core Web Vitals targets met (LCP < 2.5s)
 2. Privacy policy, T&C, and Cookie banners are active
 3. N+1 database query checks pass
 4. sitemap.xml automatically generates
+
+Plans:
+- [ ] 09-01-PLAN.md — Wave 0 foundations (seo.ts helper, Legal/Errors/Meta i18n skeleton, footer href migration, returns-policy reconciliation, PDP title-template fix)
+- [ ] 09-02-PLAN.md — Legal pages (Privacy / Terms / Cookies) + LegalArticle + CookieTable + body copy fill
+- [ ] 09-03-PLAN.md — Vercel Analytics + Speed Insights mounting + image priority audit
+- [ ] 09-04-PLAN.md — Sitemap + robots + OG fallback + per-page generateMetadata wiring
+- [ ] 09-05-PLAN.md — Reliability hygiene (global-error + per-locale error/not-found, Drizzle logger gate, try/catch, N+1 doc)
+- [ ] 09-06-PLAN.md — CookieBanner scaffold + cookie-consent helper (built, NOT mounted)
 
 ### Phase 10: Authentication & Security Core (DEFERRED)
 **Goal:** Implement secure user authentication and fundamental API security.
