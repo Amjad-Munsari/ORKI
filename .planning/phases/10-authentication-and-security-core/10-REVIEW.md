@@ -68,9 +68,9 @@ files_reviewed_list:
 findings:
   critical: 0
   warning: 0
-  info: 6
-  total: 6
-status: fixes_applied
+  info: 0
+  total: 0
+status: clean
 fixes_applied:
   - CR-01
   - WR-01
@@ -82,15 +82,28 @@ fixes_applied:
   - WR-07
   - WR-08
   - WR-09
+  - IN-01
+  - IN-02
+  - IN-03
+  - IN-04
+  - IN-05
+  - IN-06
 fixes_applied_at: 2026-05-11
 fixes_applied_notes: |
-  All Critical (1) and Warning (9) findings addressed in 10 atomic commits
-  on 2026-05-11. WR-01 is documented-mitigation only — full nonce migration
-  deferred to Phase 11 per 10-VERIFICATION.md deviations doc. WR-07 added a
-  STATUS header to the .sql migration file + sidecar NOTES.md; the
-  migration itself was NOT re-applied (production already carries it from
-  2026-05-10). Six Info findings remain out of scope per fix policy
-  (critical_warning).
+  All 16 findings (1 Critical + 9 Warning + 6 Info) addressed in atomic
+  commits on 2026-05-11. WR-01 is documented-mitigation only — full nonce
+  migration deferred to Phase 11 per 10-VERIFICATION.md deviations doc.
+  WR-07 added a STATUS header to the .sql migration file + sidecar
+  NOTES.md; the migration itself was NOT re-applied (production already
+  carries it from 2026-05-10). IN-05 is a documentation-only fix — the
+  double intlMiddleware(request) call is intentional and correctness-
+  load-bearing (Supabase SSR + next-intl cookie propagation pattern); an
+  inline comment now explains why. IN-04 extracted a shared
+  resolveAuthErrorMessage helper to centralize the next-intl dynamic-key
+  escape hatch across LoginForm/SignupForm/ResetPasswordForm.
+  Verification: tsc clean against baseline (34 pre-existing errors in
+  unrelated test files, no new errors introduced), test suite 103 pass +
+  8 skip (matches prior baseline), lint introduces no new errors.
 ---
 
 # Phase 10: Code Review Report
