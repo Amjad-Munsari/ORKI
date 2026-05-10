@@ -400,7 +400,7 @@
     "section": {
       "shopLoadFailed": "نواجه مشكلة في تحميل المتجر الآن. حاول مرة أخرى بعد قليل.",
       "orderLoadFailed": "لا نستطيع عرض طلبك الآن — تم تأكيد الدفع. راسلنا إن احتجت مساعدة.",
-      "adminOrdersFailed": "Order list temporarily unavailable."
+      "adminOrdersFailed": "قائمة الطلبات غير متاحة مؤقتاً."
     }
   },
   "CookieBanner": {
