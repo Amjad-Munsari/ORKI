@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = product.name[locale]
   const fullTitle = `${title} | ORKI`
   const description = product.description[locale]
-  const image = product.images[0] || '/images/og-default.png'
+  const image = product.images[0] || '/og-default.png'
   const path = `/shop/${product.category}/${product.slug}`
 
   return {
