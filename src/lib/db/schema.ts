@@ -265,9 +265,16 @@ export const orderEventsRelations = relations(orderEvents, ({ one }) => ({
 // Server-only audit trail of auth lifecycle events: signup, signin, signin_failed,
 // signout, password_reset_requested, password_reset_completed, admin_access, etc.
 // RLS-enabled-with-no-policies in the DB — anon/authenticated have ZERO access.
-// Only service_role can read or write (BYPASSRLS). Writes happen from auth Server
-// Actions via the admin client (Plan 10-03 `writeAuthEvent`); reads happen only
-// from /admin pages.
+// Only service_role can read or write (BYPASSRLS).
+//
+// WR-03 (Phase 10 review): writes happen via Drizzle (`Plan 10-03 writeAuthEvent`),
+// which uses the postgres connection-string role (also BYPASSRLS). The
+// admin Supabase client is NOT in the audit-write path. If a future
+// refactor reduces the postgres role's privileges, audit writes will start
+// failing silently — `writeAuthEvent` swallows errors per T-10-03-06. Either
+// keep the postgres role privileged OR refactor `writeAuthEvent` to use
+// `createAdminClient()` from `src/lib/supabase/admin.ts` and re-test.
+// Reads happen only from /admin pages, via the service-role admin client.
 
 export const authEvents = pgTable(
   'auth_events',

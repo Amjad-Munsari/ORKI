@@ -4,9 +4,13 @@ import 'server-only';
  *
  * Inserts a row into `public.auth_events` for every auth lifecycle event.
  *
- * Drizzle uses the postgres connection-string role which BYPASSRLS, so writes
- * succeed without a JWT. (Plan 10-02 created the table RLS-enabled with NO
- * policies; only service_role / postgres bypass can read or write.)
+ * Implementation note (WR-03): writes happen via Drizzle, NOT via the
+ * service-role admin client. The postgres connection-string role used by
+ * Drizzle has BYPASSRLS, so writes succeed against the no-policies
+ * `auth_events` table set up by Plan 10-02. If you ever swap the Drizzle
+ * connection to a less-privileged role, audit writes will start failing
+ * silently (the try/catch below swallows them) — at that point refactor
+ * this function to use `createAdminClient()` from `@/lib/supabase/admin`.
  *
  * IMPORTANT: failures are caught + logged but NEVER thrown — audit failures
  * must not break the user's auth flow (T-10-03-06). We accept the risk that
