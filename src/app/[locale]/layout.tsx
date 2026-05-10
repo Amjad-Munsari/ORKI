@@ -10,6 +10,8 @@ import { Footer } from '@/components/footer/Footer';
 import { StoreHydration } from '@/store/StoreHydration';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { PageTransition } from '@/components/PageTransition';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '@/app/globals.css';
 
 type Props = {
@@ -22,7 +24,11 @@ export function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: 'ORKI — Underground Streetwear',
+  metadataBase: new URL('https://orki.sa'),
+  title: {
+    default: 'ORKI — Saudi Streetwear',
+    template: '%s | ORKI',
+  },
   description: 'Saudi streetwear. Dark. Underground.',
 };
 
@@ -54,6 +60,8 @@ export default async function LocaleLayout({ children, params }: Props) {
           </PageTransition>
           <Footer />
         </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
