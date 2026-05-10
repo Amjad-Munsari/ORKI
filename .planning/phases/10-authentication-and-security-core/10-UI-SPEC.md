@@ -1,10 +1,12 @@
 ---
 phase: 10
 slug: authentication-and-security-core
-status: draft
+status: approved
 shadcn_initialized: true
 preset: base-nova (style) / neutral baseColor / lucide icons / cssVariables=true
 created: 2026-05-10
+reviewed_at: 2026-05-10
+checker_iterations: 2
 ---
 
 # Phase 10 — UI Design Contract
