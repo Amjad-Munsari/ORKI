@@ -12,7 +12,9 @@ import { env } from '@/lib/env';
 
 export function isAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false;
-  const allow = (env.SUPABASE_ADMIN_EMAILS ?? '')
+  // env.SUPABASE_ADMIN_EMAILS is z.string().min(1) in src/lib/env.ts so it is
+  // guaranteed non-empty at runtime; no `?? ''` fallback needed.
+  const allow = env.SUPABASE_ADMIN_EMAILS
     .split(',')
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
