@@ -1,11 +1,17 @@
 import { Link } from '@/i18n/navigation'
 import { Truck, RotateCcw, ShieldCheck, Users } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 
-export function Footer() {
+export async function Footer() {
   const currentYear = new Date().getFullYear()
+  const tLegal = await getTranslations('Footer.legal')
 
   return (
     <footer className="w-full bg-black text-white">
+      {/* TODO(i18n) benefit-bar: the four lines below (shipping / returns / payments / support)
+          are EN-only by current Phase-9 contract. Phase 9 reconciles only the returns-policy
+          duration (30 days → 14 days). Full i18n keying of the benefit bar is a future-phase
+          concern. */}
       {/* Benefit Bar */}
       <div className="grid grid-cols-1 md:grid-cols-4 border-y border-white/10">
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
@@ -14,7 +20,7 @@ export function Footer() {
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
           <RotateCcw className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">Easy returns within 30 days</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">Easy returns within 14 days</span>
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
           <ShieldCheck className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
@@ -55,10 +61,11 @@ export function Footer() {
 
             {/* Group 2: Legal */}
             <div className="space-y-6">
-              <span className="text-xs font-semibold text-white/40 block">(Legal)</span>
+              <span className="text-xs font-semibold text-white/40 block">{tLegal('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/privacy" className="text-sm font-semibold hover:text-white/60 transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-sm font-semibold hover:text-white/60 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/legal/privacy" className="text-sm font-semibold hover:text-white/60 transition-colors">{tLegal('privacy')}</Link></li>
+                <li><Link href="/legal/terms" className="text-sm font-semibold hover:text-white/60 transition-colors">{tLegal('terms')}</Link></li>
+                <li><Link href="/legal/cookies" className="text-sm font-semibold hover:text-white/60 transition-colors">{tLegal('cookies')}</Link></li>
               </ul>
             </div>
 
