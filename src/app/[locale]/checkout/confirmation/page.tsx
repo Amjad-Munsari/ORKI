@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation';
 import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
 import { getOrderByReference } from '@/lib/orders/server';
 import { formatSAR } from '@/lib/orders/pricing';
-import type { Locale } from '@/types/domain';
+import type { Locale, Order } from '@/types/domain';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +22,32 @@ export default async function ConfirmationPage({
   const ref = sp.ref ?? sp.orderId;
   if (!ref) notFound();
 
-  const order = await getOrderByReference(ref);
+  // PERF-05: separate "DB unavailable" (try/catch fallback) from "order
+  // doesn't exist" (still notFound()). A Supabase blip should NOT 404 a user
+  // whose payment we already accepted — render reassurance copy instead.
+  let order: Order | null = null;
+  let lookupFailed = false;
+  try {
+    order = await getOrderByReference(ref);
+  } catch (err) {
+    console.error('[checkout/confirmation] getOrderByReference failed', err);
+    lookupFailed = true;
+  }
+
+  if (lookupFailed) {
+    const tErr = await getTranslations('Errors.section');
+    return (
+      <div
+        role="alert"
+        className="min-h-[60vh] flex items-center justify-center px-6"
+      >
+        <p className="text-lg text-white/60 max-w-md text-center">
+          {tErr('orderLoadFailed')}
+        </p>
+      </div>
+    );
+  }
+
   if (!order) notFound();
 
   const t = await getTranslations('Order');
