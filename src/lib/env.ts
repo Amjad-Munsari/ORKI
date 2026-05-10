@@ -1,24 +1,21 @@
-import 'server-only';
 /**
- * Environment variable validation using Zod (SERVER-ONLY scope).
- * This module validates all required env vars at import time and is guarded
- * by `import 'server-only'` to fail the build if any client module imports it.
+ * Environment variable validation using Zod — SERVER-SIDE intent.
  *
- * For client-scoped NEXT_PUBLIC_* access, use `@/lib/env.client` instead.
+ * This module validates all required env vars at import time. It is also
+ * imported by `next.config.ts` at build start so missing env vars fail the
+ * build, not the first request — therefore it cannot carry `'server-only'`
+ * (Next.js loads next.config.ts in a context that the `server-only` package
+ * treats as a Client Component and refuses to import).
  *
- * Add new env vars here when new phases introduce them
- * (Phase 6: auth vars, Phase 7: CDN vars, etc.)
+ * Client components MUST import `@/lib/env.client` instead. The split was
+ * introduced by CR-01 (Phase 10 review) because the prior shape crashed
+ * the browser when client.ts imported this file — `SUPABASE_SERVICE_ROLE_KEY`
+ * is stripped from client bundles, and zod's `min(100)` validation threw at
+ * module load. The split is now the boundary; this file is server-by-convention
+ * (no `NEXT_PUBLIC_` prefix on the service-role + admin keys ensures Next.js
+ * cannot inline them even if a client component accidentally imports here).
  *
- * Phase 10 (auth): adds Supabase URL + anon key + service-role key + admin
- * email allowlist. Note: SUPABASE_SERVICE_ROLE_KEY and SUPABASE_ADMIN_EMAILS
- * intentionally have NO `NEXT_PUBLIC_` prefix — that prefix would force
- * Next.js to inline them into the client bundle (RESEARCH §7 #7, §2.5).
- *
- * CR-01 (Phase 10 review): previously this module was imported by the
- * client-only `src/lib/supabase/client.ts`, which crashed in the browser
- * because Next.js strips non-`NEXT_PUBLIC_*` vars from client bundles. The
- * `server-only` import above and the new `env.client.ts` sibling enforce
- * the split going forward.
+ * Add new env vars when new phases introduce them.
  */
 import { z } from 'zod';
 
