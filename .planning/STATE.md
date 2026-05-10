@@ -4,9 +4,9 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 9
 status: in_progress
-stopped_at: Phase 9 context gathered — 4 areas discussed, all decisions captured in 09-CONTEXT.md. Ready for /gsd-plan-phase 9.
-last_updated: "2026-05-10T00:30:00.000Z"
-last_activity: 2026-05-10 — Phase 9 discuss-phase complete. Decisions: AI-drafts EN+AR legal copy (revisable), no cookie banner (cookieless Vercel Analytics + Speed Insights), real-user perf gating only, above-fold image priority, bilingual sitemap with hreflang, `{Page} | ORKI` titles, N+1 audited clean (Drizzle dev-logging guardrail only), branded EN+AR graceful-degradation pages. Phase 8 carries forward: cart-refresh bug, UAT S2–S7+S9 pending, 08-07 email deferred.
+stopped_at: Phase 9 UI-SPEC approved (6/6 dimensions; 1 FLAG on type scale carry-forward, non-blocking). Ready for /gsd-plan-phase 9.
+last_updated: "2026-05-10T01:15:00.000Z"
+last_activity: 2026-05-10 — Phase 9 UI-SPEC complete. Contract locks: 4-pt Tailwind spacing scale, B/W palette with accent reserved for 4 surfaces (error CTA, inline links, footer hover, focus ring), legal page chrome + branded error/404 + CookieBanner scaffold copy in EN+AR. Zero new shadcn installs. Four hand-rolled components (LegalArticle, CookieTable, BrandedErrorPage, CookieBanner). Open issues for planner: app/error.tsx Client Component translation strategy, legal body copy authorship, footer href migration, OG fallback asset production. Phase 8 carries forward: cart-refresh bug, UAT S2–S7+S9 pending, 08-07 email deferred.
 progress:
   total_phases: 5
   completed_phases: 2
