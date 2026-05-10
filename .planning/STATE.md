@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
-status: executing
-stopped_at: Phase 10 Plan 07 complete — six security headers in next.config.ts (CSP + HSTS + companions with VERCEL_ENV preview branch for vercel.live); tests/security/csp.test.ts (7 cases) + tests/security/headers.test.ts (RUN_HEADER_TESTS-gated) + tests/e2e/csrf.spec.ts (mismatched-Origin → 4xx); 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 outstanding Supabase ops. Phase 10 plans done; sign-off pending verifier ticking gates.
-last_updated: "2026-05-11T00:30:00.000Z"
-last_activity: 2026-05-11 -- Phase 10 Plan 07 executed (4 tasks, 4 commits); next.config.ts headers() block (CSP+HSTS+XFO+nosniff+Referrer-Policy+Permissions-Policy with preview-only vercel.live branch) + tests/security/csp.test.ts + tests/security/headers.test.ts (env-gated) + tests/e2e/csrf.spec.ts + 10-VERIFICATION.md (single-file Phase 10 sign-off doc)
+status: plans-complete-pending-verification
+stopped_at: Phase 10 plans 7/7 + code-review clean (16 findings fixed); Phase 8 cart-refresh regression resolved (commit 4c78aaf). v2.0 milestone artifacts complete on disk; outstanding work is manual verification only — 08-UAT S2-S7+S9, 09-HUMAN-UAT 6 tests, 10-VERIFICATION 6 gates + 3 Supabase dashboard ops.
+last_updated: "2026-05-11T01:30:00.000Z"
+last_activity: 2026-05-11 -- Phase 10 complete (7/7 plans, all SUMMARY.md present, REVIEW.md clean after 16 findings fixed across 18 commits); Phase 8 cart-refresh fix landed (AddToCartButton → addToCartAction); Phase 9 09-HUMAN-UAT tests 4-5 smoke-pass-partial via npm run smoke:routes
 progress:
   total_phases: 6
   completed_phases: 0
@@ -18,7 +18,7 @@ progress:
 # Project State: ORKI
 
 **Current Phase:** 10
-**Status:** Phase 10 plans complete — all 7 plans landed; sign-off pending verifier execution of 10-VERIFICATION.md (3 outstanding Supabase ops + 6 gates)
+**Status:** v2.0 milestone artifacts complete — Phase 10 (7/7) shipped + code-review clean; Phase 8 cart-refresh fix landed; remaining work is manual verification only
 **Last Updated:** 2026-05-11
 
 ## Project Reference
@@ -36,9 +36,9 @@ Plan: 7 of 7 — DONE (10-07 security headers + 10-VERIFICATION.md shipped 2026-
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
-- [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
-- [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; gap closure 09-07 + 09-08 merged; verification pending]
-- [~] Phase 10: Authentication & Security Core [plans complete — 7/7 plans built; Waves 0-3 landed (foundations, schema, actions, UI surface, account-area + cart-merge + UserMenu, admin gate + audit surface, security headers + verification document); Phase 10 sign-off pending verifier execution of 10-VERIFICATION.md]
+- [~] Phase 8: Cart, Checkout State & Order Flow [8/9 plans built; cart-refresh regression resolved (commit 4c78aaf, 2026-05-11); UAT S2-S7+S9 still pending; 08-07 email deferred until RESEND_API_KEY]
+- [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; 09-HUMAN-UAT tests 4-5 smoke-pass-partial; tests 1/2/3/8 deferred to launch; tests 6/7 pending manual runtime triggers]
+- [~] Phase 10: Authentication & Security Core [plans complete — 7/7; code-review clean (16/16 fixed); sign-off pending verifier execution of 10-VERIFICATION.md (6 gates + 3 Supabase dashboard ops)]
 
 Last activity: 2026-05-11 -- Phase 10 Plan 07 complete (security headers + final verification — six headers in next.config.ts via async headers() with VERCEL_ENV preview branch; tests/security/{csp,headers}.test.ts; tests/e2e/csrf.spec.ts; 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 Supabase outstanding ops + threat-model status table + deferred items)
 
@@ -89,21 +89,28 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- **Phase 8 follow-up:** cart resets on full-page refresh (UX-08 / Plan 08-02 cookie-backed hydration regression). Reproduce in EN at `/en/shop`. Logged in `08-UAT.md` Gaps + Test 1.
-- **Phase 8 follow-up:** finish UAT scenarios S2–S7 + S9 once cart-refresh fix lands.
+- **Phase 8 follow-up:** finish UAT scenarios S2–S7 + S9 (cart-refresh fix landed 2026-05-11; remaining scenarios ready to run).
 - **Phase 8 follow-up:** Plan 08-07 (Resend email) deferred until `RESEND_API_KEY` provisioned; restore Scenario 8 then.
+- **Phase 9 follow-up:** 09-HUMAN-UAT tests 1/2/3/8 deferred to launch; tests 6/7 require runtime triggers (force-throw + 404).
+- **Phase 10 follow-up:** 6 manual verification gates in 10-VERIFICATION.md (SEC-07 lockout, SEC-08 admin deny, cross-user RLS, CSP zero-violation, service-role bundle grep, automated suite green).
+- **Phase 10 follow-up:** 3 Supabase dashboard ops outstanding — Confirm-email-OFF verify, rate-limit set to 5/5min/IP, Management API PATCH on 4 rate_limit_* knobs.
+- **Phase 11 deferred:** CSP nonce migration (currently script-src includes 'unsafe-inline'; multi-day refactor across Vercel Analytics + base-ui + next-intl + motion).
 
 ### Blockers/Concerns
 
-- Cart-refresh persistence regression is a major UX-08 gap carried into Phase 9. Acceptable to advance per user direction, but Phase 8 cannot be marked complete until fixed.
+- None. Cart-refresh regression cleared 2026-05-11. All outstanding work is manual verification (user-driven).
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| Phase 8 bug | Cart resets on page refresh (UX-08 / Plan 08-02) | open — diagnose + fix | 2026-05-10 |
-| Phase 8 UAT | Scenarios S2–S7 + S9 outstanding | paused | 2026-05-10 |
+| Phase 8 bug | Cart resets on page refresh (UX-08 / Plan 08-02) | resolved 2026-05-11 (commit 4c78aaf) | — |
+| Phase 8 UAT | Scenarios S2–S7 + S9 outstanding | paused — ready to resume | 2026-05-10 |
 | Phase 8 plan | 08-07 Resend transactional email | deferred until RESEND_API_KEY | 2026-05-10 |
+| Phase 9 UAT | 09-HUMAN-UAT tests 1/2/3/8 | deferred to launch | 2026-05-10 |
+| Phase 9 UAT | 09-HUMAN-UAT tests 6/7 (runtime triggers) | pending manual | 2026-05-11 |
+| Phase 10 verify | 10-VERIFICATION.md — 6 gates + 3 Supabase dashboard ops | pending manual | 2026-05-11 |
+| Phase 11 prep | CSP nonce migration (script-src 'unsafe-inline' removal) | deferred to Phase 11 | 2026-05-11 |
 
 ## Session Continuity
 
