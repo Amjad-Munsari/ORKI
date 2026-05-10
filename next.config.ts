@@ -25,9 +25,19 @@ import createNextIntlPlugin from 'next-intl/plugin';
  * deploys without leaking into the production CSP (RESEARCH §2.4 footgun #2).
  */
 const isPreview = process.env.VERCEL_ENV === 'preview';
+const isProd = process.env.NODE_ENV === 'production';
 const previewScripts = isPreview ? ' https://vercel.live' : '';
 const previewConnect = isPreview ? ' https://vercel.live' : '';
 
+// WR-01 (Phase 10 review): script-src carries 'unsafe-inline' as a deliberate
+// Phase-10 trade-off. Residual risk: any successful XSS becomes immediately
+// exploitable because the attacker's injected <script> would be permitted by
+// CSP. Mitigation deferred to Phase 11 — a full nonce migration must thread
+// per-request nonces through Vercel Analytics, base-ui, next-intl scripts
+// (multi-day refactor, out of Phase 10 scope per 10-VERIFICATION.md
+// deviations). Note: 'strict-dynamic' is intentionally NOT present alongside
+// 'unsafe-inline' (that combination would silently neuter both directives).
+// Phase 11 follow-up: see 10-REVIEW.md WR-01 for the migration plan.
 const csp = [
   `default-src 'self'`,
   `script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com${previewScripts}`,
@@ -43,9 +53,16 @@ const csp = [
   `upgrade-insecure-requests`,
 ].join('; ');
 
+// WR-02 (Phase 10 review): HSTS is production-only. Shipping a 2-year HSTS
+// with preload from `next dev` is harmless on localhost itself, but if a
+// developer ever tunnels their dev server through an HTTPS reverse proxy
+// (ngrok, Tailscale Funnel) the response can pin HSTS on a real hostname
+// for two years. Gate the directive on NODE_ENV === 'production'.
 const securityHeaders = [
   { key: 'Content-Security-Policy', value: csp },
-  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+  ...(isProd
+    ? [{ key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }]
+    : []),
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
