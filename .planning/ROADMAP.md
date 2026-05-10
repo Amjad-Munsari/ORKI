@@ -67,14 +67,24 @@ Plans:
 - [x] 09-07-PLAN.md — Gap closure wave 1: visible defects + production reliability (CR-01..03, WR-01..03)
 - [x] 09-08-PLAN.md — Gap closure wave 2: hygiene + copy + dev-loop polish (WR-04..06, IN-01/02/04/05, smoke-routes UAT helper)
 
-### Phase 10: Authentication & Security Core (DEFERRED)
+### Phase 10: Authentication & Security Core
 **Goal:** Implement secure user authentication and fundamental API security.
 **Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09
+**Plans:** 7 plans (Wave 0..3)
 **Success Criteria:**
 1. User can register and log in via httpOnly cookies
 2. Invalid login returns generic message and locks after repeated failures
 3. API endpoints reject unauthenticated or unvalidated requests
 4. Security headers and CSRF protections are verified active
+
+Plans:
+- [x] 10-01-PLAN.md — Wave 0: Supabase client factories (browser/SSR/admin) + combined Supabase-refresh + next-intl middleware + ESLint admin fence + Playwright config + shared test fixture + Wave-0 smoke test
+- [ ] 10-02-PLAN.md — Wave 0: Schema migration (FK to auth.users + RLS policies) + auth_events audit table
+- [ ] 10-03-PLAN.md — Wave 1: Auth Server Actions (signup/signin/signout/password-reset) with zod + audit + error mapping
+- [ ] 10-04-PLAN.md — Wave 2: Auth UI pages (login / signup / forgot-password / reset-password) + RHF forms
+- [ ] 10-05-PLAN.md — Wave 2: Account area + cart-merge on first sign-in + UserMenu in Navbar
+- [ ] 10-06-PLAN.md — Wave 2: Admin gate (email allowlist) + audit-log surface
+- [ ] 10-07-PLAN.md — Wave 3: Security headers + CSP + final verification + production-bundle service-role-key grep
 
 ---
 

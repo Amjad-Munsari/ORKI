@@ -3,22 +3,22 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
-status: plans-ready
-stopped_at: Phase 10 plans verified (FLAG verdict, 0 BLOCKERs) — ready for /gsd:execute-phase 10
-last_updated: "2026-05-10T21:00:00.000Z"
-last_activity: 2026-05-10 -- Phase 10 PLANs (7) + PATTERNS + PLAN-REVIEW written; plan-checker verdict FLAG, recommendation PROCEED to execute
+status: executing
+stopped_at: Phase 10 Plan 01 complete — Supabase clients + middleware + Playwright + Wave-0 smoke test landed
+last_updated: "2026-05-10T22:00:00.000Z"
+last_activity: 2026-05-10 -- Phase 10 Plan 01 executed (8 tasks, 8 commits); Wave-0 smoke test PASSED (unauthenticated debug RSC returned email:null)
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 28
-  completed_plans: 17
-  percent: 61
+  completed_plans: 18
+  percent: 64
 ---
 
 # Project State: ORKI
 
-**Current Phase:** 09
-**Status:** Phase 09 plans complete — awaiting verification
+**Current Phase:** 10
+**Status:** Phase 10 in progress — Plan 01 (Wave 0 foundations) complete; Plan 02 (schema migration + RLS) next
 **Last Updated:** 2026-05-10
 
 ## Project Reference
@@ -26,21 +26,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-06)
 
 **Core value:** A premium underground streetwear shopping experience that feels as intentional as the brand itself — dark, minimal, and unapologetically cultural.
-**Current focus:** Phase 09 — performance-legal-polish (verification pending)
+**Current focus:** Phase 10 — authentication-and-security-core (executing)
 
 ## Current Position
 
-Phase: 09 (performance-legal-polish) — PLANS COMPLETE, AWAITING VERIFICATION
-Plan: 8 of 8
+Phase: 10 (authentication-and-security-core) — IN PROGRESS
+Plan: 2 of 7 (next: 10-02 schema migration + RLS + auth_events table)
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
 - [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
 - [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; gap closure 09-07 + 09-08 merged; verification pending]
-- [ ] Phase 10: Authentication & Security Core (DEFERRED — uses Supabase Auth per ADR-002) [0%]
+- [~] Phase 10: Authentication & Security Core [executing — 1/7 plans complete; 10-01 Wave-0 foundations landed]
 
-Last activity: 2026-05-10 -- Phase 09 wave 2 gap closure plans 09-07 + 09-08 complete
+Last activity: 2026-05-10 -- Phase 10 Plan 01 complete (Supabase clients + combined middleware + ESLint admin fence + Playwright + Wave-0 smoke test PASS)
 
 ## Performance Metrics
 
@@ -92,7 +92,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-08
-Stopped at: Phase 5 plans complete (4 plans)
-Resume file: .planning/phases/07-product-catalog/07-CONTEXT.md
-Next command: /gsd-plan-phase 7
+Last session: 2026-05-10
+Stopped at: Phase 10 Plan 01 complete — 8 tasks committed; Wave-0 smoke test PASSED
+Resume file: .planning/phases/10-authentication-and-security-core/10-02-PLAN.md
+Next command: /gsd-execute-phase 10 (or execute next plan in Wave 0: 10-02 schema migration + RLS)
