@@ -15,9 +15,10 @@ updated: 2026-05-10T00:10:00Z
 ### 1. EN happy path (UX-01, UX-02, UX-03, ECOM-02)
 expected: |
   EN locale: add product+size to cart, drawer shows item, refresh persists cart. Checkout step 1 shows "Step 1 of 2" with aria-current="step". Fill valid Saudi shipping (phone +966 50 123 4567), continue. Step 2 shows "Step 2 of 2" with sr-only live-region announcement. Pick mada. OrderSummary shows Subtotal / Shipping (Free if ≥300 SAR) / VAT (15%) / Total in Western numerals. TrustSignals visible. Complete Purchase. Land on /en/checkout/confirmation?ref=ORK-XXXXXX. /en/admin/orders shows the order with status confirmed.
-result: issue
+result: passed
 reported: "refreshing the page resets the cart"
 severity: major
+fix: "AddToCartButton.tsx now calls addToCartAction (debug session: cart-resets-on-refresh). Verified by user 2026-05-10 — cart persists across refresh."
 
 ### 2. AR happy path with RTL (UX-02, UX-03)
 expected: |
@@ -63,8 +64,8 @@ result: [pending]
 ## Summary
 
 total: 9
-passed: 0
-issues: 1
+passed: 1
+issues: 0
 pending: 7
 skipped: 1
 blocked: 0
@@ -72,11 +73,13 @@ blocked: 0
 ## Gaps
 
 - truth: "Cart persists across full-page refresh (UX-08; Plan 08-02 cookie-backed cart hydration)"
-  status: failed
+  status: resolved
   reason: "User reported: refreshing the page resets the cart"
+  resolved: 2026-05-10
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
+  root_cause: "AddToCartButton.tsx (PDP) never invoked the addToCartAction Server Action — the click only mutated Zustand in-memory, so nothing reached Postgres. On refresh, /api/cart correctly returned an empty cart and StoreHydration replaced Zustand with []. Plan 08-02 Task 3 wired CartItem.tsx (drawer) but omitted the PDP add path; addToCartAction had zero call sites in src/."
+  fix: "Wired AddToCartButton to call addToCartAction inside useTransition, mirroring CartItem.tsx (optimistic Zustand → Server Action → reconcile via setItems on success/failure). sizeId resolved from product.sizes by label."
+  artifacts: ["src/components/pdp/AddToCartButton.tsx"]
   missing: []
-  debug_session: ""
+  debug_session: ".planning/debug/cart-resets-on-refresh.md"

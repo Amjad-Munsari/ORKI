@@ -1,10 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Check } from 'lucide-react'
 import { animationPresets } from '@/lib/animation-presets'
 import { useCartStore } from '@/store/cartStore'
-import type { Product, Locale } from '@/types/domain'
+import { addToCartAction } from '@/app/actions/cart'
+import type { Product, Locale, ServerCartItem } from '@/types/domain'
 
 type ButtonState = 'idle' | 'success'
 
@@ -17,16 +18,59 @@ interface AddToCartButtonProps {
 export function AddToCartButton({ product, selectedSize, locale }: AddToCartButtonProps) {
   const [state, setState] = useState<ButtonState>('idle')
   const addItem = useCartStore(s => s.addItem)
+  const setItems = useCartStore(s => s.setItems)
   const setDrawerOpen = useCartStore(s => s.setDrawerOpen)
   const shouldReduceMotion = useReducedMotion()
+  const [, startTransition] = useTransition()
+
+  /** Refetch from the server when the action fails — reconciles optimistic UI. */
+  const refetch = async () => {
+    try {
+      const res = await fetch('/api/cart', { cache: 'no-store' })
+      const json = (await res.json()) as {
+        ok?: boolean
+        cart?: { items?: ServerCartItem[] } | null
+      }
+      if (json?.ok && json.cart) {
+        setItems(
+          (json.cart.items ?? []).map((si) => ({
+            id: si.id,
+            sizeId: si.sizeId,
+            product: si.product,
+            selectedSize: si.sizeLabel,
+            quantity: si.quantity,
+          }))
+        )
+      }
+    } catch {
+      /* leave optimistic state in place */
+    }
+  }
 
   function handleClick() {
     if (!selectedSize || state === 'success') return
+    const sizeId = product.sizes.find(s => s.label === selectedSize)?.id
     addItem(product, selectedSize)
     setDrawerOpen(true)
     setState('success')
     // Reset after 1500ms per D-11
     setTimeout(() => setState('idle'), 1500)
+    if (!sizeId) return
+    startTransition(async () => {
+      const result = await addToCartAction(product.id, sizeId, 1)
+      if (!result.ok) await refetch()
+      else {
+        setItems(
+          result.data.items.map((si) => ({
+            id: si.id,
+            sizeId: si.sizeId,
+            product: si.product,
+            selectedSize: si.sizeLabel,
+            quantity: si.quantity,
+          }))
+        )
+      }
+    })
   }
 
   return (
