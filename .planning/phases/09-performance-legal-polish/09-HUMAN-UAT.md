@@ -22,14 +22,17 @@ result: [pending]
 
 ### 3. sitemap.xml returns 200 with ≥ 18 `<url>` entries (live)
 expected: `curl -s http://localhost:3000/sitemap.xml | grep -c '<url>'` ≥ 18
+local: NOT covered by `npm run smoke:routes` — sitemap.ts hits Drizzle (`getAllProducts()`); requires Vercel preview deploy with real DB. Smoke runner uses stub:// DB URLs.
 result: [pending]
 
 ### 4. robots.txt returns 200 with locale-prefixed Disallow rules (live)
 expected: curl -s /robots.txt shows Disallow: /en/admin/, /ar/admin/, /en/checkout/, /ar/checkout/, /api/
+local: now runnable locally via `npm run smoke:routes` (covers /robots.txt = 200 + contains "Disallow:"). For full Disallow-line audit, run preview deploy.
 result: [pending]
 
 ### 5. Per-page `<title>` cascade renders correctly via title.template (live)
 expected: curl /en/about → `<title>About | ORKI</title>`; /en/contact → `<title>Contact | ORKI</title>`; /en/shop/tops → `<title>Tops | ORKI</title>`; PDP → `<product name> | ORKI` (single suffix only)
+local: now runnable locally via `npm run smoke:routes` for /en/about, /en/contact, /en/legal/privacy, /en/legal/terms (each must contain `| ORKI</title>`). Shop categories + PDP are DB-backed; preview deploy required for those.
 result: [pending]
 
 ### 6. Branded global-error renders with bilingual copy on top-level uncaught error
