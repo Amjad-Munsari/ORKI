@@ -4,21 +4,21 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
 status: executing
-stopped_at: Phase 10 Plan 01 complete — Supabase clients + middleware + Playwright + Wave-0 smoke test landed
-last_updated: "2026-05-10T22:00:00.000Z"
-last_activity: 2026-05-10 -- Phase 10 Plan 01 executed (8 tasks, 8 commits); Wave-0 smoke test PASSED (unauthenticated debug RSC returned email:null)
+stopped_at: Phase 10 Plan 02 complete — schema migration applied (uuid FKs + RLS + auth_events); Wave 0 done, Wave 1 next
+last_updated: "2026-05-10T23:30:00.000Z"
+last_activity: 2026-05-10 -- Phase 10 Plan 02 executed (5 tasks, 6 commits); migration applied to production Supabase; carts/orders user_id are uuid + FK to auth.users(id); 6 tables RLS-enabled with 9 policies; auth_events table live
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 28
-  completed_plans: 18
-  percent: 64
+  completed_plans: 19
+  percent: 68
 ---
 
 # Project State: ORKI
 
 **Current Phase:** 10
-**Status:** Phase 10 in progress — Plan 01 (Wave 0 foundations) complete; Plan 02 (schema migration + RLS) next
+**Status:** Phase 10 in progress — Wave 0 complete (Plans 01 + 02); Wave 1 (auth Server Actions, Plan 10-03) next
 **Last Updated:** 2026-05-10
 
 ## Project Reference
@@ -31,16 +31,16 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 10 (authentication-and-security-core) — IN PROGRESS
-Plan: 2 of 7 (next: 10-02 schema migration + RLS + auth_events table)
+Plan: 3 of 7 (next: 10-03 auth Server Actions — Wave 1)
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
 - [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
 - [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; gap closure 09-07 + 09-08 merged; verification pending]
-- [~] Phase 10: Authentication & Security Core [executing — 1/7 plans complete; 10-01 Wave-0 foundations landed]
+- [~] Phase 10: Authentication & Security Core [executing — 2/7 plans complete; Wave 0 foundations + schema landed]
 
-Last activity: 2026-05-10 -- Phase 10 Plan 01 complete (Supabase clients + combined middleware + ESLint admin fence + Playwright + Wave-0 smoke test PASS)
+Last activity: 2026-05-10 -- Phase 10 Plan 02 complete (hand-authored migration: text→uuid + cross-schema FKs to auth.users + RLS on 6 tables with 9 policies + auth_events audit table; applied to production via custom script with journal backfill; Drizzle schema mirrored)
 
 ## Performance Metrics
 
@@ -93,6 +93,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-05-10
-Stopped at: Phase 10 Plan 01 complete — 8 tasks committed; Wave-0 smoke test PASSED
-Resume file: .planning/phases/10-authentication-and-security-core/10-02-PLAN.md
-Next command: /gsd-execute-phase 10 (or execute next plan in Wave 0: 10-02 schema migration + RLS)
+Stopped at: Phase 10 Plan 02 complete — 5 tasks committed; migration applied + verified against production Supabase
+Resume file: .planning/phases/10-authentication-and-security-core/10-03-PLAN.md
+Next command: /gsd-execute-phase 10 (next plan: 10-03 auth Server Actions — Wave 1)
