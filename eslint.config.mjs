@@ -74,6 +74,16 @@ const eslintConfig = [
       'no-restricted-imports': 'off',
     },
   },
+  // CommonJS build/devops scripts genuinely need `require()` — they are not
+  // bundled and must remain executable as plain Node CJS. Scope the override
+  // tightly to scripts/**/*.cjs so it does not loosen anything in src/** or
+  // shadow the supabase admin fence above.
+  {
+    files: ['scripts/**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 ];
 
 export default eslintConfig;
