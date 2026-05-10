@@ -25,16 +25,11 @@ export default async function ConfirmationPage({
   // PERF-05: separate "DB unavailable" (try/catch fallback) from "order
   // doesn't exist" (still notFound()). A Supabase blip should NOT 404 a user
   // whose payment we already accepted — render reassurance copy instead.
-  let order: Order | null = null;
-  let lookupFailed = false;
+  let order: Order | null;
   try {
     order = await getOrderByReference(ref);
   } catch (err) {
     console.error('[checkout/confirmation] getOrderByReference failed', err);
-    lookupFailed = true;
-  }
-
-  if (lookupFailed) {
     const tErr = await getTranslations('Errors.section');
     return (
       <div
