@@ -41,6 +41,37 @@ const eslintConfig = [
             'Physical Tailwind direction class detected. Use logical properties: ms-/me- (margin), ps-/pe- (padding), border-s-/border-e-. These work in both LTR and RTL.',
         },
       ],
+
+      // Phase 10 — fence the Supabase service-role admin client. The admin
+      // client carries SUPABASE_SERVICE_ROLE_KEY and bypasses RLS; importing
+      // it from anywhere outside the allowlisted directories risks bundling
+      // the key into client code.
+      // Allowlisted callers (see override below): src/app/actions/admin/**,
+      // src/app/[locale]/admin/**, and tests/**.
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/lib/supabase/admin'],
+              message:
+                'The Supabase admin (service-role) client may only be imported from src/app/actions/admin/**, src/app/[locale]/admin/**, or tests/**. Importing elsewhere risks bundling SUPABASE_SERVICE_ROLE_KEY into client code.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // Allowlist: turn the no-restricted-imports rule OFF inside admin paths
+  // and tests so the admin client can be legitimately consumed there.
+  {
+    files: [
+      'src/app/actions/admin/**/*',
+      'src/app/[locale]/admin/**/*',
+      'tests/**/*',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
     },
   },
 ];
