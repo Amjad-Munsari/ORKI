@@ -5,9 +5,19 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CartTrigger } from './CartTrigger'
 import { ShopDropdown } from './ShopDropdown'
+import { UserMenu } from '@/components/auth/UserMenu'
+import { createClient } from '@/lib/supabase/server'
 
 export async function Navbar() {
   const t = await getTranslations('Nav')
+  // Phase 10 Plan 05 — auth slot. supabase.auth.getUser() revalidates the JWT
+  // against Supabase Auth (NOT the legacy session API — see lib/supabase/
+  // server.ts docblock for the spoofability rationale).
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const authedUser = user ? { id: user.id, email: user.email ?? '' } : null
 
   return (
     <header className="fixed top-0 z-50 w-full bg-white text-black border-b border-black/5">
@@ -57,11 +67,14 @@ export async function Navbar() {
           <div className="h-full flex items-center justify-center">
             <CartTrigger ariaLabel={t('cart')} />
           </div>
+          <div className="hidden md:flex h-full items-center justify-center">
+            <UserMenu user={authedUser} />
+          </div>
           <div className="h-full flex items-center justify-center">
             <LanguageSwitcher />
           </div>
           <div className="md:hidden h-full flex items-center justify-center">
-            <MobileNavDrawer />
+            <MobileNavDrawer user={authedUser} />
           </div>
         </div>
 

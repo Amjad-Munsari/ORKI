@@ -12,8 +12,18 @@ import {
 } from '@/components/ui/sheet';
 import {useDirection} from '@/hooks/useDirection';
 import {animationPresets} from '@/lib/animation-presets';
+import {UserMenu} from '@/components/auth/UserMenu';
 
-export function MobileNavDrawer() {
+interface AuthedUser {
+  id: string;
+  email: string;
+}
+
+interface MobileNavDrawerProps {
+  user?: AuthedUser | null;
+}
+
+export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations('Nav');
   const locale = useLocale();
@@ -125,6 +135,12 @@ export function MobileNavDrawer() {
           >
             {t('contact')}
           </Link>
+          {/* Phase 10 Plan 05 — auth slot. UserMenu handles both signed-in
+              and signed-out variants; the dropdown panel itself reuses the
+              same base-ui menu chrome as desktop. */}
+          <div className="pt-4 mt-2 border-t border-white/10">
+            <UserMenu user={user} />
+          </div>
         </nav>
       </SheetContent>
     </Sheet>
