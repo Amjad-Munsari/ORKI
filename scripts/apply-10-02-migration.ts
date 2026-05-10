@@ -77,9 +77,10 @@ async function main() {
       try {
         await tx.unsafe(stmt);
         process.stdout.write(' ok\n');
-      } catch (e: any) {
+      } catch (e: unknown) {
         process.stdout.write(' FAIL\n');
-        throw new Error(`stmt #${i + 1} failed: ${e.message}\n--- SQL ---\n${stmt}`);
+        const msg = e instanceof Error ? e.message : String(e);
+        throw new Error(`stmt #${i + 1} failed: ${msg}\n--- SQL ---\n${stmt}`);
       }
     }
 
@@ -107,7 +108,8 @@ async function main() {
   await sql.end();
 }
 
-main().catch((e) => {
-  console.error('\n❌ MIGRATION FAILED:', e.message || e);
+main().catch((e: unknown) => {
+  const msg = e instanceof Error ? e.message : String(e);
+  console.error('\n❌ MIGRATION FAILED:', msg);
   process.exit(1);
 });
