@@ -35,7 +35,11 @@ export default defineConfig({
             'node_modules',
             'dist',
             '.next',
-            // Pre-existing test debt — calls async getAllProducts() as if sync.
+            // Pre-existing assertion debt — file now type-checks cleanly
+            // (await + Size shape fixed during Phase 10 cleanup), but the
+            // hard-coded fixture-count assertions ("3 tops", "3 bottoms")
+            // and the specific product IDs (orki-washed-tee-ecru,
+            // orki-heavy-tee-black) no longer match the Phase 5 DB seed.
             // Tracked in .planning/phases/08-cart-checkout-orders/deferred-items.md.
             'tests/products.test.ts',
             // Integration tests run in a dedicated serial project below.
@@ -57,12 +61,21 @@ export default defineConfig({
           setupFiles: ['./tests/setup.ts'],
           include: ['tests/integration/**/*.test.ts'],
           exclude: ['node_modules', 'dist', '.next'],
-          // Vitest 4: pool options are top-level (forks pool with singleFork).
+          // Vitest 4: `poolOptions.forks.singleFork: true` was removed from
+          // the public type. The equivalent serial-pool behavior is achieved
+          // with `maxWorkers: 1` + `fileParallelism: false` — required
+          // because integration tests TRUNCATE shared Postgres tables between
+          // cases and parallel execution deadlocks. Isolation is left at
+          // the default (true) so module state resets between files.
           pool: 'forks',
-          forks: { singleFork: true },
+          maxWorkers: 1,
           fileParallelism: false,
           testTimeout: 30_000,
           hookTimeout: 30_000,
+          // Vitest 4: projects with different `maxWorkers` must declare a
+          // unique `sequence.groupOrder`. Run integration last so the serial
+          // pool doesn't block parallel projects.
+          sequence: { groupOrder: 1 },
         },
       },
       {
