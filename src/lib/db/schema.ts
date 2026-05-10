@@ -105,8 +105,12 @@ export const carts = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     /** Opaque session id stored in orki_sid httpOnly cookie. */
     sessionId: text('session_id').notNull().unique(),
-    /** Nullable until Phase 10 auth lands. text so a future text-based user id slots in. */
-    userId: text('user_id'),
+    // userId points at auth.users(id). Drizzle cannot introspect the auth schema
+    // (ADR-002 §6), so the FK is enforced at the DB layer only via the migration's
+    // ALTER TABLE ... ADD CONSTRAINT (0002_phase10_auth_fk_and_rls.sql). Do NOT
+    // chain .references(...) here — it would break drizzle-kit's generate diff.
+    /** Nullable. Phase 10: cross-schema FK to auth.users(id) ON DELETE SET NULL. */
+    userId: uuid('user_id'),
     /** Locale at cart creation/last update — used for email language. */
     locale: text('locale').notNull().default('en'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -158,8 +162,12 @@ export const orders = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     /** Public-facing order number, e.g. ORK-A1B2C3. */
     reference: text('reference').notNull().unique(),
-    /** Nullable until Phase 10 (guest checkout). */
-    userId: text('user_id'),
+    // userId points at auth.users(id). Drizzle cannot introspect the auth schema
+    // (ADR-002 §6), so the FK is enforced at the DB layer only via the migration's
+    // ALTER TABLE ... ADD CONSTRAINT (0002_phase10_auth_fk_and_rls.sql). Do NOT
+    // chain .references(...) here — it would break drizzle-kit's generate diff.
+    /** Nullable for guest checkout. Phase 10: cross-schema FK to auth.users(id) ON DELETE SET NULL. */
+    userId: uuid('user_id'),
     /** Snapshot of email at order time. */
     email: text('email').notNull(),
     /** Snapshot of cart locale at submit — used by email send. */
@@ -251,6 +259,40 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
 export const orderEventsRelations = relations(orderEvents, ({ one }) => ({
   order: one(orders, { fields: [orderEvents.orderId], references: [orders.id] }),
 }));
+
+// ─── Auth Events (Phase 10 audit log) ─────────────────────────────────────────
+//
+// Server-only audit trail of auth lifecycle events: signup, signin, signin_failed,
+// signout, password_reset_requested, password_reset_completed, admin_access, etc.
+// RLS-enabled-with-no-policies in the DB — anon/authenticated have ZERO access.
+// Only service_role can read or write (BYPASSRLS). Writes happen from auth Server
+// Actions via the admin client (Plan 10-03 `writeAuthEvent`); reads happen only
+// from /admin pages.
+
+export const authEvents = pgTable(
+  'auth_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    // userId is intentionally NOT FK'd to auth.users — the log must survive user
+    // deletion for forensic purposes (RESEARCH §7 #12). Email is also kept as a
+    // separate snapshot so the row remains useful after deletion.
+    userId: uuid('user_id'),
+    email: text('email'),
+    event: text('event').notNull(),
+    metadata: jsonb('metadata'),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('auth_events_user_id_idx').on(table.userId),
+    index('auth_events_event_idx').on(table.event),
+    index('auth_events_created_at_idx').on(table.createdAt),
+  ]
+);
+
+export type AuthEventRow = typeof authEvents.$inferSelect;
+export type NewAuthEventRow = typeof authEvents.$inferInsert;
 
 // ─── Type Exports (Drizzle inference) ─────────────────────────────────────────
 
