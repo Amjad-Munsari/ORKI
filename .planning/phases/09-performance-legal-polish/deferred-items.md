@@ -28,3 +28,13 @@ Phase 9.
 These are pre-existing test-file issues that pre-date Phase 9 and are not gated by
 Plan 09-01. Recommended owner: a test-fixture refresh plan after Phase 8 UAT
 finalization.
+
+## Pre-existing build-time env validation (untouched, discovered Plan 09-06)
+
+`npm run build` halts at `src/lib/env.ts:44` requiring `STORAGE_URL` or `DATABASE_URL`.
+This is pre-existing infrastructure (Phase 8 / data layer) and is not introduced or
+modified by Plan 09-06. The two new files (`src/lib/cookie-consent.ts` and
+`src/components/CookieBanner.tsx`) type-check cleanly under the project `tsc --noEmit`
+run (zero errors in either file path); the production build is gated by the env
+variable, not by these files. Out of scope for Plan 09-06; recommended owner: a
+build-environment configuration plan.
