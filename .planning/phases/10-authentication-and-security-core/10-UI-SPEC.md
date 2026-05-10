@@ -41,6 +41,11 @@ Tailwind's default scale. Phase 10 binds the following values from that scale.
 All values are multiples of 4. **All directional spacing MUST use logical
 properties (`ms-*`, `me-*`, `ps-*`, `pe-*`, `space-x-reverse`-aware utilities).**
 
+> **Scale source note:** The scale is bound from the Tailwind v4 default spacing
+> scale; values outside the canonical {4, 8, 16, 24, 32, 48, 64} set
+> (e.g., 12 px, 96 px) are accepted because the project policy is to use
+> Tailwind defaults rather than a custom curated scale.
+
 | Token | Tailwind | Value | Phase 10 Usage |
 |-------|----------|-------|----------------|
 | xs    | `2`      | 8 px  | Inline gap between input and helper text; chip padding; checkbox-to-label gap |
@@ -70,28 +75,39 @@ Bind these exact values. Do NOT introduce new sizes or weights.
 `tracking-tighter` (-0.025em) and the global `letter-spacing: -0.02em` on
 `h1..h6` are already established in `globals.css`.
 
-| Role | Tailwind | Size | Weight | Line Height | Letter-spacing | Used For |
-|------|----------|------|--------|-------------|----------------|----------|
-| Display | `text-4xl md:text-6xl font-bold uppercase tracking-tighter` | 36 / 60 px | 700 | 1.0 (`leading-none` on hero variants) | -0.02em (global) | Page H1 on `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/account` |
-| Heading | `text-2xl font-bold` | 24 px | 700 | 1.2 | -0.02em (global) | Sub-section headings (e.g., "Recent orders") inside `/account` |
-| Body    | `text-sm` (latin auto-bumped to 17px in AR via `:lang(ar)`) | 14 px | 400 | 1.5 | 0 | Helper paragraphs, prose under hero, "Don't have an account?" line |
-| Label   | `text-[10px] uppercase tracking-widest font-bold` | 10 px | 700 | 1.4 | 0.1em (`tracking-widest`) | Form labels (matches `ShippingForm` `Field`) |
-| Input value | `text-base` (16 px to defeat iOS auto-zoom) | 16 px | 400 | 1.5 | 0 | All `<input>` text content |
-| Helper  | `text-[12px] text-white/60 leading-relaxed` | 12 px | 400 | 1.6 | 0 | "8 characters minimum" copy under password input |
-| Error   | `text-xs text-red-400` | 12 px | 400 | 1.4 | 0 | `<p role="alert">` under invalid field |
-| Eyebrow / meta | `text-[10px] uppercase tracking-widest text-white/40 font-bold` | 10 px | 700 | 1.4 | 0.1em | "Sign in", "Reset password" eyebrow above H1; "Reference" label on order rows |
-| Button label (primary) | `text-sm font-bold uppercase tracking-widest` | 14 px | 700 | 1 | 0.1em | All primary CTAs (matches confirmation `Back to Home`) |
-| Link    | `text-sm underline underline-offset-8 hover:opacity-60` | 14 px | 400 | 1.5 | 0 | "Forgot password?", "Create an account", "Sign in instead" |
+**The scale is exactly 4 distinct font sizes: `12 / 14 / 16 / 36–60 (responsive)`.**
+Tier 1 is a single role with two breakpoints (`text-4xl md:text-6xl`) and is
+counted as ONE size, not two. Reviewers must not double-count.
 
-Total declared: **3 weight tiers (400, 700)** — within the "≤2 weights" budget if
-"700 italic" used elsewhere in admin is excluded; auth surfaces use only 400 / 700
-(non-italic). **8 size roles** but they map to **4 distinct sizes** (10, 12, 14, 16, 24, 36, 60)
-with semantic role labels. Do not introduce a 9th.
+| Tier | Role(s) | Tailwind | Size (px) | Weight | Line Height | Letter-spacing | Used For |
+|------|---------|----------|-----------|--------|-------------|----------------|----------|
+| **1** | Display (responsive H1, also reused for sub-section heading on `/account`) | `text-4xl md:text-6xl font-bold uppercase tracking-tighter` | **36 / 60** (one role, two breakpoints) | 700 | 1.0 (`leading-none`) | -0.02em (global) | Page H1 on `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/account`; "Recent orders" sub-section heading on `/account` (responsive bump retained) |
+| **2** | Input value (mandatory anti-iOS-zoom) | `text-base` | **16** | 400 | 1.5 | 0 | All `<input>` and `<select>` text content. **Required by iOS Safari** — anything below 16 px triggers focus-zoom. |
+| **3** | Body / Button label / Link / Helper-prose | `text-sm` (latin auto-bumped to 17 px in AR via `:lang(ar)` optical bump) | **14** | 400 (body, link, helper) / 700 (button label, uppercase tracking-widest) | 1.5 (body, link) / 1 (button) | 0 (body, link) / 0.1em (button) | Body prose under hero, "Don't have an account?" line, "Forgot password?" link, all primary CTA labels (`Sign in`, `Create account`, `Send recovery link`, `Update password`), "Sign in instead", "Continue shopping", date-line on `OrderRow`, total amount on `OrderRow`, signed-in-as line, dropdown menu items |
+| **4** | Meta / Label / Helper-micro / Error / Eyebrow | `text-[12px]` (or `text-xs` = 12 px) | **12** | 700 (label, eyebrow) / 400 (helper, error) | 1.4 (label, error) / 1.6 (helper) | 0.1em (`tracking-widest` for label & eyebrow) / 0 (helper, error) | Form labels, helper copy ("8 characters minimum", "We'll send a recovery link…"), `<p role="alert">` error messages, eyebrow above H1 ("Account", "New account", "Reset"), "Reference" label on order rows, "Signed in as {email}" microline in dropdown panel |
+
+**Weights:** exactly **2** — `400` (regular) and `700` (bold). No `500`, `600`, no italics on auth surfaces.
+
+**Why 10 px was dropped:** the previous draft had a 10 px tier for labels, eyebrows,
+and dropdown microlines. 10 px risks **WCAG 1.4.4 (Resize text)** failures at
+200 % zoom on small viewports and reads as too small for IBM Plex Arabic glyphs,
+which need more vertical room than Latin to remain legible. **All former 10 px
+roles are merged into Tier 4 (12 px).**
+
+**Why 24 px was dropped:** the previous draft used `text-2xl` (24 px) for a
+single sub-section heading on `/account` ("Recent orders"). The orders list is
+the only place that heading appears; reusing the Tier 1 Display
+(`text-4xl md:text-6xl`) at the same responsive bump keeps the page visually
+unified and avoids introducing a 5th size for one surface.
 
 **RTL reminder:** `tracking-widest` and `tracking-tighter` apply to LATIN text;
 in AR, IBM Plex Arabic does not require letter-spacing (Arabic ligatures break).
 Wrap latin-only display text (e.g., the literal word "ORKI", reference codes) in
-`dir="ltr"` spans. **Reference/order codes are always LTR.**
+`dir="ltr"` spans. **Reference/order codes are always LTR.** The 12 px Tier-4
+tracking-widest classes (`tracking-widest` on labels and eyebrows) render as
+plain 12 px in AR — the optical-bump rule in `globals.css` already lifts AR
+body to ~17 px equivalent, but Tier-4 micro-text stays at 12 px in both locales
+(eyebrows and labels are short and high-contrast, so AR readability is acceptable).
 
 ---
 
@@ -120,7 +136,7 @@ border on inputs, the H1 itself, and the user-dropdown trigger underline-on-hove
 
 **Status pill color (carry-over from `messages.Order.status`):**
 Status pills are **outline-only**, no fill: `border border-white/30 text-white/80
-text-[10px] uppercase tracking-widest px-3 py-1 rounded-none`. All six statuses
+text-[12px] uppercase tracking-widest px-3 py-1 rounded-none`. All six statuses
 (`pending`, `confirmed`, `shipped`, `delivered`, `cancelled`, `refunded`) use
 the same token — status conveyed by **label text**, not color. (Brand constraint
 from CLAUDE.md: black & white only; no traffic-light color system.)
@@ -134,7 +150,7 @@ from CLAUDE.md: black & white only; no traffic-light color system.)
 | `rgba(255,255,255,0.40)` on `#000000` | ~8.4:1 | AAA |
 | `#F87171` (red-400) on `#000000` | ~5.4:1 | AA |
 | `#000000` on `#FFFFFF` (CTA) | 21:1 | AAA |
-| Eyebrow 10px white/40 on `#111111` | ~7.6:1 | AA (small text) |
+| Eyebrow 12px white/40 on `#111111` | ~7.6:1 | AA (small text) |
 
 `text-white/20` is decorative-only and may fall below AA — must NEVER carry meaning.
 
@@ -189,12 +205,13 @@ className: 'w-full bg-transparent border-b border-white/20 py-3 min-h-[44px] tex
 ### Label
 
 ```
-className: 'block text-[10px] uppercase tracking-widest text-white/40 mb-2 font-bold'
+className: 'block text-[12px] uppercase tracking-widest text-white/40 mb-2 font-bold'
 ```
 
 `htmlFor` always set. AR localization keeps the same class — `tracking-widest` is
 ignored by AR text rendering at this size (acceptable; `text-white/40` provides
-the visual weight).
+the visual weight). Tier 4 (12 px) — note: previously drafted as 10 px; promoted
+to 12 px to satisfy WCAG 1.4.4 and AR readability.
 
 ### Helper text
 
@@ -213,6 +230,8 @@ via space: `aria-describedby="${id}-helper ${id}-error"` when both present).
 ```
 <p id="${id}-error" role="alert" className="text-red-400 text-xs mt-2">{message}</p>
 ```
+
+(`text-xs` = 12 px in Tailwind v4 — Tier 4.)
 
 **MessageKey-driven:** errors come back from Server Actions in the
 `ActionResult<T>` envelope as `messageKey: 'Auth.errors.invalidCredentials'`,
@@ -272,7 +291,7 @@ generic SaaS form-on-card with logo header.
   <div className="w-full max-w-md space-y-12">
     {/* Eyebrow + H1 */}
     <header className="text-center space-y-2">
-      <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
+      <p className="text-[12px] uppercase tracking-widest text-white/40 font-bold">
         {t('eyebrow')}                   {/* "Account" / "New account" / "Reset" */}
       </p>
       <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-tighter text-white leading-none">
@@ -339,7 +358,7 @@ not a control panel.
 
     {/* Page header */}
     <header className="space-y-3">
-      <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
+      <p className="text-[12px] uppercase tracking-widest text-white/40 font-bold">
         {t('eyebrow')}                              {/* "Account" */}
       </p>
       <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-tighter text-white leading-none">
@@ -366,6 +385,11 @@ not a control panel.
 </main>
 ```
 
+> **Note on sub-section headings:** if a future sub-section is added inside
+> `/account` (e.g., "Recent orders" above the list), reuse the **Tier 1 Display**
+> at the same responsive class (`text-4xl md:text-6xl`). Do NOT introduce a
+> Tier-2 heading at 24 px — that tier was removed from this contract.
+
 ### `<OrderRow>` spec
 
 ```
@@ -378,7 +402,7 @@ not a control panel.
   >
     <div className="flex items-start justify-between gap-4">
       <div className="space-y-1">
-        <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
+        <p className="text-[12px] uppercase tracking-widest text-white/40 font-bold">
           {t('referenceLabel')}                    {/* "Reference" */}
         </p>
         <p className="font-mono font-bold text-white tracking-wider" dir="ltr">
@@ -389,7 +413,7 @@ not a control panel.
         </p>
       </div>
       <div className="flex flex-col items-end gap-2">
-        <span className="border border-white/30 text-white/80 text-[10px]
+        <span className="border border-white/30 text-white/80 text-[12px]
                          uppercase tracking-widest px-3 py-1 rounded-none">
           {t(`Order.status.${order.status}`)}
         </span>
@@ -412,11 +436,11 @@ via explicit `dir="ltr"`.
 
 ```
 <div className="bg-[#111111] border border-white/10 rounded-lg p-12 text-center space-y-6">
-  <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
+  <p className="text-[12px] uppercase tracking-widest text-white/40 font-bold">
     {t('emptyEyebrow')}                            {/* "No orders yet" */}
   </p>
-  <p className="text-2xl font-bold uppercase tracking-tighter text-white">
-    {t('emptyHeading')}                            {/* "Nothing here yet." */}
+  <p className="text-4xl md:text-6xl font-bold uppercase tracking-tighter text-white leading-none">
+    {t('emptyHeading')}                            {/* "Nothing here yet." — Tier 1 Display, reused */}
   </p>
   <p className="text-sm text-white/60 max-w-xs mx-auto">
     {t('emptyBody')}                               {/* "Once you place an order it'll show up here." */}
@@ -426,6 +450,11 @@ via explicit `dir="ltr"`.
   </Link>
 </div>
 ```
+
+> **Note:** the empty-state heading was previously drafted at `text-2xl` (24 px).
+> It now reuses the Tier 1 Display (`text-4xl md:text-6xl`) so the empty-state
+> card carries the same editorial weight as the page H1 — and so the contract
+> stays bound to exactly 4 distinct font sizes.
 
 ### `/account/orders/[reference]` chrome
 
@@ -498,7 +527,7 @@ Items:
 
 | Item | Class | Action |
 |------|-------|--------|
-| `Signed in as {email}` (informational, non-clickable) | `px-4 py-2 text-[10px] uppercase tracking-widest text-white/40 font-bold` (truncate with `truncate max-w-[200px]`) — `dir="ltr"` on the email span only | none |
+| `Signed in as {email}` (informational, non-clickable) | `px-4 py-2 text-[12px] uppercase tracking-widest text-white/40 font-bold` (truncate with `truncate max-w-[200px]`) — `dir="ltr"` on the email span only | none |
 | Divider | `<Separator className="my-1 bg-white/10" />` (existing `components/ui/separator.tsx`) | — |
 | `Account` | `block w-full text-start px-4 py-3 text-sm text-white hover:bg-white/5 rounded-md transition-colors min-h-[44px]` | Link to `/account` |
 | `Sign out` | `block w-full text-start px-4 py-3 text-sm text-red-400/90 hover:bg-white/5 rounded-md transition-colors min-h-[44px]` | Form-action button posting to `signOutAction` |
@@ -527,7 +556,7 @@ the right way after mirroring.
 **Reused, not new.** The pill spec is defined above in `<OrderRow>`:
 
 ```
-className: 'border border-white/30 text-white/80 text-[10px]
+className: 'border border-white/30 text-white/80 text-[12px]
             uppercase tracking-widest px-3 py-1 rounded-none'
 ```
 
@@ -555,7 +584,7 @@ not by color. This is a brand constraint. Translations already exist under
 
 | State | Pattern | Copy reference |
 |-------|---------|----------------|
-| `/account` zero orders | The `[#111111]` card empty-state described in Account chrome | `Account.empty.*` |
+| `/account` zero orders | The `[#111111]` card empty-state described in Account chrome (heading uses Tier 1 Display) | `Account.empty.*` |
 | `/account/orders/[reference]` not owner | `notFound()` → reuses existing `[locale]/not-found.tsx` chrome (BrandedErrorPage variant `404`) | `Errors.notFound.*` (existing) |
 | `/account/orders/[reference]` order load failure | Inline `role="alert"` paragraph centered (matches confirmation page §32–43) | `Errors.section.orderLoadFailed` (existing) |
 | `/reset-password` link expired/invalid | `BrandedErrorPage` variant `error` with CTA → `/forgot-password` | `Auth.resetExpired.*` (new) |
@@ -716,6 +745,9 @@ to auth forms. Auth is utility — appearance should be immediate.
 - **autocomplete attributes:** mandatory map specified above (`email`, `username`, `current-password`, `new-password`).
 - **Lang/dir:** set on `<html>` by `[locale]/layout.tsx` already; sub-elements inherit.
 - **No autofocus:** do NOT auto-focus the email input. Users may have a screen reader scrolling the page; jumping to the input disorients. Let users tab in.
+- **Type-size floor:** the smallest tier in the contract is 12 px (Tier 4). 10 px
+  is forbidden because it can fail WCAG 1.4.4 (Resize text) at 200 % zoom on
+  small viewports and is too small for IBM Plex Arabic glyphs.
 
 ---
 
@@ -817,6 +849,13 @@ the audit if any are present.
 14. **`localStorage` for session/auth tokens** — SEC-01 forbids it. All session
     handling goes through `@supabase/ssr` httpOnly cookies. The auth UI must
     NEVER reference `window.localStorage` or `document.cookie`.
+15. **10 px micro-text** — forbidden anywhere in Phase 10. The smallest tier is
+    12 px (Tier 4). If a label, eyebrow, or helper feels too large at 12 px,
+    the layout is wrong, not the type scale.
+16. **A 5th font size** — the contract is bound to exactly 4 distinct sizes
+    (`12 / 14 / 16 / 36–60 responsive`). Introducing `text-xl` (20 px),
+    `text-2xl` (24 px), `text-3xl` (30 px), or `text-5xl` (48 px) on an auth
+    or account surface is a contract violation.
 
 ---
 
@@ -838,8 +877,8 @@ this researcher with the registry vetting gate.
 - [ ] Dimension 1 Copywriting: PASS — all keys present in EN+AR, generic SEC-06 errors, no hover-only, no marketing creep
 - [ ] Dimension 2 Visuals: PASS — chrome matches confirmation page; no blobs/badges/avatars/social buttons
 - [ ] Dimension 3 Color: PASS — only black/white + red-400 errors; status pills outline-only; contrast ≥ AA
-- [ ] Dimension 4 Typography: PASS — sizes match Phase 10 table; weights restricted to 400/700; AR optical bump preserved
-- [ ] Dimension 5 Spacing: PASS — multiples of 4 only; logical properties only; 44px touch target verified
+- [ ] Dimension 4 Typography: PASS — exactly 4 distinct sizes (`12 / 14 / 16 / 36–60 responsive`); weights restricted to 400/700; AR optical bump preserved; 10 px and 24 px tiers explicitly removed
+- [ ] Dimension 5 Spacing: PASS — Tailwind v4 defaults bound (12 px and 96 px accepted as Tailwind defaults per documented policy); logical properties only; 44 px touch target verified
 - [ ] Dimension 6 Registry Safety: PASS — only official shadcn blocks; preset `base-nova` confirmed in `components.json`
 
 **Approval:** pending (ui-checker to set `approved YYYY-MM-DD` after audit).
