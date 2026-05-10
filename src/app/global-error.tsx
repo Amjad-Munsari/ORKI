@@ -43,11 +43,15 @@ export default function GlobalError({
     console.error('[global-error]', error);
   }, [error]);
 
-  const detected =
-    typeof document !== 'undefined'
-      ? (document.documentElement.lang as SupportedLang)
+  // URL pathname is the only source-of-truth that survives a top-level crash:
+  // the locale layout has been replaced, so the <html lang> attribute on the
+  // document element may be empty or stale. The /[locale]/ prefix is set by
+  // next-intl routing and cannot mismatch the user's intended locale. (WR-03 fix.)
+  const lang: SupportedLang =
+    typeof window !== 'undefined' &&
+    window.location.pathname.startsWith('/ar')
+      ? 'ar'
       : 'en';
-  const lang: SupportedLang = detected === 'ar' ? 'ar' : 'en';
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
   const t = COPY[lang];
 
