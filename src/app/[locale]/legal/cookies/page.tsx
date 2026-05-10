@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { buildMetadata } from '@/lib/seo';
 import { LegalArticle } from '@/components/legal/LegalArticle';
 import { CookieTable } from '@/components/legal/CookieTable';
+import { formatLegalLastUpdated } from '@/lib/legal/last-updated';
 import type { Locale } from '@/types/domain';
 
 type Props = { params: Promise<{ locale: Locale }> };
@@ -30,12 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CookiesPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Legal.cookies' });
+  const lastUpdated = formatLegalLastUpdated(locale);
 
   return (
     <LegalArticle
       eyebrow={t('eyebrow')}
       heading={t('heading')}
-      lastUpdated="10 May 2026"
+      lastUpdated={lastUpdated}
       locale={locale}
     >
       {SECTIONS.map((key) => (
