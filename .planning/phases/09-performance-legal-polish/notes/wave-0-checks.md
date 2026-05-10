@@ -96,3 +96,27 @@ Wave 2 to Wave 3 to ensure Plan 09-03 sets `title.template` before 09-04 wires
 per-page `generateMetadata` (otherwise smoke tests could observe partial state).
 Plan 09-05 was bumped to Wave 4 to keep its `depends_on: ['09-01', '09-04']` graph
 valid.
+
+---
+
+## Addendum: 09-08 IN-05 deletion approval
+
+**Date:** 2026-05-10
+**Plan:** 09-08 (gap-closure wave 2)
+**Source:** `09-REVIEW.md` IN-05 (`LegalLayout` is a no-op pass-through — could be deleted)
+
+Plan 09-01 must_have #5 originally read:
+> "Legal route folder layout exists and renders children unmodified"
+
+This was a Wave-0 unblocker for Plan 09-02 (legal pages). Once 09-02 shipped its
+three pages and the build proved Next.js does not require a per-segment layout,
+the file became dead code (verified by IN-05 review finding).
+
+**Approved deletion:** `src/app/[locale]/legal/layout.tsx`. Plan 09-02's three pages
+continue to render via the parent `[locale]/layout.tsx`. No regression to 09-VERIFICATION.md
+must_have #5 because the original gating concern (the legal route folder being
+routable) was a Wave-0 unblocker, not a runtime requirement once the pages exist.
+
+**Verification recorded by Plan 09-08:**
+- `test ! -f src/app/[locale]/legal/layout.tsx` exits 0.
+- `npm run smoke:routes` (Plan 09-08 Task 7) renders `/en/legal/privacy` with HTTP 200.
