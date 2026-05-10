@@ -3,6 +3,13 @@
 --
 -- Phase 10 Wave 0 — auth schema foundation.
 --
+-- ⚠ STATUS: Applied to production Supabase on 2026-05-10 via the Drizzle
+-- migration runner (hash recorded in meta/_journal.json and verified by
+-- scripts/apply-10-02-migration.ts). DO NOT EDIT THE BODY — the journal
+-- hash would diverge and the runner would re-attempt application.
+-- See `0002_phase10_auth_fk_and_rls.NOTES.md` (sidecar) for the idempotency
+-- audit and re-application guidance (WR-07 follow-up from 10-REVIEW.md).
+--
 -- Hand-authored (not drizzle-kit emitted). Drizzle-kit cannot emit:
 --   - ALTER COLUMN ... TYPE uuid USING ::uuid   (data-cast migrations)
 --   - Cross-schema FKs to auth.users(id)        (Drizzle does not introspect auth.*)
