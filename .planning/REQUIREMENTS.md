@@ -14,8 +14,8 @@
 - [ ] **SEC-05**: Enforce HTTPS and set strict security headers (Content-Security-Policy, Strict-Transport-Security, X-Frame-Options)
 - [ ] **SEC-06**: Auth error messages (login, forgot password) must be generic (e.g., "Invalid credentials") to prevent user enumeration
 - [ ] **SEC-07**: Accounts must be throttled/temporarily locked after repeated failed login attempts
-- [ ] **SEC-08**: Admin panel (if built) must be on a protected route, require MFA, and be IP-restricted where possible
-- [ ] **SEC-09**: Log suspicious activity (repeated failures, unusual order sizes) and trigger alerts
+- [x] **SEC-08**: Admin panel (if built) must be on a protected route, require MFA, and be IP-restricted where possible — Phase 10-06: SSR layout gate via `getUser()` + `isAdminEmail()` with audit-on-deny redirect; TOTP MFA + IP allowlist deferred to Phase 11 hardening (T-10-06-07 accept-deferred)
+- [x] **SEC-09**: Log suspicious activity (repeated failures, unusual order sizes) and trigger alerts — Phase 10-02/03: `auth_events` audit table + `writeAuthEvent` from every auth Server Action + admin denial audit row (10-06); active alerting deferred
 
 ## Usability (UX)
 - [x] **UX-01**: Checkout must support guest checkout (no forced account creation)
@@ -82,8 +82,8 @@
 | SEC-05 | Phase 6 |
 | SEC-06 | Phase 6 |
 | SEC-07 | Phase 6 |
-| SEC-08 | Phase 6 |
-| SEC-09 | Phase 6 |
+| SEC-08 | Phase 10-06 |
+| SEC-09 | Phase 10-02/03/06 |
 | ECOM-01 | Phase 7 |
 | ECOM-05 | Phase 7 |
 | ECOM-06 | Phase 7 |
