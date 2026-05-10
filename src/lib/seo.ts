@@ -29,25 +29,12 @@ export async function buildMetadata({
   descriptionKey,
   ogImage,
 }: BuildMetadataInput): Promise<Metadata> {
-  const [titleNs, ...titleRest] = titleKey.split('.');
-  const titleSubKey = titleRest.join('.');
-  // next-intl types `namespace` as a literal union derived from messages; this helper
-  // accepts dynamic 'ns.key' strings by design, so we widen to `never` to satisfy
-  // the overload while preserving runtime behavior.
-  const tTitle = await getTranslations({
-    locale,
-    namespace: titleNs as never,
-  });
-
-  const [descNs, ...descRest] = descriptionKey.split('.');
-  const descSubKey = descRest.join('.');
-  const tDesc = await getTranslations({
-    locale,
-    namespace: descNs as never,
-  });
-
-  const title = tTitle(titleSubKey as never);
-  const description = tDesc(descSubKey as never);
+  // Single translator scoped to the locale (no namespace) — `t('Meta.about.title')`
+  // works because next-intl resolves dotted paths against the root messages tree.
+  // Drops the dual getTranslations call + redundant per-namespace splits.
+  const t = await getTranslations({ locale });
+  const title = t(titleKey as never);
+  const description = t(descriptionKey as never);
   const image = ogImage ?? DEFAULT_OG_IMAGE;
 
   const suffix = path === '/' ? '' : path;
