@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { getTranslations } from 'next-intl/server'
 import { getAllProducts } from '@/lib/products'
 import { ShopHeader } from '@/components/shop/ShopHeader'
 import { ProductGrid } from '@/components/shop/ProductGrid'
 import { buildMetadata } from '@/lib/seo'
-import type { Locale } from '@/types/domain'
+import type { Locale, Product } from '@/types/domain'
 
 type Props = {
   params: Promise<{ locale: Locale }>
@@ -26,8 +27,31 @@ export default async function ShopPage({ params, searchParams }: Props) {
   const { locale } = await params
   const { category = 'all', sort = 'newest' } = await searchParams
 
-  // Server-side filtering — unknown category values are ignored (returns all)
-  let products = await getAllProducts()
+  // Server-side filtering — unknown category values are ignored (returns all).
+  // PERF-05: wrap DB read in try/catch so a Supabase blip renders branded
+  // fallback copy instead of bubbling to the per-locale error boundary.
+  let products: Product[] | null = null
+  try {
+    products = await getAllProducts()
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('[shop] getAllProducts failed', err)
+  }
+
+  if (!products) {
+    const tErr = await getTranslations('Errors.section')
+    return (
+      <div
+        role="alert"
+        className="min-h-[60vh] flex items-center justify-center px-6"
+      >
+        <p className="text-lg text-white/60 max-w-md text-center">
+          {tErr('shopLoadFailed')}
+        </p>
+      </div>
+    )
+  }
+
   if (category === 'tops' || category === 'bottoms') {
     products = products.filter(p => p.category === category)
   }
