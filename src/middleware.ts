@@ -31,6 +31,12 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
+          // Re-run intlMiddleware so the new response object sees the
+          // just-set request cookies — required by the Supabase SSR +
+          // next-intl integration pattern. Do not "optimize" by caching
+          // the initial response: the second invocation must rebuild the
+          // NextResponse against the mutated request so cookie propagation
+          // is correct. See RESEARCH §7 #10.
           response = intlMiddleware(request);
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options),
