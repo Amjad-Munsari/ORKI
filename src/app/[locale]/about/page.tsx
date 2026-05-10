@@ -1,6 +1,21 @@
+import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
+import type { Locale } from '@/types/domain';
 
 interface AboutPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: Locale }>
+}
+
+export async function generateMetadata({
+  params,
+}: AboutPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  return buildMetadata({
+    path: '/about',
+    locale,
+    titleKey: 'Meta.about.title',
+    descriptionKey: 'Meta.about.description',
+  });
 }
 
 export default async function AboutPage({ params }: AboutPageProps) {

@@ -1,13 +1,29 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getProductsByCategory } from '@/lib/products'
 import { ShopHeader } from '@/components/shop/ShopHeader'
 import { ProductGrid } from '@/components/shop/ProductGrid'
+import { buildMetadata } from '@/lib/seo'
 import type { Locale } from '@/types/domain'
 
 type Props = {
   params: Promise<{ locale: Locale; category: string }>
   searchParams: Promise<{ sort?: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; category: string }>
+}): Promise<Metadata> {
+  const { locale, category } = await params
+  return buildMetadata({
+    titleKey: `Shop.categories.${category}.title`,
+    descriptionKey: `Shop.categories.${category}.description`,
+    locale,
+    path: `/shop/${category}`,
+  })
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
