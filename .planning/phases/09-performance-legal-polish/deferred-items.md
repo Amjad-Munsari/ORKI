@@ -38,3 +38,23 @@ modified by Plan 09-06. The two new files (`src/lib/cookie-consent.ts` and
 run (zero errors in either file path); the production build is gated by the env
 variable, not by these files. Out of scope for Plan 09-06; recommended owner: a
 build-environment configuration plan.
+
+## Full benefit-bar / About / Contact next-intl migration (deferred from gap closure)
+
+**Source:** 09-REVIEW.md WR-04
+**Surfaced:** 2026-05-10 (Plan 09-08)
+**Files affected:**
+- `src/components/footer/Footer.tsx:23,27,31,55-58,76-77` (benefit bar + nav links — three of four benefit-bar lines remain hardcoded EN; nav links remain hardcoded EN)
+- `src/app/[locale]/about/page.tsx:30-86` (entire page is `isRtl ? 'AR' : 'EN'` ternaries)
+- `src/app/[locale]/contact/ContactClient.tsx:30-95` (form labels, button copy, success state)
+
+**What 09-08 did:** Fixed only the SAR-vs-USD currency defect on the shipping line (`$149` → `300 SAR`). All other ternary strings remain EN/AR ternaries.
+
+**Recommended owner:** A standalone follow-up plan (post-Phase 9 polish or a Phase-10+ i18n hygiene pass) that:
+- Adds `Footer.benefitBar.{shipping,returns,payments,support}` keys to `messages/{en,ar}.json`.
+- Adds `Footer.nav.{home,tops,bottoms,ourStory}` keys.
+- Migrates `about/page.tsx` body copy to a `Pages.about.*` namespace.
+- Migrates `ContactClient.tsx` strings to a `Pages.contact.*` namespace.
+- Drops the `TODO(i18n) benefit-bar` comment at `Footer.tsx:11-14` once migration is complete.
+
+Out of scope for Phase 9; not gated by any Phase 9 must_have or roadmap success criterion.

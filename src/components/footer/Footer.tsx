@@ -16,7 +16,7 @@ export async function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-4 border-y border-white/10">
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
           <Truck className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">Free shipping from $149</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">Free shipping from 300 SAR</span>
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
           <RotateCcw className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
