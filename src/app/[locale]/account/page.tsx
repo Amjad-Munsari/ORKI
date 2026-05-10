@@ -13,6 +13,7 @@
  */
 export const dynamic = 'force-dynamic';
 
+import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { getOrdersForUser } from '@/lib/orders/server';
@@ -29,8 +30,10 @@ export default async function AccountPage({ params }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // Layout already gates this route; defensive belt-and-braces.
-  if (!user) return null;
+  // Layout already gates this route; defensive belt-and-braces. notFound()
+  // matches the sibling /account/orders/[reference]/page.tsx pattern and is
+  // a clearer assertion than a silent blank screen.
+  if (!user) notFound();
 
   const t = await getTranslations('Account');
   const orders = await getOrdersForUser(user.id, { limit: 20, offset: 0 });
