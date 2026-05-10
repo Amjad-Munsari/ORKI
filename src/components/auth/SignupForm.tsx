@@ -53,7 +53,7 @@ export function SignupForm() {
     resolver: zodResolver(signupSchema),
     mode: 'onBlur',
     defaultValues: {
-      acceptTerms: false as unknown as true,
+      acceptTerms: false,
     },
   });
 

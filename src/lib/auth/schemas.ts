@@ -12,6 +12,11 @@
  */
 import { z } from 'zod';
 
+// WR-08 (Phase 10 review): acceptTerms is `z.boolean().refine(v => v === true)`
+// rather than `z.literal(true)` so the form's defaultValues can honestly hold
+// `false` (the actual initial state) instead of the `false as unknown as true`
+// cast that previously satisfied the typechecker. The refine still enforces
+// that submitted forms must have the box checked.
 export const signupSchema = z.object({
   email: z
     .string()
@@ -19,7 +24,9 @@ export const signupSchema = z.object({
     .toLowerCase()
     .email('Auth.errors.emailInvalid'),
   password: z.string().min(8, 'Auth.errors.passwordTooShort'),
-  acceptTerms: z.literal(true, { error: 'Auth.errors.acceptTermsRequired' }),
+  acceptTerms: z.boolean().refine((v) => v === true, {
+    message: 'Auth.errors.acceptTermsRequired',
+  }),
 });
 
 export const signinSchema = z.object({
