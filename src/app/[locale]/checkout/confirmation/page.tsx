@@ -30,7 +30,6 @@ export default async function ConfirmationPage({
   try {
     order = await getOrderByReference(ref);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[checkout/confirmation] getOrderByReference failed', err);
     lookupFailed = true;
   }

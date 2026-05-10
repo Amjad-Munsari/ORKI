@@ -34,7 +34,6 @@ export default async function ShopPage({ params, searchParams }: Props) {
   try {
     products = await getAllProducts()
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[shop] getAllProducts failed', err)
   }
 

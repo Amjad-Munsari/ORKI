@@ -21,7 +21,6 @@ export default function LocaleError({
   const locale = useLocale() as Locale;
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
     console.error('[locale-error]', error);
   }, [error]);
 

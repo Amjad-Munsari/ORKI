@@ -36,8 +36,11 @@ export function BrandedErrorPage({
   body,
   ctaLabel,
   ctaHref,
-  locale: _locale,
-  isRtl: _isRtl,
+  // `locale` and `isRtl` are part of the typed contract but not consumed at
+  // runtime — outer layout/document already sets `dir`/`lang`, and the chrome
+  // inherits text alignment via `text-center`. Keep them in the interface so
+  // future variants (e.g. RTL-specific arrows) can opt in without breaking
+  // call sites.
   errorDigest,
   onPrimary,
   secondaryLabel,

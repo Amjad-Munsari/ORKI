@@ -15,7 +15,6 @@ export default async function AdminOrdersPage() {
   try {
     orders = await getAllOrders();
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('[admin/orders] getAllOrders failed', err);
   }
 
