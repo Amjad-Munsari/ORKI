@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
-current_phase: 9
-status: in_progress
-stopped_at: Phase 9 UI-SPEC approved (6/6 dimensions; 1 FLAG on type scale carry-forward, non-blocking). Ready for /gsd-plan-phase 9.
-last_updated: "2026-05-10T01:15:00.000Z"
-last_activity: 2026-05-10 — Phase 9 UI-SPEC complete. Contract locks: 4-pt Tailwind spacing scale, B/W palette with accent reserved for 4 surfaces (error CTA, inline links, footer hover, focus ring), legal page chrome + branded error/404 + CookieBanner scaffold copy in EN+AR. Zero new shadcn installs. Four hand-rolled components (LegalArticle, CookieTable, BrandedErrorPage, CookieBanner). Open issues for planner: app/error.tsx Client Component translation strategy, legal body copy authorship, footer href migration, OG fallback asset production. Phase 8 carries forward: cart-refresh bug, UAT S2–S7+S9 pending, 08-07 email deferred.
+current_phase: 9 — Performance, Legal & Polish
+status: executing
+stopped_at: Phase 5 plans complete (4 plans)
+last_updated: "2026-05-10T12:22:50.996Z"
+last_activity: 2026-05-10 -- Phase 09 planning complete
 progress:
-  total_phases: 5
-  completed_phases: 2
-  total_plans: 28
-  completed_plans: 28
-  percent: 40
+  total_phases: 6
+  completed_phases: 0
+  total_plans: 19
+  completed_plans: 9
+  percent: 47
 ---
 
 # Project State: ORKI
 
 **Current Phase:** 9 — Performance, Legal & Polish
-**Status:** In progress (foundations); Phase 8 partial — UAT paused with 1 known major gap
+**Status:** Ready to execute
 **Last Updated:** 2026-05-10
 
 ## Project Reference
@@ -36,7 +36,8 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 - [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
 - [~] Phase 9: Performance, Legal & Polish [in progress — foundations]
 - [ ] Phase 10: Authentication & Security Core (DEFERRED — uses Supabase Auth per ADR-002) [0%]
-Last activity: 2026-05-10 — Phase 8 implementation complete. DB migrated to Supabase. Email phase (08-07) deferred until RESEND_API_KEY available.
+
+Last activity: 2026-05-10 -- Phase 09 planning complete
 
 ## Performance Metrics
 
