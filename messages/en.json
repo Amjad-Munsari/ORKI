@@ -16,13 +16,25 @@
     "shipping": "Shipping",
     "returns": "Returns",
     "contact": "Contact",
-    "copyright": "© 2026 ORKI. All rights reserved."
+    "copyright": "© 2026 ORKI. All rights reserved.",
+    "legal": {
+      "groupLabel": "(Legal)",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "cookies": "Cookie Policy"
+    }
   },
   "Placeholder": {
     "imageAlt": "ORKI product placeholder"
   },
   "Meta": {
-    "siteTitle": "ORKI — Underground Streetwear"
+    "siteTitle": "ORKI — Saudi Streetwear",
+    "home":        { "title": "ORKI — Saudi Streetwear", "description": "Saudi streetwear. Dark. Underground." },
+    "about":       { "title": "About",                   "description": "ORKI's story: Saudi streetwear, dark and underground." },
+    "contact":     { "title": "Contact",                 "description": "Get in touch with ORKI for orders, support, or partnerships." },
+    "shop":        { "title": "Shop",                    "description": "Shop ORKI streetwear: tops and bottoms. New drops first." },
+    "shopTops":    { "title": "Tops",                    "description": "Hoodies, tees, and outerwear from ORKI." },
+    "shopBottoms": { "title": "Bottoms",                 "description": "Pants, shorts, and joggers from ORKI." }
   },
   "Shop": {
     "tabAll": "All",
@@ -44,7 +56,11 @@
     "relatedHeading": "You Might Also Like",
     "someSizesSoldOut": "Some sizes sold out",
     "sizeGuideTitle": "Size Guide",
-    "sizeGuideClose": "Close"
+    "sizeGuideClose": "Close",
+    "categories": {
+      "tops":    { "title": "Tops",    "description": "Hoodies, tees, and outerwear from ORKI." },
+      "bottoms": { "title": "Bottoms", "description": "Pants, shorts, and joggers from ORKI." }
+    }
   },
   "Checkout": {
     "title": "Checkout",
@@ -73,7 +89,7 @@
     "termsAcknowledgement": "By completing this order, you agree to our Terms of Service and Privacy Policy.",
     "trust": {
       "secureCheckout": "Secure Checkout",
-      "returnsPolicy": "30-Day Returns",
+      "returnsPolicy": "14-Day Returns",
       "sslEncryption": "SSL Encrypted"
     },
     "payment": {
@@ -151,5 +167,104 @@
       "referenceLabel": "Order Reference",
       "footer": "Questions? Reply to this email or contact support@orki.sa."
     }
+  },
+  "Legal": {
+    "lastUpdatedLabel": "Last updated:",
+    "templateDisclaimer": "This document is a template draft pending legal review. Contact us with questions.",
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How ORKI collects, stores, and uses your personal data. KSA PDPL and GDPR aligned.",
+      "eyebrow": "(Legal) — 01",
+      "heading": "Privacy Policy",
+      "section1":  { "heading": "Who we are", "body": "[DRAFT]" },
+      "section2":  { "heading": "What personal data we collect", "body": "[DRAFT]" },
+      "section3":  { "heading": "Why we collect it", "body": "[DRAFT]" },
+      "section4":  { "heading": "How we collect it", "body": "[DRAFT]" },
+      "section5":  { "heading": "How we store it", "body": "[DRAFT]" },
+      "section6":  { "heading": "How we process and use it", "body": "[DRAFT]" },
+      "section7":  { "heading": "Who we share it with", "body": "[DRAFT]" },
+      "section8":  { "heading": "International transfers", "body": "[DRAFT]" },
+      "section9":  { "heading": "How long we keep it", "body": "[DRAFT]" },
+      "section10": { "heading": "How we destroy it", "body": "[DRAFT]" },
+      "section11": { "heading": "Your rights", "body": "[DRAFT]" },
+      "section12": { "heading": "How to exercise your rights", "body": "[DRAFT — must include controller email]" },
+      "section13": { "heading": "Cookies", "body": "[DRAFT]" },
+      "section14": { "heading": "Children's privacy", "body": "[DRAFT]" },
+      "section15": { "heading": "Changes to this policy", "body": "[DRAFT]" },
+      "section16": { "heading": "Contact us", "body": "[DRAFT — must include controller contact email]" }
+    },
+    "terms": {
+      "metaTitle": "Terms & Conditions",
+      "metaDescription": "ORKI's terms of sale: pricing, payment, shipping, returns, and dispute resolution.",
+      "eyebrow": "(Legal) — 02",
+      "heading": "Terms & Conditions",
+      "section1":  { "heading": "Acceptance of terms", "body": "[DRAFT]" },
+      "section2":  { "heading": "About ORKI", "body": "[DRAFT]" },
+      "section3":  { "heading": "Eligibility", "body": "[DRAFT]" },
+      "section4":  { "heading": "Account and orders", "body": "[DRAFT]" },
+      "section5":  { "heading": "Pricing and currency", "body": "[DRAFT]" },
+      "section6":  { "heading": "Payment", "body": "[DRAFT]" },
+      "section7":  { "heading": "Shipping", "body": "[DRAFT]" },
+      "section8":  { "heading": "Returns and refunds", "body": "[DRAFT — must state 14 days]" },
+      "section9":  { "heading": "Order cancellation", "body": "[DRAFT]" },
+      "section10": { "heading": "Liability", "body": "[DRAFT]" },
+      "section11": { "heading": "Intellectual property", "body": "[DRAFT]" },
+      "section12": { "heading": "Prohibited uses", "body": "[DRAFT]" },
+      "section13": { "heading": "Privacy", "body": "[DRAFT]" },
+      "section14": { "heading": "Governing law and dispute resolution", "body": "[DRAFT]" },
+      "section15": { "heading": "Changes to these terms", "body": "[DRAFT]" },
+      "section16": { "heading": "Contact us", "body": "[DRAFT]" }
+    },
+    "cookies": {
+      "metaTitle": "Cookie Policy",
+      "metaDescription": "Cookies ORKI uses to run the cart and checkout. No analytics or marketing cookies are set.",
+      "eyebrow": "(Legal) — 03",
+      "heading": "Cookie Policy",
+      "section1": { "heading": "What are cookies", "body": "[DRAFT]" },
+      "section2": { "heading": "Cookies we use", "body": "[DRAFT — renders <CookieTable> in page]" },
+      "section3": { "heading": "We do not use", "body": "[DRAFT — explicitly: no analytics cookies, no marketing cookies, no third-party trackers]" },
+      "section4": { "heading": "Vercel Analytics and Speed Insights", "body": "[DRAFT — explain cookieless beacons]" },
+      "section5": { "heading": "Your choices", "body": "[DRAFT]" },
+      "section6": { "heading": "Changes to this policy", "body": "[DRAFT]" },
+      "section7": { "heading": "Contact us", "body": "[DRAFT]" },
+      "tableHeaders": {
+        "name": "Name",
+        "purpose": "Purpose",
+        "duration": "Duration",
+        "type": "Type"
+      },
+      "tableRows": {
+        "orkiSidName":     "orki_sid",
+        "orkiSidPurpose":  "Cart persistence",
+        "orkiSidDuration": "30 days",
+        "orkiSidType":     "Strictly necessary",
+        "sbAuthName":      "sb-*",
+        "sbAuthPurpose":   "Admin authentication",
+        "sbAuthDuration":  "Session",
+        "sbAuthType":      "Strictly necessary"
+      }
+    }
+  },
+  "Errors": {
+    "heading": "Something broke.",
+    "body":    "We're working on it. Try again, or head back home.",
+    "retry":   "Try again",
+    "home":    "Return home",
+    "notFound": {
+      "heading":    "404 — Lost in the noise.",
+      "body":       "This page doesn't exist or was moved. Try the shop instead.",
+      "browseShop": "Browse shop",
+      "returnHome": "Return home"
+    },
+    "section": {
+      "shopLoadFailed":      "We're having trouble loading the catalog right now. Try again in a moment.",
+      "orderLoadFailed":     "We can't pull up your order right now — your payment is confirmed. Email us if you need help.",
+      "adminOrdersFailed":   "Order list temporarily unavailable."
+    }
+  },
+  "CookieBanner": {
+    "body":          "We use strictly-necessary cookies to run the cart and checkout. No analytics or marketing cookies are set.",
+    "primaryCta":    "Got it",
+    "secondaryLink": "Read our Cookie Policy"
   }
 }
