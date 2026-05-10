@@ -54,6 +54,7 @@ export function mapSupabaseError(err: unknown): {
 } {
   const e = (err ?? {}) as SupabaseAuthErrorShape;
   const msg = (e.message ?? '').toLowerCase();
+  const code = (e.code ?? '').toLowerCase();
   const status = e.status ?? 0;
 
   // Rate limit (429 from Supabase Auth or message contains 'rate' / 'too many')
@@ -73,11 +74,18 @@ export function mapSupabaseError(err: unknown): {
   if (/already.*registered|user.*(?:exists|already)|email.*(?:exists|already)/.test(msg)) {
     return { code: 'UNKNOWN', messageKey: 'Auth.errors.unknown' };
   }
-  // Invalid credentials — collapse wrong-email + wrong-password
+  // Invalid credentials — collapse wrong-email + wrong-password.
+  // WR-06 (Phase 10 review): trust the Supabase error code first, fall back
+  // to the message regex. The previous `status === 400` fallback collapsed
+  // every 400 response (malformed payloads, validation errors from
+  // updateUser, etc.) to INVALID_CREDENTIALS — misleading. Unknown 400s now
+  // fall through to UNKNOWN, where the audit log preserves the raw
+  // code/status for ops triage.
   if (
+    code === 'invalid_credentials' ||
+    code === 'invalid_login_credentials' ||
     /invalid.*(login|credentials|email|password)/.test(msg) ||
-    /invalid.?login.?credentials/.test(msg) ||
-    status === 400
+    /invalid.?login.?credentials/.test(msg)
   ) {
     return {
       code: 'INVALID_CREDENTIALS',
