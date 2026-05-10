@@ -71,10 +71,12 @@ describe('SEC-02 zod gate — Supabase NEVER called on invalid input', () => {
     });
 
     it('rejects missing acceptTerms', async () => {
+      // WR-08 follow-up: acceptTerms is now z.boolean().refine(...) so
+      // `false` is a structurally valid `SignupInput`; the refine rejects
+      // it at runtime, which is exactly what this test asserts.
       const result = await signUpAction({
         email: 'a@b.com',
         password: 'long-enough',
-        // @ts-expect-error — testing runtime rejection
         acceptTerms: false,
       });
       expect(result.ok).toBe(false);
