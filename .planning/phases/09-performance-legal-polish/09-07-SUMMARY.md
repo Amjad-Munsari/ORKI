@@ -145,6 +145,10 @@ None — all changes are source-only with no external service or environment-var
 - The 30 [AR-LEGAL-REVIEW] flags in `messages/ar.json` are untouched here (Plan 09-08 owns the CI guard).
 - Phase 9 is now ready for Plan 09-08 (the remaining gap-closure wave: IN-01..IN-08 informational findings + AR-LEGAL-REVIEW CI guard).
 
+## Self-Check: PASSED
+
+All 8 referenced files exist; all 9 task/metadata commits (24a0973, 5157e94, 4619926, 574d26b, f2c27fc, eda27aa, e72382f, 6321ce4, 825579d) are reachable from `main`.
+
 ---
 *Phase: 09-performance-legal-polish*
 *Completed: 2026-05-10*
