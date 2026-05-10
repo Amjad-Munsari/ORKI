@@ -3,16 +3,19 @@ phase: 10
 slug: authentication-and-security-core
 status: verified-with-pending-manual-gates
 threats_open: 0
-threats_pending_manual: 4
+threats_pending_manual: 2
 asvs_level: 1
 created: 2026-05-11
+updated: 2026-05-11
 ---
 
 # Phase 10 — Security Audit (10-SECURITY.md)
 
 > Per-phase security contract: STRIDE register verified against shipped code, accepted-risk log, and the audit trail.
 >
-> Audit summary: 48 threats across 7 plans verified. 44 CLOSED via code evidence or documented acceptance, 4 MITIGATE-PENDING-MANUAL-GATE (structural mitigations in code; final live verification deferred to the manual gates in `10-VERIFICATION.md` Gates 1-5). No threats remain unverified. No `unregistered_flag` items.
+> Audit summary (initial run 2026-05-11): 48 threats across 7 plans verified. 44 CLOSED via code evidence or documented acceptance, 4 MITIGATE-PENDING-MANUAL-GATE (structural mitigations in code; final live verification deferred to the manual gates in `10-VERIFICATION.md` Gates 1-5). No threats remain unverified. No `unregistered_flag` items.
+>
+> **2026-05-11 update:** Gates 5 + 6 closed automatically. Service-role bundle grep returned zero hits in `.next/static/` (T-10-01-01, T-10-07-06 fully closed). Automated test suite + tsc + lint + build all green (Gate 6). Remaining pending-manual count drops from 4 to 2: Gate 3 cross-user RLS PostgREST curl (T-10-02-02, T-10-05-04) and Gate 1 SEC-07 lockout walkthrough (T-10-03-08). Gates 2 + 4 are pure SEC-08/CSP runtime checks that don't gate any individual threat ID — they're belt-and-braces for the redirect leak (T-10-06-02, already documented-accept) and the CSP `unsafe-inline` posture (T-10-07-01, R4-acknowledged).
 >
 > Verification stance: each `mitigate`-disposition threat was confirmed by grepping the implementation files cited in the plan's mitigation. Each `accept` disposition was confirmed against documented rationale (SUMMARY / CONTEXT / VERIFICATION / inline code comment).
 
@@ -42,7 +45,7 @@ Status legend: **CLOSED** = mitigation found in implementation, file:line cited.
 
 | Threat ID | Category | Disposition | Status | Evidence |
 |-----------|----------|-------------|--------|----------|
-| T-10-01-01 | Information Disclosure — service-role key in client bundle | mitigate | **CLOSED-MANUAL-PENDING** (Gate 5) | Four-layer guard verified structurally: (1) `'server-only'` at `src/lib/supabase/admin.ts:1`; (2) no `NEXT_PUBLIC_` prefix on `SUPABASE_SERVICE_ROLE_KEY` at `src/lib/env.ts:37`; (3) ESLint `no-restricted-imports` for `@/lib/supabase/admin` at `eslint.config.mjs:51-62` with allowlist override at `eslint.config.mjs:67-76`; (4) bundle-grep gate documented at `10-VERIFICATION.md` Gate 5 (lines 149-169). Code review CR-CHECK-3 + CR-CHECK-4 verified the fence applies and no admin-client imports exist outside `admin.ts`. Final bundle grep requires `npm run build` against production env — **MANUAL-PENDING**. |
+| T-10-01-01 | Information Disclosure — service-role key in client bundle | mitigate | **CLOSED** (Gate 5 passed 2026-05-11) | Four-layer guard verified end-to-end: (1) no `NEXT_PUBLIC_` prefix on `SUPABASE_SERVICE_ROLE_KEY` at `src/lib/env.ts` (server-by-convention; see env.ts/env.client.ts split per CR-01); (2) ESLint `no-restricted-imports` for `@/lib/supabase/admin` at `eslint.config.mjs:51-62` with allowlist override at `eslint.config.mjs:67-76`; (3) Code review CR-CHECK-3 + CR-CHECK-4 verified the fence applies and no admin-client imports exist outside `admin.ts`; (4) **Gate 5 executed 2026-05-11:** `npm run build` then grep of service-role JWT signature in `.next/static/` returned 0 hits (and 0 hits in `.next/server/` too — read via `process.env` at runtime). Commit `769b90c`. |
 | T-10-01-02 | Spoofing — middleware accepts forged Supabase cookies | mitigate | **CLOSED** | `await supabase.auth.getUser()` at `src/middleware.ts:52`. Companion gates also use `getUser()`: `src/app/[locale]/admin/layout.tsx:33`, `src/app/[locale]/account/layout.tsx:23`, `src/app/[locale]/account/orders/[reference]/page.tsx:36`. Rationale documented at `src/lib/supabase/server.ts:9-12`. |
 | T-10-01-03 | Tampering — middleware mutates request cookies during refresh | accept | **CLOSED-ACCEPTED** | Rationale documented inline at `src/middleware.ts:34-43` (canonical Supabase + next-intl pattern; mutation bounded to Supabase JWT cookie pair). |
 | T-10-01-04 | Elevation of Privilege — admin client cookie leak causes RLS-engaged or worse | mitigate | **CLOSED** | Empty cookie adapters at `src/lib/supabase/admin.ts:33-39` (`getAll() { return []; }`, `setAll() { /* intentionally empty */ }`). Rationale enumerated in docblock at `src/lib/supabase/admin.ts:2-23`. |
@@ -117,7 +120,7 @@ Status legend: **CLOSED** = mitigation found in implementation, file:line cited.
 | T-10-07-03 | Information Disclosure — HTTPS downgrade | mitigate | **CLOSED** (preload submission post-deploy) | HSTS `max-age=63072000; includeSubDomains; preload` at `next.config.ts:64`, gated to production at line 63 (WR-02 fix: prevents stray preload on dev tunnels per inline comment lines 56-60). Preload list submission post-deploy item tracked at `10-VERIFICATION.md:46`. |
 | T-10-07-04 | Tampering — click-jacking via iframe | mitigate | **CLOSED** | `X-Frame-Options: DENY` at `next.config.ts:66` AND CSP `frame-ancestors 'none'` at line 49. Both layers for browser compatibility. |
 | T-10-07-05 | Information Disclosure — Referer header leak | mitigate | **CLOSED** | `Referrer-Policy: strict-origin-when-cross-origin` at `next.config.ts:68`. |
-| T-10-07-06 | Information Disclosure — service-role key in client bundle | mitigate | **CLOSED-MANUAL-PENDING** (Gate 5) | Four-layer guard already verified (see T-10-01-01). Final live grep is `10-VERIFICATION.md` Gate 5 (lines 149-169). **MANUAL-PENDING**. |
+| T-10-07-06 | Information Disclosure — service-role key in client bundle | mitigate | **CLOSED** (Gate 5 passed 2026-05-11) | Four-layer guard verified end-to-end via T-10-01-01 — see that row for Gate 5 evidence. |
 | T-10-07-07 | Information Disclosure — CSP false-negative breaks user flow with no telemetry | accept (LOW) | **CLOSED-ACCEPTED** | No CSP-reporting endpoint in Phase 10. Manual Gate 4 (CSP zero-violation walkthrough at `10-VERIFICATION.md:130-145`) catches issues before deploy. Documented at `10-VERIFICATION.md:47` (Open Items: "CSP violation reporting endpoint (T-10-07-07) — LOW (accepted), Phase 11"). |
 | T-10-07-08 | Elevation of Privilege — Permissions-Policy gaps on future browser APIs | accept | **CLOSED-ACCEPTED** | Header denies `camera=(), microphone=(), geolocation=(), payment=()` at `next.config.ts:69`. Rationale: review at next browser-API expansion. |
 
@@ -125,15 +128,16 @@ Status legend: **CLOSED** = mitigation found in implementation, file:line cited.
 
 ## Manual Gates Pending (Live Verification)
 
-Four threats are **CLOSED-MANUAL-PENDING**: their structural mitigation is verifiably in code, but the final live signal requires running the procedures in `10-VERIFICATION.md`. The user has been notified that manual gates are outstanding.
+After the 2026-05-11 automation pass (Gates 5 + 6 closed), two threat-anchored manual gates remain plus two cross-cutting belt-and-braces gates. The user has been notified.
 
-| Threat ID | Manual Gate | Procedure |
-|-----------|-------------|-----------|
-| T-10-01-01, T-10-07-06 | Gate 5 — Service-role bundle grep | `10-VERIFICATION.md:149-169` — `npm run build` then grep `.next/static/**` for the key prefix; expect zero matches. |
-| T-10-02-02, T-10-05-04 | Gate 3 — Cross-user RLS deny | `10-VERIFICATION.md:105-127` — two users, curl PostgREST as A for B's order, expect `[]`. |
-| T-10-03-08 | Gate 1 — SEC-07 lockout | `10-VERIFICATION.md:63-83` — 6 rapid failed signins, 6th returns 429. Pre-requires `notes/supabase-dashboard-checklist.md` Items 2-4 ticked. |
-| (cross-cutting) | Gate 2 — SEC-08 admin deny | `10-VERIFICATION.md:86-101` — signed-in non-allowlist user visits /admin, gets redirected, audit row appears. |
-| (cross-cutting) | Gate 4 — CSP zero violations | `10-VERIFICATION.md:130-145` — every route in EN+AR with DevTools console; zero violations expected. |
+| Threat ID | Manual Gate | Status | Procedure |
+|-----------|-------------|--------|-----------|
+| T-10-01-01, T-10-07-06 | Gate 5 — Service-role bundle grep | ✓ **PASSED 2026-05-11** | Closed automatically. Commit `769b90c`. See T-10-01-01 row above. |
+| T-10-02-02, T-10-05-04 | Gate 3 — Cross-user RLS deny | pending | `10-VERIFICATION.md:105-127` — two users, curl PostgREST as A for B's order, expect `[]`. |
+| T-10-03-08 | Gate 1 — SEC-07 lockout | pending | `10-VERIFICATION.md:63-83` — 6 rapid failed signins, 6th returns 429. Pre-requires `notes/supabase-dashboard-checklist.md` Items 2-4 ticked. |
+| (cross-cutting) | Gate 2 — SEC-08 admin deny | pending | `10-VERIFICATION.md:86-101` — signed-in non-allowlist user visits /admin, gets redirected, audit row appears. T-10-06-02 already documented-accept (LOW). |
+| (cross-cutting) | Gate 4 — CSP zero violations | pending | `10-VERIFICATION.md:130-145` — every route in EN+AR with DevTools console; zero violations expected. T-10-07-01 already documented-accept (`'unsafe-inline'` R4-acknowledged). |
+| — | Gate 6 — Automated suite green | ✓ **PASSED 2026-05-11** | Closed automatically (103 pass / 8 skip; tsc 0; lint 0; build succeeds). |
 
 ---
 
@@ -172,7 +176,8 @@ Code review (16/16 findings fixed, commits `d59584e..96ccf41`) intersected with 
 
 | Audit Date | Threats Total | Closed | Manual-Pending | Open | Run By |
 |------------|---------------|--------|----------------|------|--------|
-| 2026-05-11 | 48 | 44 | 4 (cite Gates 1-5 in 10-VERIFICATION.md) | 0 | gsd-secure-phase agent |
+| 2026-05-11 (initial) | 48 | 44 | 4 (Gates 1, 3, 5 + cross-cutting 2, 4) | 0 | gsd-secure-phase agent |
+| 2026-05-11 (Gate 5 + 6 closure) | 48 | 46 | 2 (Gates 1, 3) + 2 cross-cutting (2, 4) | 0 | Claude orchestrator (post-build grep + automated suite) |
 
 ---
 

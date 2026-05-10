@@ -5,8 +5,8 @@ milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
 status: plans-complete-pending-verification
 stopped_at: Phase 10 plans 7/7 + code-review clean (16 findings fixed); Phase 8 cart-refresh regression resolved (commit 4c78aaf). v2.0 milestone artifacts complete on disk; outstanding work is manual verification only — 08-UAT S2-S7+S9, 09-HUMAN-UAT 6 tests, 10-VERIFICATION 6 gates + 3 Supabase dashboard ops.
-last_updated: "2026-05-11T01:30:00.000Z"
-last_activity: 2026-05-11 -- Phase 10 complete (7/7 plans, all SUMMARY.md present, REVIEW.md clean after 16 findings fixed across 18 commits); Phase 8 cart-refresh fix landed (AddToCartButton → addToCartAction); Phase 9 09-HUMAN-UAT tests 4-5 smoke-pass-partial via npm run smoke:routes
+last_updated: "2026-05-11T02:00:00.000Z"
+last_activity: 2026-05-11 -- Phase 10 complete (7/7 plans, REVIEW clean, SECURITY clean, Gates 5+6 auto-closed); Phase 8 cart-refresh fix landed; cross-phase typecheck+lint rot cleared (38 TS + 4 lint + 3 warnings → all green); 4 manual verification gates remain (1/2/3/4 — all browser-required)
 progress:
   total_phases: 6
   completed_phases: 0
@@ -92,7 +92,7 @@ Recent decisions affecting current work:
 - **Phase 8 follow-up:** finish UAT scenarios S2–S7 + S9 (cart-refresh fix landed 2026-05-11; remaining scenarios ready to run).
 - **Phase 8 follow-up:** Plan 08-07 (Resend email) deferred until `RESEND_API_KEY` provisioned; restore Scenario 8 then.
 - **Phase 9 follow-up:** 09-HUMAN-UAT tests 1/2/3/8 deferred to launch; tests 6/7 require runtime triggers (force-throw + 404).
-- **Phase 10 follow-up:** 6 manual verification gates in 10-VERIFICATION.md (SEC-07 lockout, SEC-08 admin deny, cross-user RLS, CSP zero-violation, service-role bundle grep, automated suite green).
+- **Phase 10 follow-up:** 4 manual verification gates remain in 10-VERIFICATION.md (Gate 1 SEC-07 lockout, Gate 2 SEC-08 admin deny, Gate 3 cross-user RLS, Gate 4 CSP zero-violation). Gates 5 + 6 closed automatically 2026-05-11 (service-role bundle grep: 0 hits in `.next/static/`; automated suite: 103 pass + tsc + lint + build all green).
 - **Phase 10 follow-up:** 3 Supabase dashboard ops outstanding — Confirm-email-OFF verify, rate-limit set to 5/5min/IP, Management API PATCH on 4 rate_limit_* knobs.
 - **Phase 11 deferred:** CSP nonce migration (currently script-src includes 'unsafe-inline'; multi-day refactor across Vercel Analytics + base-ui + next-intl + motion).
 
@@ -109,7 +109,9 @@ Recent decisions affecting current work:
 | Phase 8 plan | 08-07 Resend transactional email | deferred until RESEND_API_KEY | 2026-05-10 |
 | Phase 9 UAT | 09-HUMAN-UAT tests 1/2/3/8 | deferred to launch | 2026-05-10 |
 | Phase 9 UAT | 09-HUMAN-UAT tests 6/7 (runtime triggers) | pending manual | 2026-05-11 |
-| Phase 10 verify | 10-VERIFICATION.md — 6 gates + 3 Supabase dashboard ops | pending manual | 2026-05-11 |
+| Phase 10 verify | 10-VERIFICATION.md — 4 gates (Gates 1/2/3/4) + 3 Supabase dashboard ops | pending manual | 2026-05-11 |
+| Phase 10 verify | Gate 5 (service-role bundle grep) | resolved 2026-05-11 (commit 769b90c) | — |
+| Phase 10 verify | Gate 6 (automated suite green) | resolved 2026-05-11 (commit 769b90c) | — |
 | Phase 11 prep | CSP nonce migration (script-src 'unsafe-inline' removal) | deferred to Phase 11 | 2026-05-11 |
 
 ## Session Continuity
