@@ -10,10 +10,10 @@
 - [ ] **SEC-01**: Implement Authentication using a proven library (e.g. NextAuth, Clerk) with httpOnly cookies for session tokens (no localStorage for auth)
 - [ ] **SEC-02**: Validate and sanitize all user input server-side
 - [ ] **SEC-03**: Implement rate limiting and strict CORS policies on all API endpoints
-- [ ] **SEC-04**: Require CSRF protection on all state-changing routes
-- [ ] **SEC-05**: Enforce HTTPS and set strict security headers (Content-Security-Policy, Strict-Transport-Security, X-Frame-Options)
+- [x] **SEC-04**: Require CSRF protection on all state-changing routes — Phase 10-07: Next.js 15 Server Actions enforce same-origin via Origin/Host check (RESEARCH §2.3); defence-in-depth Playwright spec at `tests/e2e/csrf.spec.ts` (mismatched-Origin → 4xx)
+- [x] **SEC-05**: Enforce HTTPS and set strict security headers (Content-Security-Policy, Strict-Transport-Security, X-Frame-Options) — Phase 10-07: six headers in `next.config.ts` async `headers()` (CSP, HSTS max-age=63072000+preload, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy strict-origin-when-cross-origin, Permissions-Policy denies camera/mic/geo/payment); `tests/security/csp.test.ts` (7 cases) + `tests/security/headers.test.ts` (env-gated)
 - [ ] **SEC-06**: Auth error messages (login, forgot password) must be generic (e.g., "Invalid credentials") to prevent user enumeration
-- [ ] **SEC-07**: Accounts must be throttled/temporarily locked after repeated failed login attempts
+- [~] **SEC-07**: Accounts must be throttled/temporarily locked after repeated failed login attempts — Phase 10-07: per-IP throttle via Supabase dashboard (Item 3 in `notes/supabase-dashboard-checklist.md`, 5/5min/IP); manual SEC-07 walkthrough in 10-VERIFICATION.md Gate 1; per-account lockout (R1+R2) deferred to Phase 11 hardening
 - [x] **SEC-08**: Admin panel (if built) must be on a protected route, require MFA, and be IP-restricted where possible — Phase 10-06: SSR layout gate via `getUser()` + `isAdminEmail()` with audit-on-deny redirect; TOTP MFA + IP allowlist deferred to Phase 11 hardening (T-10-06-07 accept-deferred)
 - [x] **SEC-09**: Log suspicious activity (repeated failures, unusual order sizes) and trigger alerts — Phase 10-02/03: `auth_events` audit table + `writeAuthEvent` from every auth Server Action + admin denial audit row (10-06); active alerting deferred
 

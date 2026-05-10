@@ -4,21 +4,21 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 10
 status: executing
-stopped_at: Phase 10 Plan 06 complete — admin layout gated by getUser + isAdminEmail with denial audit; /admin/audit Drizzle-backed paginated auth_events surface; Playwright admin-gate spec covers unauthed redirect (2 automated + 1 documented skip). Plan 10-07 (security headers + final verification) next.
-last_updated: "2026-05-11T00:05:00.000Z"
-last_activity: 2026-05-11 -- Phase 10 Plan 06 executed (3 tasks, 3 commits); src/app/[locale]/admin/layout.tsx (auth+allowlist gate with audit-on-deny) + src/app/[locale]/admin/audit/page.tsx (paginated authEvents reader) + src/components/admin/AuditTable.tsx (utility 6-col table, dir=ltr reference fields) + tests/e2e/admin-gate.spec.ts (unauthed-redirect Playwright spec)
+stopped_at: Phase 10 Plan 07 complete — six security headers in next.config.ts (CSP + HSTS + companions with VERCEL_ENV preview branch for vercel.live); tests/security/csp.test.ts (7 cases) + tests/security/headers.test.ts (RUN_HEADER_TESTS-gated) + tests/e2e/csrf.spec.ts (mismatched-Origin → 4xx); 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 outstanding Supabase ops. Phase 10 plans done; sign-off pending verifier ticking gates.
+last_updated: "2026-05-11T00:30:00.000Z"
+last_activity: 2026-05-11 -- Phase 10 Plan 07 executed (4 tasks, 4 commits); next.config.ts headers() block (CSP+HSTS+XFO+nosniff+Referrer-Policy+Permissions-Policy with preview-only vercel.live branch) + tests/security/csp.test.ts + tests/security/headers.test.ts (env-gated) + tests/e2e/csrf.spec.ts + 10-VERIFICATION.md (single-file Phase 10 sign-off doc)
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 28
-  completed_plans: 23
-  percent: 82
+  completed_plans: 24
+  percent: 86
 ---
 
 # Project State: ORKI
 
 **Current Phase:** 10
-**Status:** Phase 10 in progress — Waves 0-2 complete (Plans 01, 02, 03, 04, 05, 06); Plan 10-07 (security headers + final verification) next
+**Status:** Phase 10 plans complete — all 7 plans landed; sign-off pending verifier execution of 10-VERIFICATION.md (3 outstanding Supabase ops + 6 gates)
 **Last Updated:** 2026-05-11
 
 ## Project Reference
@@ -30,17 +30,17 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 
 ## Current Position
 
-Phase: 10 (authentication-and-security-core) — IN PROGRESS
-Plan: 7 of 7 (next: 10-07 security headers + final verification — Wave 3)
+Phase: 10 (authentication-and-security-core) — PLANS COMPLETE (sign-off pending)
+Plan: 7 of 7 — DONE (10-07 security headers + 10-VERIFICATION.md shipped 2026-05-11)
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
 - [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
 - [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; gap closure 09-07 + 09-08 merged; verification pending]
-- [~] Phase 10: Authentication & Security Core [executing — 6/7 plans complete; Waves 0-2 landed (foundations, schema, actions, UI surface, account-area + cart-merge + UserMenu, admin gate + audit surface)]
+- [~] Phase 10: Authentication & Security Core [plans complete — 7/7 plans built; Waves 0-3 landed (foundations, schema, actions, UI surface, account-area + cart-merge + UserMenu, admin gate + audit surface, security headers + verification document); Phase 10 sign-off pending verifier execution of 10-VERIFICATION.md]
 
-Last activity: 2026-05-11 -- Phase 10 Plan 06 complete (admin gate + audit surface — SSR getUser + isAdminEmail gate at admin/layout with audit-on-deny row, /admin/audit Drizzle-backed paginated auth_events table, sidebar Audit nav entry, Playwright spec covers unauthed redirect, signed-in-non-allowlist verification deferred to 10-07 manual run)
+Last activity: 2026-05-11 -- Phase 10 Plan 07 complete (security headers + final verification — six headers in next.config.ts via async headers() with VERCEL_ENV preview branch; tests/security/{csp,headers}.test.ts; tests/e2e/csrf.spec.ts; 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 Supabase outstanding ops + threat-model status table + deferred items)
 
 ## Performance Metrics
 
@@ -68,6 +68,9 @@ Last activity: 2026-05-11 -- Phase 10 Plan 06 complete (admin gate + audit surfa
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- 10-07: Six security headers in `next.config.ts` via async `headers()` returning `[{ source: '/:path*', headers: securityHeaders }]`. CSP keeps `'unsafe-inline'` for Phase 10 (R4 acknowledged; per-route nonce upgrade deferred to Phase 11). VERCEL_ENV === 'preview' branch widens `script-src` + `connect-src` to include `https://vercel.live` for the Vercel preview toolbar without polluting production.
+- 10-07: CSRF defence-in-depth via `tests/e2e/csrf.spec.ts` (mismatched-Origin → 4xx); Next.js 15 Server Actions enforce same-origin out of the box (RESEARCH §2.3) — the spec is verification, not new code.
+- 10-07: `10-VERIFICATION.md` is the single Phase 10 sign-off artefact — inlines outstanding Supabase ops (Items 2/3/4 from notes/supabase-dashboard-checklist.md) + six gates (SEC-07 lockout, SEC-08 admin deny, cross-user RLS, CSP zero-violation, service-role bundle grep, automated suite green). Verifier ticks all to claim Phase 10 complete.
 - 10-06: Admin gate lives in `src/app/[locale]/admin/layout.tsx`, NOT middleware — every nested admin page inherits the gate for free, and the redirect emits before any admin HTML, satisfying T-10-06-02 (info disclosure) at SSR.
 - 10-06: Audit page reads `auth_events` via Drizzle (postgres role bypasses RLS) instead of `createAdminClient` — chosen for consistency with admin/inventory pattern. Both paths have identical effective access; ESLint fence still permits a future switch.
 - 10-06: Deny path is `redirect('/login')`, not `notFound()` — required by plan acceptance regex + audit-before-redirect contract. The minimal "admin path exists" leak is accepted (T-10-06-02 LOW) because the SSR redirect prevents any chrome leak.
@@ -105,6 +108,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-05-11
-Stopped at: Phase 10 Plan 06 complete — 3 tasks committed; admin gate live at SSR layer with audit-on-deny; /admin/audit paginated auth_events surface live; admin sidebar gains "Audit" nav entry; Playwright spec passes --list (2 automated + 1 documented skip); 96 vitest passing (1 skipped lockout); no regressions
-Resume file: .planning/phases/10-authentication-and-security-core/10-07-PLAN.md
-Next command: /gsd-execute-phase 10 (next plan: 10-07 security headers + final verification — Wave 3)
+Stopped at: Phase 10 Plan 07 complete — 4 tasks committed; six security headers in next.config.ts (CSP+HSTS+companions, VERCEL_ENV preview branch); tests/security/csp.test.ts (7/7 pass) + tests/security/headers.test.ts (RUN_HEADER_TESTS-gated) + tests/e2e/csrf.spec.ts (1 spec, --list passes); 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 outstanding Supabase ops; vitest node project 83 pass / 8 skipped; no regressions; Phase 10 plans done — sign-off pending verifier execution
+Resume file: .planning/phases/10-authentication-and-security-core/10-VERIFICATION.md
+Next command: /gsd-verify-work 10 (verifier ticks all 3 ops + 6 gates in 10-VERIFICATION.md to claim Phase 10 complete)
