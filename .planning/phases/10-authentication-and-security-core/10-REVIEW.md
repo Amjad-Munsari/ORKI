@@ -66,11 +66,31 @@ files_reviewed_list:
   - tests/setup/next-cookies-mock.ts
   - tests/setup/supabase-test-client.ts
 findings:
-  critical: 1
-  warning: 9
+  critical: 0
+  warning: 0
   info: 6
-  total: 16
-status: issues_found
+  total: 6
+status: fixes_applied
+fixes_applied:
+  - CR-01
+  - WR-01
+  - WR-02
+  - WR-03
+  - WR-04
+  - WR-05
+  - WR-06
+  - WR-07
+  - WR-08
+  - WR-09
+fixes_applied_at: 2026-05-11
+fixes_applied_notes: |
+  All Critical (1) and Warning (9) findings addressed in 10 atomic commits
+  on 2026-05-11. WR-01 is documented-mitigation only — full nonce migration
+  deferred to Phase 11 per 10-VERIFICATION.md deviations doc. WR-07 added a
+  STATUS header to the .sql migration file + sidecar NOTES.md; the
+  migration itself was NOT re-applied (production already carries it from
+  2026-05-10). Six Info findings remain out of scope per fix policy
+  (critical_warning).
 ---
 
 # Phase 10: Code Review Report
