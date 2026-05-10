@@ -49,7 +49,7 @@ async function waitForReady(deadlineMs) {
     try {
       const r = await fetchOnce('/robots.txt');
       if (r.status === 200) return;
-    } catch (_) { /* not up yet */ }
+    } catch { /* not up yet */ }
     await new Promise((r) => setTimeout(r, 500));
   }
   throw new Error(`next dev did not become ready on :${PORT} within ${deadlineMs}ms`);

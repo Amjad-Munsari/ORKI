@@ -21,7 +21,7 @@ interface Props {
  * so the layout is correct in both LTR and RTL without using `ps-`/`pe-`/`ms-`/`me-`.
  * CLAUDE.md's directional-class prohibition targets `pl-`/`pr-`/`ml-`/`mr-` only.
  */
-export function CookieBanner(_props: Props) {
+export function CookieBanner({}: Props) {
   const [show, setShow] = useState(false);
   const t = useTranslations('CookieBanner');
 

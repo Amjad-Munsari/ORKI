@@ -39,7 +39,7 @@ vi.mock('@/lib/db/client', () => {
   const handler: ProxyHandler<typeof chain> = {
     get(target, prop) {
       if (prop === 'then') return undefined;
-      return (...args: unknown[]) => proxy;
+      return () => proxy;
     },
   };
   const proxy: typeof chain = new Proxy(chain, handler);
