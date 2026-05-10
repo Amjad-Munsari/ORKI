@@ -33,7 +33,7 @@ export function CookieBanner(_props: Props) {
 
   return (
     <div
-      className="fixed bottom-0 inline-end-0 z-50 max-w-md p-6 m-6 bg-[#111111] border border-white/10 space-y-4"
+      className="fixed bottom-0 inset-inline-end-0 z-50 max-w-md p-6 m-6 bg-[#111111] border border-white/10 space-y-4"
       role="region"
       aria-label="Cookie consent"
     >
