@@ -4,9 +4,9 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 9
 status: in_progress
-stopped_at: Phase 8 UAT paused at Test 1 of 9 — cart-refresh persistence failed (UX-08 / Plan 08-02 regression). User opted to advance to Phase 9 foundations and tackle Phase 8 follow-ups later. 7 scenarios remain pending (S2–S7, S9); S8 deferred with 08-07.
-last_updated: "2026-05-10T00:10:00.000Z"
-last_activity: 2026-05-10 — Phase 8 UAT started; Test 1 EN happy path failed on "refresh resets cart" (UX-08 regression in cart hydration). User chose to move to Phase 9 with the gap carried forward. Phase 8 status = partial. Phase 8 follow-ups: (a) cart-refresh persistence bug (open), (b) S2–S7 + S9 pending, (c) Plan 08-07 Resend email deferred until RESEND_API_KEY.
+stopped_at: Phase 9 context gathered — 4 areas discussed, all decisions captured in 09-CONTEXT.md. Ready for /gsd-plan-phase 9.
+last_updated: "2026-05-10T00:30:00.000Z"
+last_activity: 2026-05-10 — Phase 9 discuss-phase complete. Decisions: AI-drafts EN+AR legal copy (revisable), no cookie banner (cookieless Vercel Analytics + Speed Insights), real-user perf gating only, above-fold image priority, bilingual sitemap with hreflang, `{Page} | ORKI` titles, N+1 audited clean (Drizzle dev-logging guardrail only), branded EN+AR graceful-degradation pages. Phase 8 carries forward: cart-refresh bug, UAT S2–S7+S9 pending, 08-07 email deferred.
 progress:
   total_phases: 5
   completed_phases: 2
