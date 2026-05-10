@@ -407,5 +407,67 @@
     "body": "We use strictly-necessary cookies to run the cart and checkout. No analytics or marketing cookies are set.",
     "primaryCta": "Got it",
     "secondaryLink": "Read our Cookie Policy"
+  },
+  "Auth": {
+    "login": {
+      "eyebrow": "Account",
+      "heading": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "forgot": "Forgot password?",
+      "alt": "Don't have an account?",
+      "altCta": "Create one"
+    },
+    "signup": {
+      "eyebrow": "New account",
+      "heading": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "passwordHelper": "8 characters minimum.",
+      "acceptTerms": "I agree to the <terms>Terms & Conditions</terms> and <privacy>Privacy Policy</privacy>.",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "alt": "Already have an account?",
+      "altCta": "Sign in instead"
+    },
+    "forgot": {
+      "eyebrow": "Reset",
+      "heading": "Reset password",
+      "email": "Email",
+      "helper": "Enter your account email. We'll send a recovery link if it matches an account.",
+      "submit": "Send recovery link",
+      "submitting": "Sending...",
+      "success": "Check your inbox. If an account exists for that email, a recovery link is on the way.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "eyebrow": "Reset",
+      "heading": "Set a new password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "success": "Password updated. You can sign in with the new password.",
+      "verifyingLink": "Verifying link...",
+      "linkExpiredHeading": "Link expired",
+      "linkExpiredBody": "Reset links are valid for one hour. Request a new one.",
+      "requestNewLink": "Request new link",
+      "back": "Back to sign in"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Password is required.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "acceptTermsRequired": "You must agree to the terms to create an account.",
+      "tooManyAttempts": "Too many attempts. Try again in a few minutes.",
+      "sessionExpired": "Your session expired. Sign in again.",
+      "linkInvalid": "This link is invalid or has expired.",
+      "unknown": "Something went wrong. Try again."
+    }
   }
 }
