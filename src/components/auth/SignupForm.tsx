@@ -21,6 +21,7 @@ import { useRouter, Link } from '@/i18n/navigation';
 import { Field } from '@/components/forms/Field';
 import { signUpAction } from '@/app/actions/auth';
 import { signupSchema, type SignupInput } from '@/lib/auth/schemas';
+import { resolveAuthErrorMessage } from '@/lib/auth/resolve-error';
 
 const inputClass =
   'w-full bg-transparent border-b border-white/20 py-3 min-h-[44px] text-white text-base placeholder:text-white/10 ' +
@@ -62,12 +63,7 @@ export function SignupForm() {
     startTransition(async () => {
       const result = await signUpAction(data);
       if (!result.ok) {
-        const stripped = result.messageKey.replace(/^Auth\.errors\./, '');
-        try {
-          setFormError(tErrors(stripped as never));
-        } catch {
-          setFormError(tErrors('unknown' as never));
-        }
+        setFormError(resolveAuthErrorMessage(tErrors, result.messageKey));
         return;
       }
       router.push('/account');
@@ -181,14 +177,7 @@ export function SignupForm() {
             role="alert"
             className="text-red-400 text-xs"
           >
-            {(() => {
-              const stripped = acceptErr.replace(/^Auth\.errors\./, '');
-              try {
-                return tErrors(stripped as never);
-              } catch {
-                return acceptErr;
-              }
-            })()}
+            {resolveAuthErrorMessage(tErrors, acceptErr)}
           </p>
         )}
       </div>

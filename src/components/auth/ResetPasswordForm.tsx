@@ -25,6 +25,7 @@ import { BrandedErrorPage } from '@/components/error/BrandedErrorPage';
 import { Field } from '@/components/forms/Field';
 import { setPasswordAction } from '@/app/actions/auth';
 import { setPasswordSchema, type SetPasswordInput } from '@/lib/auth/schemas';
+import { resolveAuthErrorMessage } from '@/lib/auth/resolve-error';
 import type { Locale } from '@/types/domain';
 
 const inputClass =
@@ -91,12 +92,7 @@ export function ResetPasswordForm({ locale }: Props) {
     startTransition(async () => {
       const result = await setPasswordAction(data);
       if (!result.ok) {
-        const stripped = result.messageKey.replace(/^Auth\.errors\./, '');
-        try {
-          setFormError(tErrors(stripped as never));
-        } catch {
-          setFormError(tErrors('unknown' as never));
-        }
+        setFormError(resolveAuthErrorMessage(tErrors, result.messageKey));
         return;
       }
       setView('done');
