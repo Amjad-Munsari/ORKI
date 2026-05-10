@@ -61,7 +61,7 @@ Plans:
 - [x] 09-01-PLAN.md — Wave 0 foundations (seo.ts helper, Legal/Errors/Meta i18n skeleton, footer href migration, returns-policy reconciliation, PDP title-template fix)
 - [x] 09-02-PLAN.md — Legal pages (Privacy / Terms / Cookies) + LegalArticle + CookieTable + body copy fill
 - [x] 09-03-PLAN.md — Vercel Analytics + Speed Insights mounting + image priority audit
-- [ ] 09-04-PLAN.md — Sitemap + robots + OG fallback + per-page generateMetadata wiring
+- [x] 09-04-PLAN.md — Sitemap + robots + OG fallback + per-page generateMetadata wiring
 - [ ] 09-05-PLAN.md — Reliability hygiene (global-error + per-locale error/not-found, Drizzle logger gate, try/catch, N+1 doc)
 - [x] 09-06-PLAN.md — CookieBanner scaffold + cookie-consent helper (built, NOT mounted)
 
