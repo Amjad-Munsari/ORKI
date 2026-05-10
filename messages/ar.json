@@ -16,13 +16,25 @@
     "shipping": "الشحن",
     "returns": "المرتجعات",
     "contact": "تواصل معنا",
-    "copyright": "© 2026 ORKI. جميع الحقوق محفوظة."
+    "copyright": "© 2026 ORKI. جميع الحقوق محفوظة.",
+    "legal": {
+      "groupLabel": "(القانوني)",
+      "privacy": "سياسة الخصوصية",
+      "terms": "الشروط والأحكام",
+      "cookies": "سياسة ملفات الارتباط"
+    }
   },
   "Placeholder": {
     "imageAlt": "صورة بديلة لمنتج أوركي"
   },
   "Meta": {
-    "siteTitle": "أوركي — ملابس الشوارع"
+    "siteTitle": "أوركي — ملابس الشوارع السعودية",
+    "home":        { "title": "أوركي — ملابس الشوارع السعودية", "description": "ملابس شارع سعودية. داكنة. تحت الأرض." },
+    "about":       { "title": "عن أوركي",                       "description": "قصة أوركي: ملابس شارع سعودية، داكنة وتحت الأرض." },
+    "contact":     { "title": "تواصل معنا",                      "description": "تواصل مع أوركي للطلبات أو الدعم أو الشراكات." },
+    "shop":        { "title": "المتجر",                          "description": "تسوّق ملابس أوركي: قمم وسراويل. الإصدارات الجديدة أولاً." },
+    "shopTops":    { "title": "القمم",                            "description": "هوديز وتيشيرتات وملابس خارجية من أوركي." },
+    "shopBottoms": { "title": "السراويل",                         "description": "بناطيل وشورتات وجوغرز من أوركي." }
   },
   "Shop": {
     "tabAll": "الكل",
@@ -44,7 +56,11 @@
     "relatedHeading": "قد يعجبك أيضاً",
     "someSizesSoldOut": "بعض المقاسات نفدت",
     "sizeGuideTitle": "دليل المقاسات",
-    "sizeGuideClose": "إغلاق"
+    "sizeGuideClose": "إغلاق",
+    "categories": {
+      "tops":    { "title": "القمم",    "description": "هوديز وتيشيرتات وملابس خارجية من أوركي." },
+      "bottoms": { "title": "السراويل", "description": "بناطيل وشورتات وجوغرز من أوركي." }
+    }
   },
   "Checkout": {
     "title": "إتمام الشراء",
@@ -73,7 +89,7 @@
     "termsAcknowledgement": "بإتمام هذا الطلب، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.",
     "trust": {
       "secureCheckout": "دفع آمن",
-      "returnsPolicy": "إرجاع خلال 30 يوم",
+      "returnsPolicy": "إرجاع خلال 14 يوم",
       "sslEncryption": "اتصال مشفر SSL"
     },
     "payment": {
@@ -151,5 +167,104 @@
       "referenceLabel": "رقم الطلب",
       "footer": "لأي استفسار، يمكنك الرد على هذا البريد أو التواصل مع support@orki.sa."
     }
+  },
+  "Legal": {
+    "lastUpdatedLabel": "آخر تحديث:",
+    "templateDisclaimer": "هذه الوثيقة مسودة قابلة للمراجعة القانونية. تواصل معنا لأي استفسار.",
+    "privacy": {
+      "metaTitle": "سياسة الخصوصية",
+      "metaDescription": "كيف تجمع أوركي بياناتك الشخصية وتخزنها وتستخدمها. متوافقة مع نظام حماية البيانات الشخصية السعودي ولوائح GDPR.",
+      "eyebrow": "(القانوني) — 01",
+      "heading": "سياسة الخصوصية",
+      "section1":  { "heading": "من نحن", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section2":  { "heading": "ما البيانات الشخصية التي نجمعها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section3":  { "heading": "لماذا نجمعها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section4":  { "heading": "كيف نجمعها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section5":  { "heading": "كيف نخزّنها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section6":  { "heading": "كيف نعالجها ونستخدمها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section7":  { "heading": "مع من نشاركها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section8":  { "heading": "النقل الدولي للبيانات", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section9":  { "heading": "مدة الاحتفاظ بها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section10": { "heading": "كيف نتلفها", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section11": { "heading": "حقوقك", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section12": { "heading": "كيفية ممارسة حقوقك", "body": "[AR-LEGAL-REVIEW] [مسودة — يجب أن يتضمّن البريد الإلكتروني للمتحكم]" },
+      "section13": { "heading": "ملفات الارتباط", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section14": { "heading": "خصوصية الأطفال", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section15": { "heading": "تعديلات هذه السياسة", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section16": { "heading": "تواصل معنا", "body": "[AR-LEGAL-REVIEW] [مسودة — يجب أن يتضمّن البريد الإلكتروني للمتحكم]" }
+    },
+    "terms": {
+      "metaTitle": "الشروط والأحكام",
+      "metaDescription": "شروط البيع لدى أوركي: الأسعار والدفع والشحن والإرجاع وفض النزاعات.",
+      "eyebrow": "(القانوني) — 02",
+      "heading": "الشروط والأحكام",
+      "section1":  { "heading": "قبول الشروط", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section2":  { "heading": "عن أوركي", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section3":  { "heading": "الأهلية", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section4":  { "heading": "الحساب والطلبات", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section5":  { "heading": "الأسعار والعملة", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section6":  { "heading": "الدفع", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section7":  { "heading": "الشحن", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section8":  { "heading": "الإرجاع واسترداد المبالغ", "body": "[AR-LEGAL-REVIEW] [مسودة — يجب ذكر 14 يوماً]" },
+      "section9":  { "heading": "إلغاء الطلب", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section10": { "heading": "المسؤولية", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section11": { "heading": "الملكية الفكرية", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section12": { "heading": "الاستخدامات المحظورة", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section13": { "heading": "الخصوصية", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section14": { "heading": "القانون الحاكم وفض النزاعات", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section15": { "heading": "تعديلات هذه الشروط", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section16": { "heading": "تواصل معنا", "body": "[AR-LEGAL-REVIEW] [مسودة]" }
+    },
+    "cookies": {
+      "metaTitle": "سياسة ملفات الارتباط",
+      "metaDescription": "ملفات الارتباط التي تستخدمها أوركي لتشغيل السلة وإتمام الشراء. لا تُستخدم ملفات تحليلات أو تسويقية.",
+      "eyebrow": "(القانوني) — 03",
+      "heading": "سياسة ملفات الارتباط",
+      "section1": { "heading": "ما هي ملفات الارتباط", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section2": { "heading": "ملفات الارتباط التي نستخدمها", "body": "[AR-LEGAL-REVIEW] [مسودة — يعرض <CookieTable> داخل الصفحة]" },
+      "section3": { "heading": "ما لا نستخدمه", "body": "[AR-LEGAL-REVIEW] [مسودة — صراحةً: لا توجد ملفات تحليلات أو تسويقية أو متتبّعات طرف ثالث]" },
+      "section4": { "heading": "Vercel Analytics و Speed Insights", "body": "[AR-LEGAL-REVIEW] [مسودة — اشرح القياسات بدون ملفات ارتباط]" },
+      "section5": { "heading": "خياراتك", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section6": { "heading": "تعديلات هذه السياسة", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "section7": { "heading": "تواصل معنا", "body": "[AR-LEGAL-REVIEW] [مسودة]" },
+      "tableHeaders": {
+        "name": "الاسم",
+        "purpose": "الغرض",
+        "duration": "المدة",
+        "type": "النوع"
+      },
+      "tableRows": {
+        "orkiSidName":     "orki_sid",
+        "orkiSidPurpose":  "حفظ السلة",
+        "orkiSidDuration": "30 يوم",
+        "orkiSidType":     "ضروري بشكل صارم",
+        "sbAuthName":      "sb-*",
+        "sbAuthPurpose":   "تسجيل دخول الإدارة",
+        "sbAuthDuration":  "الجلسة",
+        "sbAuthType":      "ضروري بشكل صارم"
+      }
+    }
+  },
+  "Errors": {
+    "heading": "حدث خطأ ما.",
+    "body":    "نحن نعمل على إصلاحه. حاول مرة أخرى أو ارجع إلى الرئيسية.",
+    "retry":   "إعادة المحاولة",
+    "home":    "العودة إلى الرئيسية",
+    "notFound": {
+      "heading":    "404 — ضاع في الضجيج.",
+      "body":       "هذه الصفحة غير موجودة أو تم نقلها. جرّب المتجر بدلاً من ذلك.",
+      "browseShop": "تصفح المتجر",
+      "returnHome": "العودة إلى الرئيسية"
+    },
+    "section": {
+      "shopLoadFailed":      "نواجه مشكلة في تحميل المتجر الآن. حاول مرة أخرى بعد قليل.",
+      "orderLoadFailed":     "لا نستطيع عرض طلبك الآن — تم تأكيد الدفع. راسلنا إن احتجت مساعدة.",
+      "adminOrdersFailed":   "Order list temporarily unavailable."
+    }
+  },
+  "CookieBanner": {
+    "body":          "نستخدم ملفات ارتباط ضرورية فقط لتشغيل السلة وإتمام الشراء. لا تُستخدم ملفات تحليلات أو تسويقية.",
+    "primaryCta":    "حسناً",
+    "secondaryLink": "اقرأ سياسة ملفات الارتباط"
   }
 }
