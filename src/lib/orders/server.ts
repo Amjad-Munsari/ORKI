@@ -317,6 +317,37 @@ export async function getOrderByReference(
 }
 
 /**
+ * Phase 10 Plan 05 — per-user order history for /[locale]/account.
+ *
+ * Drizzle connects via the postgres-role connection string and BYPASSES RLS,
+ * so the `userId` filter here is the ONLY enforcement of "users only see their
+ * own orders" for this query path. RLS protects PostgREST consumers; the
+ * cross-user-deny test (tests/rls/cross-user-deny.test.ts) proves the
+ * PostgREST path is also locked down. Both paths exist by design — defence
+ * in depth.
+ *
+ * Returns newest-first, paginated. Limit defaults to 20 per UI-SPEC.
+ */
+export async function getOrdersForUser(
+  userId: string,
+  opts: { limit?: number; offset?: number } = {}
+): Promise<Order[]> {
+  const limit = opts.limit ?? 20;
+  const offset = opts.offset ?? 0;
+  const rows = await db.query.orders.findMany({
+    where: eq(orders.userId, userId),
+    with: {
+      items: true,
+      events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
+    },
+    orderBy: (o, { desc: d }) => [d(o.placedAt)],
+    limit,
+    offset,
+  });
+  return rows.map(toOrder);
+}
+
+/**
  * Admin-list helper. Newest-placed first.
  */
 export async function getAllOrders(): Promise<Order[]> {
