@@ -62,7 +62,7 @@ Plans:
 - [x] 09-02-PLAN.md — Legal pages (Privacy / Terms / Cookies) + LegalArticle + CookieTable + body copy fill
 - [x] 09-03-PLAN.md — Vercel Analytics + Speed Insights mounting + image priority audit
 - [x] 09-04-PLAN.md — Sitemap + robots + OG fallback + per-page generateMetadata wiring
-- [ ] 09-05-PLAN.md — Reliability hygiene (global-error + per-locale error/not-found, Drizzle logger gate, try/catch, N+1 doc)
+- [x] 09-05-PLAN.md — Reliability hygiene (global-error + per-locale error/not-found, Drizzle logger gate, try/catch, N+1 doc)
 - [x] 09-06-PLAN.md — CookieBanner scaffold + cookie-consent helper (built, NOT mounted)
 
 ### Phase 10: Authentication & Security Core (DEFERRED)
