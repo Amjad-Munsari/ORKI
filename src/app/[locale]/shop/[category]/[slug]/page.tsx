@@ -7,6 +7,21 @@ import { RelatedProducts } from '@/components/pdp/RelatedProducts'
 import type { Metadata } from 'next'
 import type { Locale } from '@/types/domain'
 
+/**
+ * Escape characters that are unsafe inside a <script type="application/ld+json"> body.
+ * Beyond `<` (which can break out of the script tag), Next.js JSON-LD hardening guidance
+ * also recommends escaping `>`, `&`, and the U+2028 / U+2029 line separators that some
+ * older JS parsers treat as line terminators inside string literals.
+ */
+function safeJsonLd(value: unknown): string {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/ /g, '\\u2028')
+    .replace(/ /g, '\\u2029');
+}
+
 type Props = {
   params: Promise<{ locale: Locale; category: string; slug: string }>
 }
@@ -58,8 +73,9 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound()
 
   // JSON-LD Product schema — PDP-10
-  // Native <script> tag (not next/script which is for executable JS)
-  // .replace(/</g, '\\u003c') mitigates XSS via product name/description injection
+  // Native <script> tag (not next/script which is for executable JS).
+  // safeJsonLd() escapes <, >, &, U+2028, U+2029 to mitigate XSS via product
+  // name/description once those fields become CMS/admin-driven (CLAUDE.md data contract).
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -107,15 +123,11 @@ export default async function ProductPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
-        }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c'),
-        }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
       />
 
       <div className="max-w-[1280px] mx-auto px-6 py-12">
