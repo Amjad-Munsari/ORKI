@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
-current_phase: 8
-status: complete-pending-uat
-stopped_at: Phase 8 PASS (programmatic) — 8 of 9 plans executed (08-07 email deferred, no Resend key). DB migrated Neon → Supabase. 76 tests passing incl. concurrent-stock proof of FOR UPDATE. Awaiting human UAT execution of 08-UAT.md scenarios 1–7 + 9.
-last_updated: "2026-05-10T01:15:00.000Z"
-last_activity: 2026-05-10 — Phase 8: Plans 01–06, 08, 09 executed end-to-end. DB switched to Supabase Postgres mid-phase (ADR-001). Linchpin verified: SELECT FOR UPDATE inside db.transaction proven against real Supabase via integration test. Inline fix: payment enum reconciled (card/cod added) closing UI/server mismatch. Plan 08-07 (Resend email) intentionally deferred — sites stubbed, schema and i18n keys ready, ECOM-03 is the only Phase 8 requirement carried forward.
+current_phase: 9
+status: in_progress
+stopped_at: Phase 8 UAT paused at Test 1 of 9 — cart-refresh persistence failed (UX-08 / Plan 08-02 regression). User opted to advance to Phase 9 foundations and tackle Phase 8 follow-ups later. 7 scenarios remain pending (S2–S7, S9); S8 deferred with 08-07.
+last_updated: "2026-05-10T00:10:00.000Z"
+last_activity: 2026-05-10 — Phase 8 UAT started; Test 1 EN happy path failed on "refresh resets cart" (UX-08 regression in cart hydration). User chose to move to Phase 9 with the gap carried forward. Phase 8 status = partial. Phase 8 follow-ups: (a) cart-refresh persistence bug (open), (b) S2–S7 + S9 pending, (c) Plan 08-07 Resend email deferred until RESEND_API_KEY.
 progress:
   total_phases: 5
   completed_phases: 2
@@ -17,8 +17,8 @@ progress:
 
 # Project State: ORKI
 
-**Current Phase:** 8 — Cart, Checkout State & Order Flow
-**Status:** Complete pending human UAT (Plan 08-07 email deferred)
+**Current Phase:** 9 — Performance, Legal & Polish
+**Status:** In progress (foundations); Phase 8 partial — UAT paused with 1 known major gap
 **Last Updated:** 2026-05-10
 
 ## Project Reference
@@ -33,8 +33,8 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
 - [x] Phase 7: Product Catalog & Dynamic Inventory [100%]
-- [~] Phase 8: Cart, Checkout State & Order Flow [89% — 8/9 plans, 08-07 email deferred]
-- [ ] Phase 9: Performance, Legal & Polish [0%]
+- [~] Phase 8: Cart, Checkout State & Order Flow [partial — 8/9 plans built; UAT paused with cart-refresh gap; 08-07 email deferred]
+- [~] Phase 9: Performance, Legal & Polish [in progress — foundations]
 - [ ] Phase 10: Authentication & Security Core (DEFERRED — uses Supabase Auth per ADR-002) [0%]
 Last activity: 2026-05-10 — Phase 8 implementation complete. DB migrated to Supabase. Email phase (08-07) deferred until RESEND_API_KEY available.
 
@@ -70,17 +70,21 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None.
+- **Phase 8 follow-up:** cart resets on full-page refresh (UX-08 / Plan 08-02 cookie-backed hydration regression). Reproduce in EN at `/en/shop`. Logged in `08-UAT.md` Gaps + Test 1.
+- **Phase 8 follow-up:** finish UAT scenarios S2–S7 + S9 once cart-refresh fix lands.
+- **Phase 8 follow-up:** Plan 08-07 (Resend email) deferred until `RESEND_API_KEY` provisioned; restore Scenario 8 then.
 
 ### Blockers/Concerns
 
-None.
+- Cart-refresh persistence regression is a major UX-08 gap carried into Phase 9. Acceptable to advance per user direction, but Phase 8 cannot be marked complete until fixed.
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| Phase 8 bug | Cart resets on page refresh (UX-08 / Plan 08-02) | open — diagnose + fix | 2026-05-10 |
+| Phase 8 UAT | Scenarios S2–S7 + S9 outstanding | paused | 2026-05-10 |
+| Phase 8 plan | 08-07 Resend transactional email | deferred until RESEND_API_KEY | 2026-05-10 |
 
 ## Session Continuity
 
