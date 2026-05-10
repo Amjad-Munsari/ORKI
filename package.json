@@ -15,7 +15,8 @@
     "db:seed": "tsx scripts/seed.ts",
     "audit": "npm audit --audit-level=moderate",
     "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:legal-placeholders": "node scripts/check-legal-placeholders.cjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
