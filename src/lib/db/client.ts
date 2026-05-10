@@ -30,4 +30,10 @@ if (env.NODE_ENV !== 'production') {
   globalForDb.conn = conn;
 }
 
-export const db = drizzle(conn, { schema });
+export const db = drizzle(conn, {
+  schema,
+  // Dev-time SQL logger — emits every statement to stdout in `next dev`.
+  // Strict gate: OFF in Vercel Preview AND Production (both run NODE_ENV=production).
+  // Mitigates T-09-05-02 (information disclosure via SQL in prod logs).
+  logger: env.NODE_ENV !== 'production',
+});
