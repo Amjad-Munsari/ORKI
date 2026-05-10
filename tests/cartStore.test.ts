@@ -14,8 +14,8 @@ const makeProduct = (id: string, category: 'tops' | 'bottoms' = 'tops'): Product
   price: 100,
   currency: 'SAR',
   sizes: [
-    { label: 'S', inStock: true },
-    { label: 'M', inStock: true },
+    { id: `${id}-size-s`, label: 'S', stock: 10, inStock: true },
+    { id: `${id}-size-m`, label: 'M', stock: 10, inStock: true },
   ],
   images: [],
   inStock: true,

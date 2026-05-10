@@ -31,7 +31,7 @@ const mockProduct: Product = {
   category: 'tops',
   price: 249,
   currency: 'SAR',
-  sizes: [{ label: 'M', inStock: true }],
+  sizes: [{ id: 'test-size-m', label: 'M', stock: 10, inStock: true }],
   images: [],
   inStock: true,
 }

@@ -63,7 +63,12 @@ describe('getStockState', () => {
     category: 'tops',
     price: 100,
     currency: 'SAR',
-    sizes: sizes.map((s, i) => ({ label: `S${i}`, inStock: s.inStock })),
+    sizes: sizes.map((s, i) => ({
+      id: `test-size-${i}`,
+      label: `S${i}`,
+      stock: s.inStock ? 10 : 0,
+      inStock: s.inStock,
+    })),
     images: [],
     inStock: sizes.some(s => s.inStock),
   })

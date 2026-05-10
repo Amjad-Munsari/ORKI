@@ -10,9 +10,9 @@ import { SizeSelector } from '@/components/pdp/SizeSelector'
 import type { Size } from '@/types/domain'
 
 const sizes: Size[] = [
-  { label: 'S', inStock: true },
-  { label: 'M', inStock: false },
-  { label: 'L', inStock: true },
+  { id: 'test-size-s', label: 'S', stock: 10, inStock: true },
+  { id: 'test-size-m', label: 'M', stock: 0, inStock: false },
+  { id: 'test-size-l', label: 'L', stock: 10, inStock: true },
 ]
 
 describe('SizeSelector (PDP-04)', () => {
