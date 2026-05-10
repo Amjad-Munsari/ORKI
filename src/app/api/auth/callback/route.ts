@@ -16,12 +16,27 @@
  * (SEC-06 generic error policy).
  */
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
+
+/**
+ * WR-05 (Phase 10 review): resolve locale from the requester's NEXT_LOCALE
+ * cookie (set by next-intl middleware) so failure redirects preserve
+ * locale. Arabic users who click an invalid recovery link should land on
+ * /ar/forgot-password, not /en/forgot-password.
+ */
+async function resolveLocale(): Promise<'en' | 'ar'> {
+  const jar = await cookies();
+  return jar.get('NEXT_LOCALE')?.value === 'ar' ? 'ar' : 'en';
+}
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/en/reset-password';
+  const locale = await resolveLocale();
+  // `next` typically comes through as /<locale>/reset-password (set by
+  // requestPasswordResetAction). Default to the resolved locale when absent.
+  const next = searchParams.get('next') ?? `/${locale}/reset-password`;
 
   if (code) {
     try {
@@ -35,6 +50,6 @@ export async function GET(request: Request) {
     }
   }
   return NextResponse.redirect(
-    `${origin}/en/forgot-password?error=invalid_link`,
+    `${origin}/${locale}/forgot-password?error=invalid_link`,
   );
 }

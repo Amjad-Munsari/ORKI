@@ -219,10 +219,17 @@ export async function requestPasswordResetAction(
       (process.env.NEXT_PUBLIC_VERCEL_URL
         ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
         : 'http://localhost:3000');
+    // WR-05 (Phase 10 review): preserve the requester's locale through the
+    // recovery flow so Arabic users land on /ar/reset-password rather than
+    // being silently switched to /en. next-intl's middleware sets the
+    // NEXT_LOCALE cookie based on the URL prefix; fall back to 'en' only if
+    // the cookie is genuinely absent.
+    const jar = await cookies();
+    const locale = jar.get('NEXT_LOCALE')?.value === 'ar' ? 'ar' : 'en';
     // resetPasswordForEmail emits the reset email; redirectTo is the URL the
     // recovery link returns to (Plan 10-04 ships /api/auth/callback).
     await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-      redirectTo: `${origin}/api/auth/callback?next=/en/reset-password`,
+      redirectTo: `${origin}/api/auth/callback?next=/${locale}/reset-password`,
     });
   } catch (err) {
     // Anti-enumeration: swallow + log. UI must NOT see an error here.
