@@ -31,14 +31,23 @@ export async function buildMetadata({
 }: BuildMetadataInput): Promise<Metadata> {
   const [titleNs, ...titleRest] = titleKey.split('.');
   const titleSubKey = titleRest.join('.');
-  const tTitle = await getTranslations({ locale, namespace: titleNs });
+  // next-intl types `namespace` as a literal union derived from messages; this helper
+  // accepts dynamic 'ns.key' strings by design, so we widen to `never` to satisfy
+  // the overload while preserving runtime behavior.
+  const tTitle = await getTranslations({
+    locale,
+    namespace: titleNs as never,
+  });
 
   const [descNs, ...descRest] = descriptionKey.split('.');
   const descSubKey = descRest.join('.');
-  const tDesc = await getTranslations({ locale, namespace: descNs });
+  const tDesc = await getTranslations({
+    locale,
+    namespace: descNs as never,
+  });
 
-  const title = tTitle(titleSubKey);
-  const description = tDesc(descSubKey);
+  const title = tTitle(titleSubKey as never);
+  const description = tDesc(descSubKey as never);
   const image = ogImage ?? DEFAULT_OG_IMAGE;
 
   const suffix = path === '/' ? '' : path;
