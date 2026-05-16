@@ -60,7 +60,7 @@ See `.planning/STATE.md` for current phase and status.
 | Animation | Motion (formerly Framer Motion) + GSAP ScrollTrigger |
 | i18n | next-intl — URL-based locale routing (`/en/...`, `/ar/...`) |
 | Cart state | Zustand + persist middleware (localStorage) |
-| Fonts | next/font — Space Grotesk (EN) + IBM Plex Arabic (AR) |
+| Fonts | next/font — Geist (EN) + IBM Plex Sans Arabic (AR) |
 | Deployment | Vercel |
 
 **Future (backend phase):** Medusa v2 + Moyasar (Mada + STC Pay)
@@ -71,7 +71,7 @@ See `.planning/STATE.md` for current phase and status.
 - **Mode:** Dark-first
 - **Animations:** Mix of subtle (hover, transitions) and bold (scroll reveals) — never distracting
 - **Image ratios:** 3:4 catalog cards, 4:5 PDP hero — enforce via aspect-ratio CSS
-- **Typography:** Geometric sans (EN) + IBM Plex Arabic (AR) — loaded via next/font
+- **Typography:** Geist (EN) + IBM Plex Sans Arabic (AR) — loaded via next/font
 - **Currency:** SAR — formatted via `Intl.NumberFormat` with `'ar-SA-u-nu-latn'` for Western numerals in both locales
 
 ## Planning Artifacts
