@@ -31,6 +31,12 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
 
       <p className="text-sm text-white/60">{formattedPrice}</p>
 
+      {product.description?.[locale] && (
+        <p className="text-base text-white/70 leading-relaxed max-w-prose">
+          {product.description[locale]}
+        </p>
+      )}
+
       {!isFullyOOS && (
         <>
           <SizeSelector

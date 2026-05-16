@@ -7,25 +7,27 @@ interface PDPGalleryProps {
   locale: Locale
 }
 
+const MAX_GALLERY_IMAGES = 6
+
 export function PDPGallery({ productName, images, locale }: PDPGalleryProps) {
-  const imageSlots = [
-    {
-      n: 1,
-      src: images[0],
-      alt: locale === 'ar' ? `${productName} — صورة 1` : `${productName} — image 1`,
-      priority: true,
-    },
-  ]
+  const visibleImages = (images.length > 0 ? images : [undefined as unknown as string]).slice(
+    0,
+    MAX_GALLERY_IMAGES,
+  )
 
   return (
     <div className="flex flex-col gap-4">
-      {imageSlots.map(slot => (
+      {visibleImages.map((src, index) => (
         <PlaceholderImage
-          key={slot.n}
+          key={`${productName}-${index}`}
           aspectRatio="4/5"
-          alt={slot.alt}
-          src={slot.src}
-          priority={slot.priority}
+          alt={
+            locale === 'ar'
+              ? `${productName} — صورة ${index + 1}`
+              : `${productName} — image ${index + 1}`
+          }
+          src={src}
+          priority={index === 0}
         />
       ))}
     </div>

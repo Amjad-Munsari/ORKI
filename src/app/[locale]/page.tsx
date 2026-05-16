@@ -38,11 +38,14 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="relative z-10 max-w-[1440px] mx-auto px-8 w-full">
           <ScrollReveal direction="up" className="max-w-4xl space-y-6">
             <span className="text-sm font-medium text-white/90 block">
-              {isRtl ? '(مجموعة مختارة)' : '(Featured Collection)'}
+              {isRtl ? '(صيف ٢٦ — الإصدار ٠١)' : '(SS26 — Drop 01)'}
             </span>
             <h1 className="text-6xl md:text-[90px] font-medium text-white leading-[1.1] tracking-tight">
-              {isRtl ? 'أساسيات العصر الحديث' : 'Timeless Essentials for the Season'}
+              {isRtl ? 'صُنع في صخب الرياض.' : 'Made in the noise of Riyadh.'}
             </h1>
+            <p className="text-base md:text-lg text-white/70 max-w-xl leading-relaxed">
+              {isRtl ? 'البس صوت المدينة.' : 'Wear what the city sounds like.'}
+            </p>
           </ScrollReveal>
         </div>
       </section>

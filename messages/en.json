@@ -19,6 +19,25 @@
     "returns": "Returns",
     "contact": "Contact",
     "copyright": "© 2026 ORKI. All rights reserved.",
+    "copyrightShort": "© {year} All Rights Reserved",
+    "benefits": {
+      "shipping": "Free shipping from 300 SAR",
+      "returns": "Easy returns within 14 days",
+      "payments": "Secure payments online",
+      "support": "24/7 customer support"
+    },
+    "nav": {
+      "groupLabel": "(Navigation)",
+      "home": "Home",
+      "tops": "Tops",
+      "bottoms": "Bottoms",
+      "story": "Our Story"
+    },
+    "help": {
+      "groupLabel": "(Help)",
+      "contact": "Contact",
+      "faq": "FAQ"
+    },
     "legal": {
       "groupLabel": "(Legal)",
       "privacy": "Privacy Policy",

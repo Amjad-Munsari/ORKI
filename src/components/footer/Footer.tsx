@@ -4,45 +4,45 @@ import { getTranslations } from 'next-intl/server'
 
 export async function Footer() {
   const currentYear = new Date().getFullYear()
+  const tBenefits = await getTranslations('Footer.benefits')
+  const tNav = await getTranslations('Footer.nav')
+  const tHelp = await getTranslations('Footer.help')
   const tLegal = await getTranslations('Footer.legal')
+  const tFooter = await getTranslations('Footer')
 
   return (
     <footer className="w-full bg-black text-white">
-      {/* TODO(i18n) benefit-bar: the four lines below (shipping / returns / payments / support)
-          are EN-only by current Phase-9 contract. Phase 9 reconciles only the returns-policy
-          duration (30 days → 14 days). Full i18n keying of the benefit bar is a future-phase
-          concern. */}
       {/* Benefit Bar */}
       <div className="grid grid-cols-1 md:grid-cols-4 border-y border-white/10">
-        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
+        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-e border-white/10 group hover:bg-white/[0.02] transition-colors">
           <Truck className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">Free shipping from 300 SAR</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">{tBenefits('shipping')}</span>
         </div>
-        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
+        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-e border-white/10 group hover:bg-white/[0.02] transition-colors">
           <RotateCcw className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">Easy returns within 14 days</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">{tBenefits('returns')}</span>
         </div>
-        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/[0.02] transition-colors">
+        <div className="flex flex-col items-center justify-center py-12 px-6 text-center border-b md:border-b-0 md:border-e border-white/10 group hover:bg-white/[0.02] transition-colors">
           <ShieldCheck className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">Secure payments online</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">{tBenefits('payments')}</span>
         </div>
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center group hover:bg-white/[0.02] transition-colors">
           <Users className="size-6 mb-4 text-white/60 group-hover:text-white transition-colors" />
-          <span className="text-sm font-medium tracking-tight text-white/80">24/7 customer support</span>
+          <span className="text-sm font-medium tracking-tight text-white/80">{tBenefits('support')}</span>
         </div>
       </div>
 
       {/* Main Footer Section */}
       <div className="max-w-[1440px] mx-auto px-8 py-24">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-32">
-          
+
           {/* Brand & Copyright */}
           <div className="flex-1 space-y-8">
             <h2 className="text-8xl md:text-[160px] font-bold tracking-[-0.05em] leading-none">
               ORKI
             </h2>
             <p className="text-sm text-white/40 font-medium">
-              © {currentYear} All Rights Reserved
+              {tFooter('copyrightShort', { year: currentYear })}
             </p>
           </div>
 
@@ -50,12 +50,12 @@ export async function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-16 lg:gap-24 pt-4">
             {/* Group 1: Navigation */}
             <div className="space-y-6">
-              <span className="text-xs font-semibold text-white/40 block">(Navigation)</span>
+              <span className="text-xs font-semibold text-white/40 block">{tNav('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/" className="text-sm font-semibold hover:text-white/60 transition-colors">Home</Link></li>
-                <li><Link href="/shop/tops" className="text-sm font-semibold hover:text-white/60 transition-colors">Tops</Link></li>
-                <li><Link href="/shop/bottoms" className="text-sm font-semibold hover:text-white/60 transition-colors">Bottoms</Link></li>
-                <li><Link href="/about" className="text-sm font-semibold hover:text-white/60 transition-colors">Our Story</Link></li>
+                <li><Link href="/" className="text-sm font-semibold hover:text-white/60 transition-colors">{tNav('home')}</Link></li>
+                <li><Link href="/shop/tops" className="text-sm font-semibold hover:text-white/60 transition-colors">{tNav('tops')}</Link></li>
+                <li><Link href="/shop/bottoms" className="text-sm font-semibold hover:text-white/60 transition-colors">{tNav('bottoms')}</Link></li>
+                <li><Link href="/about" className="text-sm font-semibold hover:text-white/60 transition-colors">{tNav('story')}</Link></li>
               </ul>
             </div>
 
@@ -71,10 +71,10 @@ export async function Footer() {
 
             {/* Group 3: Help */}
             <div className="space-y-6">
-              <span className="text-xs font-semibold text-white/40 block">(Help)</span>
+              <span className="text-xs font-semibold text-white/40 block">{tHelp('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/contact" className="text-sm font-semibold hover:text-white/60 transition-colors">Contact</Link></li>
-                <li><Link href="/faq" className="text-sm font-semibold hover:text-white/60 transition-colors">FAQ</Link></li>
+                <li><Link href="/contact" className="text-sm font-semibold hover:text-white/60 transition-colors">{tHelp('contact')}</Link></li>
+                <li><Link href="/faq" className="text-sm font-semibold hover:text-white/60 transition-colors">{tHelp('faq')}</Link></li>
               </ul>
             </div>
           </div>
