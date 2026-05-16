@@ -86,8 +86,23 @@ Plans:
 - [x] 10-06-PLAN.md — Wave 2: Admin gate (email allowlist) + audit-log surface
 - [x] 10-07-PLAN.md — Wave 3: Security headers + CSP + final verification + production-bundle service-role-key grep
 
+### Phase 11: Storefront UI/UX Polish (EN)
+**Goal:** Close the EN-scope findings from the 2026-05-16 storefront cross-phase audit so the public storefront (Home, Shop + category, PDP, About, Contact, Navbar, Footer, 404) feels intentional, branded, and accessible. AR-specific copy/voice reconciliation deferred to a future sibling phase.
+**Source of truth:** `.planning/STOREFRONT-UI-REVIEW-EN.md` (23 findings; 6 already closed in commit `becd464`).
+**Out of scope:** Checkout, cart drawer, admin pages, auth flows, account pages, AR copy reconciliation (see `.planning/STOREFRONT-UI-REVIEW-AR.md`).
+**Success Criteria:**
+1. All `[OPEN]` findings in `STOREFRONT-UI-REVIEW-EN.md` resolved or explicitly deferred with rationale.
+2. Storefront visually verified in a live `npm run dev` session (audit was code-only).
+3. Navbar + ShopDropdown ship dark-mode chrome consistent with the brand voice.
+4. Every storefront interactive has a visible `focus-visible` ring; keyboard nav is usable.
+5. Shop list, PDP gallery, and PageTransition all degrade gracefully (loading skeletons + reduced-motion).
+6. No new TypeScript errors, lint warnings, or test failures introduced.
+
 ---
 
 ## Backlog
 
-*(Empty)*
+### Phase 999.11: Storefront UI/UX Polish (AR) — DEFERRED
+**Source:** `.planning/STOREFRONT-UI-REVIEW-AR.md`
+**Trigger:** Phase 11 (EN) shipped + brand voice locked in EN + AR-native reviewer + AR-legal reviewer available.
+**Scope:** AR copy reconciliation (Nav vs Shop vs Meta `tops`/`bottoms` divergence), AR-native review of EN-polish AR drafts, AR-legal `[AR-LEGAL-REVIEW]` sign-off carried over from Phase 9-02, AR-side 404 voice, AR-side About numbering choice.
