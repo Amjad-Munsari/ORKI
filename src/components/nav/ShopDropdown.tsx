@@ -28,8 +28,8 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
   }
 
   return (
-    <div 
-      className="relative h-full flex items-center"
+    <div
+      className="relative flex items-center"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

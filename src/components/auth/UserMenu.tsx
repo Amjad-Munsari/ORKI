@@ -38,7 +38,7 @@ export function UserMenu({ user }: Props) {
     return (
       <Link
         href="/login"
-        className="h-full flex items-center text-sm font-medium tracking-tight whitespace-nowrap"
+        className="text-sm font-medium tracking-tight whitespace-nowrap"
       >
         <span className="link-underline inline-block leading-none py-2">{tNav('signIn')}</span>
       </Link>
@@ -48,7 +48,7 @@ export function UserMenu({ user }: Props) {
   return (
     <Menu.Root>
       <Menu.Trigger
-        className="h-full flex items-center gap-2 text-sm font-medium tracking-tight whitespace-nowrap min-h-[44px]"
+        className="flex items-center gap-2 text-sm font-medium tracking-tight whitespace-nowrap"
         aria-label={t('userMenu', { email: user.email })}
       >
         <UserCircle className="size-5" aria-hidden />
