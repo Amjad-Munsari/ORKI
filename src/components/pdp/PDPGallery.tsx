@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { PlaceholderImage } from '@/components/PlaceholderImage'
 import { getPlaceholderVariantName } from '@/lib/placeholder-variant'
 import type { Locale } from '@/types/domain'
@@ -29,6 +29,28 @@ export function PDPGallery({ productName, images, locale, slug }: PDPGalleryProp
   // IntersectionObserver. We allocate refs up to MAX_GALLERY_IMAGES once.
   const cellRefs = useRef<Array<HTMLDivElement | null>>([])
   const [activeIndex, setActiveIndex] = useState(0)
+
+  // Desktop-only parallax on the FIRST image. Gated via matchMedia so mobile
+  // (which renders the gallery as a horizontal scroller) renders identically
+  // to before. Reduced-motion users also skip the transform.
+  const heroRef = useRef<HTMLDivElement>(null)
+  const [parallaxEnabled, setParallaxEnabled] = useState(false)
+  useEffect(() => {
+    if (shouldReduceMotion) return
+    const mql = window.matchMedia('(min-width: 768px)')
+    const sync = () => setParallaxEnabled(mql.matches)
+    sync()
+    mql.addEventListener('change', sync)
+    return () => mql.removeEventListener('change', sync)
+  }, [shouldReduceMotion])
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start end', 'end start'],
+  })
+  // Slow ~12% upward drift across the hero's scroll range. Lenis-smoothed
+  // scroll makes this read as physical momentum, not a CSS tic.
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '-12%'])
 
   // Mobile dot tracking: observe each cell; the most-visible one wins.
   useEffect(() => {
@@ -111,25 +133,42 @@ export function PDPGallery({ productName, images, locale, slug }: PDPGalleryProp
         role="region"
         aria-label={locale === 'ar' ? 'صور المنتج' : 'Product images'}
       >
-        {visibleImages.map((src, index) => (
-          <div
-            key={`cell-${index}`}
-            ref={(el) => { cellRefs.current[index] = el }}
-            className="flex-shrink-0 w-full snap-center md:flex-shrink"
-          >
+        {visibleImages.map((src, index) => {
+          const alt =
+            locale === 'ar'
+              ? `${productName} — صورة ${index + 1}`
+              : `${productName} — image ${index + 1}`
+          const image = (
             <PlaceholderImage
               aspectRatio="4/5"
-              alt={
-                locale === 'ar'
-                  ? `${productName} — صورة ${index + 1}`
-                  : `${productName} — image ${index + 1}`
-              }
+              alt={alt}
               src={src}
               priority={index === 0}
               variant={variant}
             />
-          </div>
-        ))}
+          )
+          return (
+            <div
+              key={`cell-${index}`}
+              ref={(el) => {
+                cellRefs.current[index] = el
+                if (index === 0) heroRef.current = el
+              }}
+              className="flex-shrink-0 w-full snap-center md:flex-shrink"
+            >
+              {index === 0 && parallaxEnabled ? (
+                <motion.div
+                  style={{ y: heroY }}
+                  className="will-change-transform"
+                >
+                  {image}
+                </motion.div>
+              ) : (
+                image
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* Mobile dot indicators — hidden on md and up. */}
