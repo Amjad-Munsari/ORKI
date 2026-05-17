@@ -119,18 +119,27 @@ function CategoryCard({ title, href, locale }: { title: string; href: string; lo
       href={href}
       className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16 bg-[var(--color-placeholder-bg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
-      {/* Massive kerned wordmark of the category title — D-03 typographic-only treatment.
-          Sits behind the foreground Shop-Now block; subtle scale on group-hover. */}
+      {/* Vignette overlay — invisible at rest, fades in on hover to deepen the splat */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden transition-transform duration-1000 group-hover:scale-[1.03]"
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--duration-slow)] ease-[var(--ease-out-soft)]"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 90%)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Massive kerned wordmark of the category title — D-03 typographic-only treatment.
+          Cinematic slow scale + opacity bump on group-hover. */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden
+                   transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)]
+                   group-hover:scale-[1.06] motion-reduce:transform-none"
         aria-hidden="true"
       >
         <span
-          className="font-bold uppercase leading-none tracking-[-0.04em]"
-          style={{
-            color: 'rgba(255, 255, 255, 0.08)',
-            fontSize: '22vw',
-          }}
+          className="font-bold uppercase leading-none tracking-[-0.04em] transition-[color] duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] text-white/[0.08] group-hover:text-white/[0.14]"
+          style={{ fontSize: '22vw' }}
         >
           {title}
         </span>
@@ -141,7 +150,9 @@ function CategoryCard({ title, href, locale }: { title: string; href: string; lo
         <h3 className="text-5xl md:text-8xl font-medium text-white leading-tight">
           {title}
         </h3>
-        <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-2">
+        <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3
+                        transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)]
+                        group-hover:translate-x-2 motion-reduce:transform-none">
           {isRtl ? 'تسوق الآن' : 'Shop Now'}
           {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
         </div>

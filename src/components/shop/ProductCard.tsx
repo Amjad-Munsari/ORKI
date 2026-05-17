@@ -43,7 +43,7 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
           // cardHover preset = 0.3s duration, ease-out — expressed as Tailwind duration-300 ease-out.
           // motion-safe: prefix disables scale when prefers-reduced-motion: reduce is active.
           // group-hover:scale-[1.04] fires when hovering anywhere on the card (via group on Link).
-          className="transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.04]"
+          className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-soft)] motion-safe:group-hover:scale-[1.06]"
         />
         {/* OOS overlay badge — absolute positioned inside the image container.
             Only renders for 'out-of-stock' in card context (partial OOS shows nothing on card). */}
