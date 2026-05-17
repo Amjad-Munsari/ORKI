@@ -72,6 +72,7 @@ export function ShopHeader({ activeCategory, activeSort, productCount, locale }:
               role="tab"
               aria-selected={isActive}
               onClick={() => setCategory(value)}
+              suppressHydrationWarning
               className={[
                 'text-sm font-normal pb-1 transition-colors duration-150',
                 isActive
