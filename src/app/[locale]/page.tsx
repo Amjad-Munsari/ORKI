@@ -1,5 +1,6 @@
 
 
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getAllProducts } from '@/lib/products'
 import { ProductCard } from '@/components/shop/ProductCard'
@@ -15,7 +16,8 @@ interface HomePageProps {
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
   const isRtl = locale === 'ar'
-  
+  const tEthos = await getTranslations('Home.ethos')
+
   const products = await getAllProducts()
   const featuredProducts = products.slice(0, 4)
 
@@ -93,16 +95,14 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="py-64 bg-[var(--color-placeholder-bg)]">
         <ScrollReveal className="max-w-[var(--container-max)] mx-auto px-8 text-center space-y-12">
           <h3 className="display-4 font-medium text-white max-w-5xl mx-auto">
-            {isRtl 
-              ? 'نحن لا نصنع الملابس، نحن نوثق ثقافة الشارع.' 
-              : 'We don\'t just make clothes. We document the evolution of street culture.'}
+            {tEthos('line')}
           </h3>
           <div className="pt-8">
             <Link
               href="/about"
               className="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              {isRtl ? 'اقرأ قصتنا' : 'Read Our Story'}
+              {tEthos('readStory')}
               <ArrowRight className="size-4 rtl-flip" />
             </Link>
           </div>
