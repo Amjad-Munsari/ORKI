@@ -15,7 +15,7 @@ export function CartTrigger({ ariaLabel }: CartTriggerProps) {
     <button
       onClick={() => setDrawerOpen(true)}
       aria-label={ariaLabel}
-      className="flex items-center justify-center min-h-[44px] min-w-[44px] hover:opacity-60 transition-opacity relative"
+      className="flex items-center justify-center min-h-[44px] min-w-[44px] hover:opacity-60 transition-opacity relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
       <ShoppingCart className="size-5" aria-hidden="true" />
       <CartBadge />

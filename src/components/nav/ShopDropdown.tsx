@@ -35,7 +35,7 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
     >
       <Link
         href="/shop"
-        className="flex items-center gap-1 text-sm font-medium tracking-tight hover:opacity-60 transition-opacity"
+        className="flex items-center gap-1 text-sm font-medium tracking-tight hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
         {label}
       </Link>
@@ -53,7 +53,7 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-6 py-3 text-sm font-medium hover:bg-black/5 transition-colors whitespace-nowrap"
+                className="block px-6 py-3 text-sm font-medium hover:bg-black/5 transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}

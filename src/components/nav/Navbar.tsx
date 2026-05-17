@@ -39,7 +39,7 @@ export async function Navbar() {
             <Link
               key={href}
               href={href}
-              className="h-full flex items-center text-sm font-medium tracking-tight hover:opacity-60 transition-opacity whitespace-nowrap"
+              className="h-full flex items-center text-sm font-medium tracking-tight hover:opacity-60 transition-opacity whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {label}
             </Link>
@@ -50,7 +50,7 @@ export async function Navbar() {
         <div className="h-full flex items-center justify-center">
           <Link
             href="/"
-            className="text-2xl font-bold tracking-[0.05em] hover:opacity-80 transition-opacity flex items-center"
+            className="text-2xl font-bold tracking-[0.05em] hover:opacity-80 transition-opacity flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             <span dir="ltr">ORKI</span>
           </Link>

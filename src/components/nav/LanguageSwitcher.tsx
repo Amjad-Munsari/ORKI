@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
     <button
       onClick={handleSwitch}
       aria-label={locale === 'en' ? 'Switch to Arabic' : 'Switch to English'}
-      className="flex items-center justify-center min-h-[44px] min-w-[44px] text-xs font-semibold tracking-wider uppercase text-black/60 hover:text-black transition-opacity duration-150 active:scale-[0.97]"
+      className="flex items-center justify-center min-h-[44px] min-w-[44px] text-xs font-semibold tracking-wider uppercase text-black/60 hover:text-black transition-opacity duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
       {label}
     </button>

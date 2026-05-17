@@ -59,7 +59,7 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
         render={
           <button
             aria-label={isOpen ? t('closeMenu') : t('openMenu')}
-            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-black hover:opacity-60 transition-opacity duration-150 active:scale-[0.97]"
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-black hover:opacity-60 transition-opacity duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           />
         }
       >
@@ -101,7 +101,7 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
           <Link
             href="/shop"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-bold text-white hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            className="text-lg font-bold text-white hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             {t('shop')}
           </Link>
@@ -109,14 +109,14 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
             <Link
               href="/shop/tops"
               onClick={() => setIsOpen(false)}
-              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {t('tops')}
             </Link>
             <Link
               href="/shop/bottoms"
               onClick={() => setIsOpen(false)}
-              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+              className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {t('bottoms')}
             </Link>
@@ -124,14 +124,14 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
           <Link
             href="/about"
             onClick={() => setIsOpen(false)}
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             {t('about')}
           </Link>
           <Link
             href="/contact"
             onClick={() => setIsOpen(false)}
-            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center"
+            className="text-base font-normal text-white/60 hover:text-white transition-opacity duration-150 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             {t('contact')}
           </Link>
