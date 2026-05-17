@@ -17,35 +17,30 @@ export function ScrollReveal({
 }: ScrollRevealProps) {
   const shouldReduceMotion = useReducedMotion()
 
-  // Fallback for reduced motion: simple fade with no movement
+  // Fallback for reduced motion: instant render, no fade, no movement.
+  // (Phase 11 anim pass: reduced-motion users skip the reveal entirely.)
   if (shouldReduceMotion) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, delay }}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    )
+    return <div className={className}>{children}</div>
   }
+
+  // Canonical Lenis/Apple decelerating curve — matches --ease-out-soft in globals.css
+  // and the easing inside SmoothScrollProvider so the page feels coherent.
+  const EASE_OUT_SOFT = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
   const variants = {
     hidden: {
       opacity: 0,
-      y: direction === 'up' ? 30 : direction === 'down' ? -30 : 0,
-      x: direction === 'left' ? 30 : direction === 'right' ? -30 : 0,
+      y: direction === 'up' ? 48 : direction === 'down' ? -48 : 0,
+      x: direction === 'left' ? 48 : direction === 'right' ? -48 : 0,
     },
     visible: {
       opacity: 1,
       y: 0,
       x: 0,
       transition: {
-        duration: 0.8,
+        duration: 1.1,
         delay,
-        ease: [0.21, 1.11, 0.81, 0.99] as [number, number, number, number], // Slight overshoot for premium feel
+        ease: EASE_OUT_SOFT,
       },
     },
   }
