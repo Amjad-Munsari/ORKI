@@ -34,7 +34,7 @@ export function SizeGuideModal({ locale }: SizeGuideModalProps) {
         render={
           <button
             type="button"
-            className="text-sm font-normal text-white/60 hover:text-white transition-colors duration-150 min-h-[44px]"
+            className="text-sm font-medium text-white underline underline-offset-4 decoration-white/40 hover:decoration-white transition-colors duration-150 min-h-[44px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm"
           >
             {locale === 'ar' ? 'دليل المقاسات' : 'Size Guide'}
           </button>

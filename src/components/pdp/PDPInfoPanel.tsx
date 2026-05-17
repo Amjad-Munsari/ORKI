@@ -33,20 +33,23 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-xl font-semibold tracking-[-0.02em]">
-        {product.name[locale]}
-      </h1>
-
-      <p className="text-sm text-white/60">{formattedPrice}</p>
-
-      {showPassiveLowStock && (
-        <p
-          role="status"
-          className="text-xs text-white/60 font-mono uppercase tracking-widest"
-        >
-          {locale === 'ar' ? 'كمية محدودة' : 'Limited stock'}
+      <header className="flex flex-col gap-3">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-[-0.02em] leading-tight">
+          {product.name[locale]}
+        </h1>
+        <p className="text-2xl font-semibold text-white tabular-nums">
+          {formattedPrice}
         </p>
-      )}
+        {showPassiveLowStock && (
+          <p
+            role="status"
+            className="inline-flex items-center gap-2 self-start text-[11px] font-mono uppercase tracking-widest text-white bg-white/[0.08] px-3 py-1.5 rounded-full"
+          >
+            <span aria-hidden className="size-1.5 rounded-full bg-white" />
+            {locale === 'ar' ? 'كمية محدودة' : 'Limited stock'}
+          </p>
+        )}
+      </header>
 
       {product.description?.[locale] && (
         <p className="text-base text-white/70 leading-relaxed max-w-prose">
