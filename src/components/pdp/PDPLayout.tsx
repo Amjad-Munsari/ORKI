@@ -10,7 +10,7 @@ interface PDPLayoutProps {
 // Mobile: single column, gallery above, info below.
 export function PDPLayout({ gallery, info }: PDPLayoutProps) {
   return (
-    <div className="flex flex-col gap-8 md:grid md:grid-cols-[55%_45%] md:gap-12 xl:gap-16">
+    <div className="flex flex-col gap-8 md:grid md:grid-cols-[11fr_9fr] md:gap-12 xl:gap-16">
       <div>{gallery}</div>
       {/*
         sticky top-20: sticks 80px from viewport top (Navbar height = h-[80px]; layout pt-20 = 80px).
