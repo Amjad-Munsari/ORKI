@@ -413,10 +413,16 @@
     "retry": "Try again",
     "home": "Return home",
     "notFound": {
-      "heading": "404 — Lost in the noise.",
-      "body": "This page doesn't exist or was moved. Try the shop instead.",
+      "heading": "404 / NO DROP HERE",
+      "body": "That page isn't on the rack. The shop is.",
       "browseShop": "Browse shop",
-      "returnHome": "Return home"
+      "returnHome": "Return home",
+      "_candidates": {
+        "_comment": "Phase 11 D-08 — UAT picks one in Plan 11-16. Replace live heading+body above with the chosen candidate's values, then delete this _candidates key.",
+        "A_voice": { "heading": "404 / NO DROP HERE", "body": "That page isn't on the rack. The shop is." },
+        "B_locative": { "heading": "404 / OFF THE MAP", "body": "This street doesn't run through ORKI. Take the shop instead." },
+        "C_minimal": { "heading": "404", "body": "Page not here. Shop is." }
+      }
     },
     "section": {
       "shopLoadFailed": "We're having trouble loading the catalog right now. Try again in a moment.",
