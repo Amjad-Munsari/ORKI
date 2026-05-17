@@ -160,12 +160,17 @@
     @apply font-sans;
   }
 
-  /* Touch target minimum for all interactive elements */
-  a,
-  button,
-  [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+  /* Touch target minimum — only on touch devices (no hover + coarse pointer).
+     Desktop with mouse/keyboard doesn't need 44px boxes; the rule was bloating
+     every inline link's bounding box (visible as oversized hover/underline
+     hit areas in the footer, etc.). Mobile/tablet behavior unchanged. */
+  @media (hover: none) and (pointer: coarse) {
+    a,
+    button,
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }
 
