@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { ProductCard } from '@/components/shop/ProductCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import type { Product, Locale } from '@/types/domain'
@@ -7,17 +8,18 @@ interface ProductGridProps {
   locale: Locale
 }
 
-export function ProductGrid({ products, locale }: ProductGridProps) {
+export async function ProductGrid({ products, locale }: ProductGridProps) {
   if (products.length === 0) {
+    const t = await getTranslations('Shop.empty')
+    // next-intl resolves messages/ar.json for AR users; AR keys added as placeholder
+    // values (same strings as pre-Phase-11 inline). Phase 999.11 owns AR voice review.
     return (
       <div className="py-24 text-center">
         <p className="text-white text-lg font-semibold mb-2">
-          {locale === 'ar' ? 'لا يوجد شيء هنا بعد.' : 'Nothing here yet.'}
+          {t('heading')}
         </p>
         <p className="text-white/60 text-base">
-          {locale === 'ar'
-            ? 'تصفح جميع المنتجات أو جرّب فئة أخرى.'
-            : 'Browse all products or try a different category.'}
+          {t('body')}
         </p>
       </div>
     )
