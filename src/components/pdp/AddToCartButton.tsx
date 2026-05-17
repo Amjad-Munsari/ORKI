@@ -80,7 +80,10 @@ export function AddToCartButton({ product, selectedSize, locale }: AddToCartButt
       disabled={!selectedSize}
       className="w-full h-[52px] rounded-lg bg-white text-black font-semibold text-base
                  disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none
-                 transition-opacity duration-150"
+                 transition-[transform,opacity,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)]
+                 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(255,255,255,0.25)]
+                 active:translate-y-0 active:scale-[0.98]
+                 motion-reduce:transform-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100"
     >
       <AnimatePresence mode="wait" initial={false}>
         {state === 'idle' ? (

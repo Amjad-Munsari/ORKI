@@ -39,7 +39,7 @@ export function ContactClient({ locale }: Props) {
               <div className="pt-6">
                 <a
                   {...linkAttrs}
-                  className={`inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'hover:bg-white hover:text-black cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
+                  className={`inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg transition-[background-color,color,transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'cursor-pointer hover:bg-white hover:text-black hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none' : 'opacity-40 cursor-not-allowed'}`}
                 >
                   <MessageCircle className="size-5" />
                   {isRtl ? 'دردشة عبر الواتساب' : 'Chat on WhatsApp'}
@@ -70,7 +70,7 @@ export function ContactClient({ locale }: Props) {
               </p>
               <a
                 {...linkAttrs}
-                className={`inline-flex items-center gap-3 w-full h-16 rounded-lg font-bold uppercase tracking-widest transition-colors justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'bg-white text-black hover:bg-white/90 cursor-pointer' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
+                className={`inline-flex items-center gap-3 w-full h-16 rounded-lg font-bold uppercase tracking-widest justify-center transition-[background-color,color,transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'bg-white text-black cursor-pointer hover:bg-white/90 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(255,255,255,0.25)] active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
               >
                 {isRtl ? 'افتح الواتساب' : 'Open WhatsApp'}
                 <ArrowRight className="size-5 rtl-flip" />

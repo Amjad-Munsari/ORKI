@@ -60,9 +60,9 @@ export default async function HomePage({ params }: HomePageProps) {
               {isRtl ? 'الإصدارات المميزة' : 'Featured Drops'}
             </h2>
           </div>
-          <Link 
+          <Link
             href="/shop"
-            className="text-sm font-medium text-white/60 hover:text-white transition-colors border-b border-white/20 pb-1"
+            className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-soft)] link-underline"
           >
             {isRtl ? 'مشاهدة الكل' : 'View All Products'}
           </Link>

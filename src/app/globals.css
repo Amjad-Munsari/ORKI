@@ -210,6 +210,27 @@ h6 {
   transform: scaleX(-1);
 }
 
+/* ─── Animated Underline ──────────────────────────────────────────────────
+   Used on nav links and inline CTAs. Underline grows from the inline-start
+   edge to full-width on hover. RTL automatically mirrors via background-position. */
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--duration-base) var(--ease-out-soft);
+  /* Padding adds vertical breathing room so the underline doesn't sit on top of the text baseline */
+  padding-bottom: 2px;
+}
+[dir="rtl"] .link-underline {
+  background-position: 100% 100%;
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
 @layer utilities {
   .animate-scroll-indicator {
     animation: scroll-indicator 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
