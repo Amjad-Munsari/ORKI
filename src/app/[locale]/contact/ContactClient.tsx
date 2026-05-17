@@ -40,7 +40,7 @@ export function ContactClient({ locale }: Props) {
                   href="https://wa.me/966500000000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg hover:bg-white hover:text-black transition-all"
+                  className="inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg hover:bg-white hover:text-black transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
                   <MessageCircle className="size-5" />
                   {isRtl ? 'دردشة عبر الواتساب' : 'Chat on WhatsApp'}

@@ -70,6 +70,7 @@ export function ShopHeader({ activeCategory, activeSort, productCount, locale }:
                 isActive
                   ? 'text-white border-b-2 border-white'
                   : 'text-white/60 hover:text-white border-b-2 border-transparent',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black',
               ].join(' ')}
             >
               {label}
@@ -89,7 +90,8 @@ export function ShopHeader({ activeCategory, activeSort, productCount, locale }:
             value={activeSort}
             onChange={e => setSort(e.target.value)}
             className="bg-transparent text-sm text-white border-none outline-none cursor-pointer
-                       [&>option]:bg-[#111111] [&>option]:text-white"
+                       [&>option]:bg-[#111111] [&>option]:text-white
+                       focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             aria-label={locale === 'ar' ? 'ترتيب المنتجات' : 'Sort products'}
           >
             {sorts.map(({ value, label }) => (
