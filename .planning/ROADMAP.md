@@ -90,7 +90,7 @@ Plans:
 **Goal:** Close the EN-scope findings from the 2026-05-16 storefront cross-phase audit so the public storefront (Home, Shop + category, PDP, About, Contact, Navbar, Footer, 404) feels intentional, branded, and accessible. AR-specific copy/voice reconciliation deferred to a future sibling phase.
 **Source of truth:** `.planning/STOREFRONT-UI-REVIEW-EN.md` (23 findings; 6 already closed in commit `becd464`).
 **Out of scope:** Checkout, cart drawer, admin pages, auth flows, account pages, AR copy reconciliation (see `.planning/STOREFRONT-UI-REVIEW-AR.md`).
-**Plans:** 1/15 plans executed
+**Plans:** 2/15 plans executed
 **Success Criteria:**
 1. All `[OPEN]` findings in `STOREFRONT-UI-REVIEW-EN.md` resolved or explicitly deferred with rationale.
 2. Storefront visually verified in a live `npm run dev` session (audit was code-only).
@@ -101,7 +101,7 @@ Plans:
 
 Plans:
 - [x] 11-01-PLAN.md — Wave 0: Design-system tokens (display-1..4 utilities, --container-max=1440px, near-black hex collapse to CSS vars)
-- [ ] 11-02-PLAN.md — Wave 0: RTL/logical-prop sweep in shadcn primitives (dialog/sheet/navigation-menu) + ShopDropdown
+- [x] 11-02-PLAN.md — Wave 0: RTL/logical-prop sweep in shadcn primitives (dialog/sheet/navigation-menu) + ShopDropdown
 - [ ] 11-03-PLAN.md — Wave 0: Focus-visible ring across Nav chrome + ShopHeader tabs/sort + Contact WhatsApp anchor
 - [ ] 11-04-PLAN.md — Wave 1: Navbar dark-mode flip + LanguageSwitcher/MobileNavDrawer token cascade + ShopDropdown panel chrome + search icon removal
 - [ ] 11-05-PLAN.md — Wave 1: Footer wordmark display-1 utility reconciliation
