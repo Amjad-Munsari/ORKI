@@ -22,7 +22,7 @@ export function LanguageSwitcher() {
       aria-label={locale === 'en' ? 'Switch to Arabic' : 'Switch to English'}
       className="flex items-center justify-center min-h-[44px] min-w-[44px] text-xs font-semibold tracking-wider uppercase text-white/60 hover:text-white transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-soft)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
-      <span className="link-underline">{label}</span>
+      <span className="link-underline inline-block leading-none py-2">{label}</span>
     </button>
   )
 }

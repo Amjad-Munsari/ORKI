@@ -40,7 +40,7 @@ export async function Navbar() {
               href={href}
               className="h-full flex items-center text-sm font-medium tracking-tight whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <span className="link-underline">{label}</span>
+              <span className="link-underline inline-block leading-none py-2">{label}</span>
             </Link>
           ))}
         </nav>

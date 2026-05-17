@@ -40,7 +40,7 @@ export function UserMenu({ user }: Props) {
         href="/login"
         className="h-full flex items-center text-sm font-medium tracking-tight whitespace-nowrap"
       >
-        <span className="link-underline">{tNav('signIn')}</span>
+        <span className="link-underline inline-block leading-none py-2">{tNav('signIn')}</span>
       </Link>
     );
   }
@@ -52,7 +52,7 @@ export function UserMenu({ user }: Props) {
         aria-label={t('userMenu', { email: user.email })}
       >
         <UserCircle className="size-5" aria-hidden />
-        <span className="hidden sm:inline link-underline">{tNav('account')}</span>
+        <span className="hidden sm:inline-block link-underline leading-none py-2">{tNav('account')}</span>
         <ChevronDown className="size-4 rtl-flip" aria-hidden />
       </Menu.Trigger>
       <Menu.Portal>
