@@ -5,14 +5,14 @@ milestone_name: Backend Integration & Technical Foundations
 current_phase: 11
 status: executing
 stopped_at: Completed 11-09 (About body/pull-quote rhythm lock)
-last_updated: "2026-05-17T13:34:49.193Z"
+last_updated: "2026-05-17T13:44:04.125Z"
 last_activity: 2026-05-17
 progress:
   total_phases: 8
   completed_phases: 3
   total_plans: 43
-  completed_plans: 39
-  percent: 91
+  completed_plans: 40
+  percent: 93
 ---
 
 # Project State: ORKI
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 11 (storefront-ui-ux-polish-en) — EXECUTING
-Plan: 10 of 15
+Plan: 11 of 15
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
@@ -66,6 +66,7 @@ Last activity: 2026-05-17
 | Phase 11-storefront-ui-ux-polish-en P08 | 7 | 3 tasks | 3 files |
 | Phase 11-storefront-ui-ux-polish-en P09 | 2 | 1 task | 1 file |
 | Phase 11-storefront-ui-ux-polish-en P11-10 | 8min | 1 tasks | 1 files |
+| Phase 11-storefront-ui-ux-polish-en P12 | 18 | - tasks | - files |
 
 ## Accumulated Context
 
@@ -97,6 +98,8 @@ Recent decisions affecting current work:
 - 04-01: Implemented `useReducedMotion` hook to toggle transform-based animations for accessibility.
 - 04-01: Home page editorial grid uses 3:4 and 4:5 aspect ratios consistent with catalog/PDP.
 - [Phase ?]: 11-10: WhatsApp callout replaces mock form; WA_NUMBER='TBD' constant; aria-live=polite; F-Copy-3 + F-Exp-3 closed
+- [Phase ?]: Cleanest SSR streaming with minimal structural change
+- [Phase ?]: Base UI onValueChange can be null on deselect; guard preserves string-only contract
 
 ### Pending Todos
 
@@ -127,7 +130,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-17T13:34:49.174Z
+Last session: 2026-05-17T13:43:53.062Z
 Stopped at: Completed 11-09 (About body/pull-quote rhythm lock)
 Resume file: None
 Next command: /gsd-execute-phase 11 (Plan 10 of 15 next)
