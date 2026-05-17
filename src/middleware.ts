@@ -17,6 +17,12 @@ const intlMiddleware = createMiddleware(routing);
  * the cookie pair if the access token is expiring.
  */
 export async function middleware(request: NextRequest) {
+  // Propagate the requested pathname to RSCs via a request header so
+  // root-level fallbacks (src/app/not-found.tsx) can detect the locale
+  // prefix when next-intl's getLocale() is unavailable. Safe to set here:
+  // NextRequest headers are mutable inside middleware.
+  request.headers.set('x-pathname', request.nextUrl.pathname);
+
   let response = intlMiddleware(request);
 
   const supabase = createServerClient(
