@@ -3,6 +3,13 @@ import { useRouter, usePathname } from '@/i18n/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import type { Locale } from '@/types/domain'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface ShopHeaderProps {
   activeCategory: 'all' | 'tops' | 'bottoms'
@@ -84,20 +91,27 @@ export function ShopHeader({ activeCategory, activeSort, productCount, locale }:
         <span className="text-sm text-white/60">
           {t('productCount', { count: productCount })}
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <span className="text-sm text-white">{t('sortLabel')}</span>
-          <select
-            value={activeSort}
-            onChange={e => setSort(e.target.value)}
-            className="bg-transparent text-sm text-white border-none outline-none cursor-pointer
-                       [&>option]:bg-[#111111] [&>option]:text-white
-                       focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-            aria-label={locale === 'ar' ? 'ترتيب المنتجات' : 'Sort products'}
-          >
-            {sorts.map(({ value, label }) => (
-              <option key={value} value={value}>{label}</option>
-            ))}
-          </select>
+          <Select value={activeSort} onValueChange={(v) => { if (v !== null) setSort(v) }}>
+            <SelectTrigger
+              aria-label={locale === 'ar' ? 'ترتيب المنتجات' : 'Sort products'}
+              className="w-auto min-w-[180px] bg-transparent border-white/[0.12] text-white hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-[var(--color-secondary-surface)] border-white/[0.12] text-white">
+              {sorts.map(({ value, label }) => (
+                <SelectItem
+                  key={value}
+                  value={value}
+                  className="text-white focus:bg-white/[0.06] focus:text-white"
+                >
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
