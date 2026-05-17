@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { getAllProducts } from '@/lib/products'
 import { ShopHeader } from '@/components/shop/ShopHeader'
 import { ProductGrid } from '@/components/shop/ProductGrid'
+import { ShopGridSkeleton } from '@/components/shop/ShopGridSkeleton'
 import { buildMetadata } from '@/lib/seo'
 import type { Locale, Product } from '@/types/domain'
 
@@ -27,7 +28,38 @@ export default async function ShopPage({ params, searchParams }: Props) {
   const { locale } = await params
   const { category = 'all', sort = 'newest' } = await searchParams
 
-  // Server-side filtering — unknown category values are ignored (returns all).
+  const activeCategory =
+    category === 'tops' ? 'tops' :
+    category === 'bottoms' ? 'bottoms' :
+    'all'
+
+  const activeSort =
+    sort === 'price-asc' ? 'price-asc' :
+    sort === 'price-desc' ? 'price-desc' :
+    'newest'
+
+  return (
+    <div className="max-w-[var(--container-max)] mx-auto px-6 py-12">
+      <Suspense fallback={<ShopGridSkeleton />}>
+        <ShopGridSection
+          locale={locale}
+          category={activeCategory}
+          sort={activeSort}
+        />
+      </Suspense>
+    </div>
+  )
+}
+
+async function ShopGridSection({
+  locale,
+  category,
+  sort,
+}: {
+  locale: Locale
+  category: 'all' | 'tops' | 'bottoms'
+  sort: 'newest' | 'price-asc' | 'price-desc'
+}) {
   // PERF-05: wrap DB read in try/catch so a Supabase blip renders branded
   // fallback copy instead of bubbling to the per-locale error boundary.
   let products: Product[] | null = null
@@ -62,29 +94,18 @@ export default async function ShopPage({ params, searchParams }: Props) {
     products = [...products].sort((a, b) => b.price - a.price)
   }
 
-  // Normalize category for ShopHeader prop type
-  const activeCategory =
-    category === 'tops' ? 'tops' :
-    category === 'bottoms' ? 'bottoms' :
-    'all'
-
-  const activeSort =
-    sort === 'price-asc' ? 'price-asc' :
-    sort === 'price-desc' ? 'price-desc' :
-    'newest'
-
   return (
-    <div className="max-w-[var(--container-max)] mx-auto px-6 py-12">
+    <>
       {/* ShopHeader uses useSearchParams — MUST be wrapped in Suspense (Next.js 15 requirement) */}
       <Suspense fallback={null}>
         <ShopHeader
-          activeCategory={activeCategory}
-          activeSort={activeSort}
+          activeCategory={category}
+          activeSort={sort}
           productCount={products.length}
           locale={locale}
         />
       </Suspense>
       <ProductGrid products={products} locale={locale} />
-    </div>
+    </>
   )
 }
