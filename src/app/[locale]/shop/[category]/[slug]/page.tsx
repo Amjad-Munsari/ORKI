@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getProductBySlug } from '@/lib/products'
 import { PDPLayout } from '@/components/pdp/PDPLayout'
 import { PDPGallery } from '@/components/pdp/PDPGallery'
+import { PDPGallerySkeleton } from '@/components/pdp/PDPGallerySkeleton'
 import { PDPInfoPanel } from '@/components/pdp/PDPInfoPanel'
 import { RelatedProducts } from '@/components/pdp/RelatedProducts'
 import type { Metadata } from 'next'
@@ -133,11 +135,14 @@ export default async function ProductPage({ params }: Props) {
       <div className="max-w-[var(--container-max)] mx-auto px-6 py-12">
         <PDPLayout
           gallery={
-            <PDPGallery
-              productName={product.name[locale]}
-              images={product.images}
-              locale={locale}
-            />
+            <Suspense fallback={<PDPGallerySkeleton />}>
+              <PDPGallery
+                productName={product.name[locale]}
+                images={product.images}
+                locale={locale}
+                slug={product.slug}
+              />
+            </Suspense>
           }
           info={
             <PDPInfoPanel
