@@ -58,12 +58,7 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
                       group-hover:underline decoration-white underline-offset-[3px]">
           {product.name[locale]}
         </p>
-        <p
-          className="text-sm font-normal text-white/60 mt-1 tabular-nums font-[family-name:var(--font-geist)]"
-          dir="ltr"
-        >
-          {formattedPrice}
-        </p>
+        <p className="text-sm font-normal text-white/60 mt-1">{formattedPrice}</p>
       </div>
     </Link>
   );
