@@ -13,7 +13,12 @@ const WA_NUMBER = 'TBD'
 
 export function ContactClient({ locale }: Props) {
   const isRtl = locale === 'ar'
-  const waHref = `https://wa.me/${WA_NUMBER}`
+  const waConfigured = WA_NUMBER !== 'TBD'
+  const waHref = waConfigured ? `https://wa.me/${WA_NUMBER}` : undefined
+
+  const linkAttrs = waConfigured
+    ? { href: waHref, target: '_blank' as const, rel: 'noopener noreferrer' }
+    : { 'aria-disabled': true, role: 'link' as const, tabIndex: 0 }
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-48">
@@ -33,10 +38,8 @@ export function ContactClient({ locale }: Props) {
               </p>
               <div className="pt-6">
                 <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg hover:bg-white hover:text-black transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  {...linkAttrs}
+                  className={`inline-flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 px-8 h-14 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'hover:bg-white hover:text-black cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
                 >
                   <MessageCircle className="size-5" />
                   {isRtl ? 'دردشة عبر الواتساب' : 'Chat on WhatsApp'}
@@ -48,7 +51,6 @@ export function ContactClient({ locale }: Props) {
           {/* Right column — callout card replaces the mock form (D-14). */}
           <aside
             role="region"
-            aria-live="polite"
             aria-label={isRtl ? 'قناة المراسلة الحالية' : 'Current messaging channel'}
             className="bg-[var(--color-secondary-surface)] border border-white/10 p-12 rounded-lg"
           >
@@ -67,14 +69,19 @@ export function ContactClient({ locale }: Props) {
                   : 'Message us on WhatsApp — we read every one.'}
               </p>
               <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 w-full h-16 bg-white text-black rounded-lg font-bold uppercase tracking-widest hover:bg-white/90 transition-colors justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                {...linkAttrs}
+                className={`inline-flex items-center gap-3 w-full h-16 rounded-lg font-bold uppercase tracking-widest transition-colors justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'bg-white text-black hover:bg-white/90 cursor-pointer' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
               >
                 {isRtl ? 'افتح الواتساب' : 'Open WhatsApp'}
                 <ArrowRight className="size-5 rtl-flip" />
               </a>
+              {!waConfigured && (
+                <p className="text-xs text-white/40 leading-relaxed italic">
+                  {isRtl
+                    ? 'رقم الواتساب لم يُربط بعد — هذه واجهة معاينة. سيُفعّل قبل الإطلاق.'
+                    : "WhatsApp number not yet configured — this is a preview. Will be live before launch."}
+                </p>
+              )}
               <p className="text-xs text-white/30 leading-relaxed">
                 {isRtl
                   ? 'سيُعاد فتح نموذج البريد الإلكتروني عندما نُفعّل خدمة الإرسال (لاحقاً).'

@@ -3,6 +3,7 @@
 // selected from product slug via getPlaceholderVariant(). Real image swap-in path
 // preserved: when `src` is provided, the placeholder fades out and Image takes over.
 
+import { useId } from 'react';
 import Image from 'next/image';
 import type { PlaceholderVariantName } from '@/lib/placeholder-variant';
 
@@ -35,6 +36,7 @@ export function PlaceholderImage({
   const cssAspectRatio = aspectRatio.replace('/', ' / ');
   const finalSrc = src || PLACEHOLDER_SRC;
   const hasRealImage = Boolean(src);
+  const grainId = useId();
 
   return (
     <div
@@ -45,7 +47,7 @@ export function PlaceholderImage({
           real image, which fades in on top when `src` is provided. */}
       {!hasRealImage && variant === 'ghost' && <GhostMark />}
       {!hasRealImage && variant === 'color' && <ColorBlock />}
-      {!hasRealImage && variant === 'texture' && <GrainTexture />}
+      {!hasRealImage && variant === 'texture' && <GrainTexture filterId={grainId} />}
       {!hasRealImage && variant === 'type' && <TypographicMark />}
 
       <Image
@@ -97,7 +99,7 @@ function ColorBlock() {
   );
 }
 
-function GrainTexture() {
+function GrainTexture({ filterId }: { filterId: string }) {
   return (
     <>
       <div
@@ -108,7 +110,7 @@ function GrainTexture() {
         className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
         aria-hidden="true"
       >
-        <filter id="orki-grain">
+        <filter id={filterId}>
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.65"
@@ -116,7 +118,7 @@ function GrainTexture() {
             stitchTiles="stitch"
           />
         </filter>
-        <rect width="100%" height="100%" filter="url(#orki-grain)" />
+        <rect width="100%" height="100%" filter={`url(#${filterId})`} />
       </svg>
     </>
   );
