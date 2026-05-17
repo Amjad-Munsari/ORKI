@@ -33,7 +33,7 @@ export async function Footer() {
       </div>
 
       {/* Main Footer Section */}
-      <div className="max-w-[var(--container-max)] mx-auto px-8 py-24">
+      <div className="max-w-[var(--container-max)] mx-auto px-12 py-24">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-32">
 
           {/* Brand & Copyright */}

@@ -24,7 +24,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-48">
-      <div className="max-w-[var(--container-max)] mx-auto px-6">
+      <div className="max-w-[var(--container-max)] mx-auto px-12">
         <header className="mb-32">
           <h1 className="display-2 font-bold uppercase text-white">
             {isRtl ? 'أوركي / القصة' : 'ORKI / THE STORY'}

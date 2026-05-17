@@ -37,7 +37,7 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-[var(--container-max)] mx-auto px-8 w-full">
+        <div className="relative z-10 max-w-[var(--container-max)] mx-auto px-12 w-full">
           <ScrollReveal direction="up" className="max-w-4xl space-y-6">
             <span className="text-sm font-medium text-white/90 block">
               {isRtl ? '(صيف ٢٦ — الإصدار ٠١)' : '(SS26 — Drop 01)'}
@@ -53,7 +53,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Featured Collection */}
-      <section className="py-32 max-w-[var(--container-max)] mx-auto px-8">
+      <section className="py-32 max-w-[var(--container-max)] mx-auto px-12">
         <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="space-y-4">
             <h2 className="text-4xl font-medium text-white">
@@ -93,7 +93,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Brand Ethos */}
       <section className="py-64 bg-[var(--color-placeholder-bg)]">
-        <ScrollReveal className="max-w-[var(--container-max)] mx-auto px-8 text-center space-y-12">
+        <ScrollReveal className="max-w-[var(--container-max)] mx-auto px-12 text-center space-y-12">
           <h3 className="display-4 font-medium text-white max-w-5xl mx-auto">
             {tEthos('line')}
           </h3>

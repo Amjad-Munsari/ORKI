@@ -77,7 +77,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-32">
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="max-w-[1280px] mx-auto px-12">
         <h1 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-8 text-white">
           {t('title')}
         </h1>

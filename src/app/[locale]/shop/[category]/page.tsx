@@ -50,7 +50,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     'newest'
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto px-6 py-12">
+    <div className="max-w-[var(--container-max)] mx-auto px-12 py-12">
       {/* ShopHeader uses useSearchParams — MUST be wrapped in Suspense (Next.js 15 requirement) */}
       <Suspense fallback={null}>
         <ShopHeader

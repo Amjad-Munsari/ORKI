@@ -39,7 +39,7 @@ export default async function ShopPage({ params, searchParams }: Props) {
     'newest'
 
   return (
-    <div className="max-w-[var(--container-max)] mx-auto px-6 py-12">
+    <div className="max-w-[var(--container-max)] mx-auto px-12 py-12">
       <Suspense fallback={<ShopGridSkeleton />}>
         <ShopGridSection
           locale={locale}

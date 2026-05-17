@@ -22,7 +22,7 @@ export function ContactClient({ locale }: Props) {
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-48">
-      <div className="max-w-[var(--container-max)] mx-auto px-6">
+      <div className="max-w-[var(--container-max)] mx-auto px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
 
           {/* Left column — hero + intro (unchanged structurally per D-15) */}
