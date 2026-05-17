@@ -66,9 +66,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </Link>
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
           {featuredProducts.map((product, idx) => (
-            <ScrollReveal key={product.id} delay={idx * 0.1}>
+            <ScrollReveal key={product.id} delay={(idx % 4) * 0.08}>
               <ProductCard product={product} locale={locale as Locale} />
             </ScrollReveal>
           ))}

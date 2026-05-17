@@ -24,7 +24,7 @@ export function ProductGrid({ products, locale }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
       {products.map((product, i) => (
         <ScrollReveal key={product.id} delay={(i % 4) * 0.1}>
           <ProductCard
