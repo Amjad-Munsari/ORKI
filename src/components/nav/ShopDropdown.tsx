@@ -47,13 +47,13 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute top-full start-0 min-w-[160px] bg-white border border-black/5 shadow-xl py-2 z-50"
+            className="absolute top-full start-0 min-w-[160px] bg-[var(--color-secondary-surface)] border border-white/[0.12] shadow-xl py-2 z-50"
           >
             {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-6 py-3 text-sm font-medium hover:bg-black/5 transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="block px-6 py-3 text-sm font-medium text-white hover:bg-white/5 transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
