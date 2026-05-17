@@ -225,8 +225,9 @@ h6 {
   background-repeat: no-repeat;
   background-size: 0% 1px;
   transition: background-size var(--duration-base) var(--ease-out-soft);
-  /* 4px gap between text and underline — applies to both navbar + footer. */
-  padding-bottom: 4px;
+  /* No padding-bottom — the host element decides the gap.
+     Navbar inner spans inherit text-sm's 20px line-height → ~3-4px gap.
+     Footer outer links carry py-2 → 8px gap (underline sits under the box). */
 }
 [dir="rtl"] .link-underline {
   background-position: 100% 100%;

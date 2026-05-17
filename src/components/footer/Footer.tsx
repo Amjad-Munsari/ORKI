@@ -52,10 +52,10 @@ export async function Footer() {
             <div className="space-y-6">
               <span className="text-xs font-semibold text-white/40 block">{tNav('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tNav('home')}</span></Link></li>
-                <li><Link href="/shop/tops" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tNav('tops')}</span></Link></li>
-                <li><Link href="/shop/bottoms" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tNav('bottoms')}</span></Link></li>
-                <li><Link href="/about" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tNav('story')}</span></Link></li>
+                <li><Link href="/" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tNav('home')}</Link></li>
+                <li><Link href="/shop/tops" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tNav('tops')}</Link></li>
+                <li><Link href="/shop/bottoms" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tNav('bottoms')}</Link></li>
+                <li><Link href="/about" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tNav('story')}</Link></li>
               </ul>
             </div>
 
@@ -63,9 +63,9 @@ export async function Footer() {
             <div className="space-y-6">
               <span className="text-xs font-semibold text-white/40 block">{tLegal('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/legal/privacy" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tLegal('privacy')}</span></Link></li>
-                <li><Link href="/legal/terms" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tLegal('terms')}</span></Link></li>
-                <li><Link href="/legal/cookies" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tLegal('cookies')}</span></Link></li>
+                <li><Link href="/legal/privacy" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tLegal('privacy')}</Link></li>
+                <li><Link href="/legal/terms" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tLegal('terms')}</Link></li>
+                <li><Link href="/legal/cookies" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tLegal('cookies')}</Link></li>
               </ul>
             </div>
 
@@ -73,8 +73,8 @@ export async function Footer() {
             <div className="space-y-6">
               <span className="text-xs font-semibold text-white/40 block">{tHelp('groupLabel')}</span>
               <ul className="space-y-4">
-                <li><Link href="/contact" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tHelp('contact')}</span></Link></li>
-                <li><Link href="/faq" className="text-sm font-semibold inline-block leading-none py-2"><span className="link-underline">{tHelp('faq')}</span></Link></li>
+                <li><Link href="/contact" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tHelp('contact')}</Link></li>
+                <li><Link href="/faq" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tHelp('faq')}</Link></li>
               </ul>
             </div>
           </div>
