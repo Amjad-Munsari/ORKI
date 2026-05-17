@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
-current_phase: 10
-status: verifying
+current_phase: 11
+status: executing
 stopped_at: Phase 11 context gathered
-last_updated: "2026-05-16T22:01:54.636Z"
-last_activity: 2026-05-11 -- Phase 10 Plan 07 complete (security headers + final verification — six headers in next.config.ts via async headers() with VERCEL_ENV preview branch; tests/security/{csp,headers}.test.ts; tests/e2e/csrf.spec.ts; 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 Supabase outstanding ops + threat-model status table + deferred items)
+last_updated: "2026-05-17T12:14:15.610Z"
+last_activity: 2026-05-17
 progress:
   total_phases: 8
   completed_phases: 3
-  total_plans: 28
-  completed_plans: 28
-  percent: 100
+  total_plans: 43
+  completed_plans: 29
+  percent: 67
 ---
 
 # Project State: ORKI
 
-**Current Phase:** 10
-**Status:** v2.0 milestone artifacts complete — Phase 10 (7/7) shipped + code-review clean; Phase 8 cart-refresh fix landed; remaining work is manual verification only
+**Current Phase:** 11
+**Status:** Ready to execute
 **Last Updated:** 2026-05-11
 
 ## Project Reference
@@ -26,12 +26,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-06)
 
 **Core value:** A premium underground streetwear shopping experience that feels as intentional as the brand itself — dark, minimal, and unapologetically cultural.
-**Current focus:** Phase 10 — authentication-and-security-core (executing)
+**Current focus:** Phase 11 — storefront-ui-ux-polish-en
 
 ## Current Position
 
-Phase: 10 (authentication-and-security-core) — PLANS COMPLETE (sign-off pending)
-Plan: 7 of 7 — DONE (10-07 security headers + 10-VERIFICATION.md shipped 2026-05-11)
+Phase: 11 (storefront-ui-ux-polish-en) — EXECUTING
+Plan: 2 of 15
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
@@ -40,7 +40,7 @@ Plan: 7 of 7 — DONE (10-07 security headers + 10-VERIFICATION.md shipped 2026-
 - [x] Phase 9: Performance, Legal & Polish [plans complete — 8/8; 09-HUMAN-UAT tests 4-5 smoke-pass-partial; tests 1/2/3/8 deferred to launch; tests 6/7 pending manual runtime triggers]
 - [~] Phase 10: Authentication & Security Core [plans complete — 7/7; code-review clean (16/16 fixed); sign-off pending verifier execution of 10-VERIFICATION.md (6 gates + 3 Supabase dashboard ops)]
 
-Last activity: 2026-05-11 -- Phase 10 Plan 07 complete (security headers + final verification — six headers in next.config.ts via async headers() with VERCEL_ENV preview branch; tests/security/{csp,headers}.test.ts; tests/e2e/csrf.spec.ts; 10-VERIFICATION.md owns SEC-NN traceability + 6 gates + 3 Supabase outstanding ops + threat-model status table + deferred items)
+Last activity: 2026-05-17
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Last activity: 2026-05-11 -- Phase 10 Plan 07 complete (security headers + final
 | Phase 4 Brand & Polish (complete) | 1/1 | ~30 min | ~30 min |
 
 *Updated after each plan completion*
+| Phase 11 P11-01 | 15 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,9 @@ Recent decisions affecting current work:
 - 10-03: Email normalisation (`.trim().toLowerCase()`) lives in zod schemas so audit log + Supabase calls always see canonical form.
 - 10-03: requestPasswordResetAction always returns `ok:true` (anti-enumeration); audit row always written for ops visibility.
 - 10-03: Cookie-flag test asserts only fields Supabase SSR controls (sameSite=lax, path=/); httpOnly + secure are runtime-adapter concerns verified separately in 10-07.
+- 11-01: display-1..4 fluid utilities via clamp() added to @layer utilities — all storefront display text uses these, never bespoke text-[Npx] literals.
+- 11-01: --container-max:1440px token in @theme inline — all storefront page wrappers use max-w-[var(--container-max)] (checkout out of scope).
+- 11-01: Canonical near-black: #0A0A0A → --color-placeholder-bg for editorial frames; #111111 → --color-secondary-surface for dark UI chrome.
 - 04-01: Used `AnimatePresence` with `mode="wait"` in `layout.tsx` for premium page transitions.
 - 04-01: Implemented `useReducedMotion` hook to toggle transform-based animations for accessibility.
 - 04-01: Home page editorial grid uses 3:4 and 4:5 aspect ratios consistent with catalog/PDP.
@@ -116,7 +120,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-16T22:01:54.601Z
-Stopped at: Phase 11 context gathered
-Resume file: .planning/phases/11-storefront-ui-ux-polish-en/11-CONTEXT.md
-Next command: /gsd-verify-work 10 (verifier ticks all 3 ops + 6 gates in 10-VERIFICATION.md to claim Phase 10 complete)
+Last session: 2026-05-17T12:14:15.595Z
+Stopped at: Completed 11-01 (design token foundation)
+Resume file: .planning/phases/11-storefront-ui-ux-polish-en/11-01-SUMMARY.md
+Next command: /gsd-execute-phase 11 (Plan 2 of 15 next)
