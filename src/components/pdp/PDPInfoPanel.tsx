@@ -6,6 +6,11 @@ import { StockStateBadge } from '@/components/shop/StockStateBadge'
 import { getStockState } from '@/lib/products-logic'
 import type { Product, Locale } from '@/types/domain'
 
+function lowestInStock(sizes: Product['sizes']): number {
+  const stocks = sizes.filter(s => s.stock > 0).map(s => s.stock)
+  return stocks.length > 0 ? Math.min(...stocks) : 0
+}
+
 interface PDPInfoPanelProps {
   product: Product
   locale: Locale
@@ -23,6 +28,9 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
     maximumFractionDigits: 0,
   }).format(product.price)
 
+  const lowest = lowestInStock(product.sizes)
+  const showPassiveLowStock = lowest > 0 && lowest <= 5 && !isFullyOOS
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-xl font-semibold tracking-[-0.02em]">
@@ -30,6 +38,15 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
       </h1>
 
       <p className="text-sm text-white/60">{formattedPrice}</p>
+
+      {showPassiveLowStock && (
+        <p
+          role="status"
+          className="text-xs text-white/60 font-mono uppercase tracking-widest"
+        >
+          {locale === 'ar' ? 'كمية محدودة' : 'Limited stock'}
+        </p>
+      )}
 
       {product.description?.[locale] && (
         <p className="text-base text-white/70 leading-relaxed max-w-prose">
