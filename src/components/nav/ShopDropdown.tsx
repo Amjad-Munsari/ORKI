@@ -47,7 +47,7 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute top-full left-0 min-w-[160px] bg-white border border-black/5 shadow-xl py-2 z-50"
+            className="absolute top-full start-0 min-w-[160px] bg-white border border-black/5 shadow-xl py-2 z-50"
           >
             {items.map((item) => (
               <Link
