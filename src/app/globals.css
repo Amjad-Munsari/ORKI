@@ -57,6 +57,10 @@
   --color-orki-border: rgba(255, 255, 255, 0.12);
   --color-placeholder-bg: #0A0A0A;
   --color-placeholder-mark: rgba(255, 255, 255, 0.15);
+
+  /* Storefront container width — single source of truth. All storefront page
+     wrappers use max-w-[var(--container-max)] mx-auto. */
+  --container-max: 1440px;
 }
 
 :root {
@@ -200,6 +204,29 @@ h6 {
 @layer utilities {
   .animate-scroll-indicator {
     animation: scroll-indicator 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  /* Display-size scale — replaces bespoke text-[90px]/[100px]/[120px]/[160px] literals.
+     Used on hero H1, About header, Contact header, Footer wordmark. */
+  .display-1 {
+    font-size: clamp(4rem, 12vw, 10rem); /* 64..160px — Footer wordmark */
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .display-2 {
+    font-size: clamp(3.5rem, 9vw, 7.5rem); /* 56..120px — About header */
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+  }
+  .display-3 {
+    font-size: clamp(3rem, 7.5vw, 6.25rem); /* 48..100px — Contact header */
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .display-4 {
+    font-size: clamp(2.75rem, 7vw, 5.625rem); /* 44..90px — Home hero H1 */
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
 }
 
