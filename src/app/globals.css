@@ -220,8 +220,6 @@ h6 {
   background-repeat: no-repeat;
   background-size: 0% 1px;
   transition: background-size var(--duration-base) var(--ease-out-soft);
-  /* Padding adds vertical breathing room so the underline doesn't sit on top of the text baseline */
-  padding-bottom: 2px;
 }
 [dir="rtl"] .link-underline {
   background-position: 100% 100%;
