@@ -35,9 +35,9 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
     >
       <Link
         href="/shop"
-        className="flex items-center gap-1 text-sm font-medium tracking-tight hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        className="flex items-center gap-1 text-sm font-medium tracking-tight focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
-        {label}
+        <span className="link-underline">{label}</span>
       </Link>
 
       <AnimatePresence>

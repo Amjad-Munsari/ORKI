@@ -38,9 +38,9 @@ export function UserMenu({ user }: Props) {
     return (
       <Link
         href="/login"
-        className="h-full flex items-center text-sm font-medium tracking-tight hover:opacity-60 transition-opacity whitespace-nowrap"
+        className="h-full flex items-center text-sm font-medium tracking-tight whitespace-nowrap"
       >
-        {tNav('signIn')}
+        <span className="link-underline">{tNav('signIn')}</span>
       </Link>
     );
   }
@@ -48,11 +48,11 @@ export function UserMenu({ user }: Props) {
   return (
     <Menu.Root>
       <Menu.Trigger
-        className="h-full flex items-center gap-2 text-sm font-medium tracking-tight hover:opacity-60 transition-opacity whitespace-nowrap min-h-[44px]"
+        className="h-full flex items-center gap-2 text-sm font-medium tracking-tight whitespace-nowrap min-h-[44px]"
         aria-label={t('userMenu', { email: user.email })}
       >
         <UserCircle className="size-5" aria-hidden />
-        <span className="hidden sm:inline">{tNav('account')}</span>
+        <span className="hidden sm:inline link-underline">{tNav('account')}</span>
         <ChevronDown className="size-4 rtl-flip" aria-hidden />
       </Menu.Trigger>
       <Menu.Portal>
