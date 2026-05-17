@@ -52,7 +52,7 @@ export function StockStateBadge({ state, locale, context }: StockStateBadgeProps
 
   // state === 'out-of-stock' on PDP
   return (
-    <p role="status" className="text-sm text-destructive mt-2">
+    <p role="status" className="text-sm text-white/60 mt-2">
       {locale === 'ar' ? 'نفد المخزون' : 'Out of Stock'}
     </p>
   );
