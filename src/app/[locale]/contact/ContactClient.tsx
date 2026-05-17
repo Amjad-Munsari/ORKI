@@ -23,10 +23,10 @@ export function ContactClient({ locale }: Props) {
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-48">
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="max-w-[var(--container-max)] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
           <div className="space-y-12">
-            <h1 className="text-6xl md:text-[100px] font-bold uppercase tracking-tighter leading-none text-white">
+            <h1 className="display-3 font-bold uppercase text-white">
               {isRtl ? 'تواصل / معنا' : 'GET IN / TOUCH'}
             </h1>
             <div className="space-y-6">

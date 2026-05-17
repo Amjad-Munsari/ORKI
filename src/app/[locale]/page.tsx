@@ -24,7 +24,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Editorial Hero */}
       <section className="relative h-screen w-full overflow-hidden flex items-end pb-24 md:pb-32">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-[var(--color-placeholder-bg)] flex items-center justify-center pointer-events-none">
             <span
               className="font-semibold tracking-[0.2em] text-[10vw] uppercase"
               style={{color: 'rgba(255, 255, 255, 0.05)'}}
@@ -35,12 +35,12 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-8 w-full">
+        <div className="relative z-10 max-w-[var(--container-max)] mx-auto px-8 w-full">
           <ScrollReveal direction="up" className="max-w-4xl space-y-6">
             <span className="text-sm font-medium text-white/90 block">
               {isRtl ? '(صيف ٢٦ — الإصدار ٠١)' : '(SS26 — Drop 01)'}
             </span>
-            <h1 className="text-6xl md:text-[90px] font-medium text-white leading-[1.1] tracking-tight">
+            <h1 className="display-4 font-medium text-white">
               {isRtl ? 'صُنع في صخب الرياض.' : 'Made in the noise of Riyadh.'}
             </h1>
             <p className="text-base md:text-lg text-white/70 max-w-xl leading-relaxed">
@@ -51,7 +51,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Featured Collection */}
-      <section className="py-32 max-w-[1440px] mx-auto px-8">
+      <section className="py-32 max-w-[var(--container-max)] mx-auto px-8">
         <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="space-y-4">
             <h2 className="text-4xl font-medium text-white">
@@ -90,9 +90,9 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Brand Ethos */}
-      <section className="py-64 bg-[#050505]">
-        <ScrollReveal className="max-w-[1440px] mx-auto px-8 text-center space-y-12">
-          <h3 className="text-4xl md:text-7xl font-medium text-white leading-tight max-w-5xl mx-auto">
+      <section className="py-64 bg-[var(--color-placeholder-bg)]">
+        <ScrollReveal className="max-w-[var(--container-max)] mx-auto px-8 text-center space-y-12">
+          <h3 className="display-4 font-medium text-white max-w-5xl mx-auto">
             {isRtl 
               ? 'نحن لا نصنع الملابس، نحن نوثق ثقافة الشارع.' 
               : 'We don\'t just make clothes. We document the evolution of street culture.'}
@@ -115,7 +115,7 @@ function CategoryCard({ title, href, locale }: { title: string; href: string; lo
   const isRtl = locale === 'ar'
   return (
     <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
-      <div className="absolute inset-0 bg-[#0d0d0d] flex items-center justify-center pointer-events-none transition-transform duration-1000 group-hover:scale-105">
+      <div className="absolute inset-0 bg-[var(--color-secondary-surface)] flex items-center justify-center pointer-events-none transition-transform duration-1000 group-hover:scale-105">
         <span
           className="font-semibold tracking-[0.2em] text-[8vw] md:text-[5vw] uppercase"
           style={{color: 'rgba(255, 255, 255, 0.05)'}}

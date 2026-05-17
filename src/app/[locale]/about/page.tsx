@@ -24,9 +24,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
   return (
     <div className="min-h-screen bg-black pt-24 pb-48">
-      <div className="max-w-[1280px] mx-auto px-6">
+      <div className="max-w-[var(--container-max)] mx-auto px-6">
         <header className="mb-32">
-          <h1 className="text-6xl md:text-[120px] font-bold uppercase tracking-tighter leading-none text-white">
+          <h1 className="display-2 font-bold uppercase text-white">
             {isRtl ? 'أوركي / القصة' : 'ORKI / THE STORY'}
           </h1>
         </header>
@@ -44,7 +44,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </p>
             </section>
 
-            <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg bg-[#0a0a0a] flex items-center justify-center select-none">
+            <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg bg-[var(--color-placeholder-bg)] flex items-center justify-center select-none">
               <span
                 className="font-semibold tracking-[0.2em] text-[5vw] uppercase"
                 style={{color: 'rgba(255, 255, 255, 0.05)'}}
@@ -66,7 +66,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           </div>
 
           <div className="lg:col-span-5 lg:pt-48 space-y-24">
-            <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#0d0d0d] flex items-center justify-center select-none">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[var(--color-secondary-surface)] flex items-center justify-center select-none">
               <span
                 className="font-semibold tracking-[0.2em] text-[3vw] uppercase"
                 style={{color: 'rgba(255, 255, 255, 0.05)'}}

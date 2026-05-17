@@ -33,12 +33,12 @@ export async function Footer() {
       </div>
 
       {/* Main Footer Section */}
-      <div className="max-w-[1440px] mx-auto px-8 py-24">
+      <div className="max-w-[var(--container-max)] mx-auto px-8 py-24">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-32">
 
           {/* Brand & Copyright */}
           <div className="flex-1 space-y-8">
-            <h2 className="text-8xl md:text-[160px] font-bold tracking-[-0.05em] leading-none">
+            <h2 className="display-1 font-bold">
               ORKI
             </h2>
             <p className="text-sm text-white/40 font-medium">
