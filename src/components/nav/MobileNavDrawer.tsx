@@ -59,7 +59,7 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
         render={
           <button
             aria-label={isOpen ? t('closeMenu') : t('openMenu')}
-            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-black hover:opacity-60 transition-opacity duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-white hover:opacity-60 transition-opacity duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           />
         }
       >
