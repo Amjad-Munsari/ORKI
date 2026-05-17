@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import '@/app/globals.css';
+import { geist, ibmPlexArabic } from '@/lib/fonts';
 
 /**
  * Root-level 404 fallback. Catches unmatched URLs that fall through the
@@ -34,6 +35,7 @@ export default async function RootNotFound() {
         shopHref: '/ar/shop',
         homeHref: '/ar',
         dir: 'rtl' as const,
+        lang: 'ar',
       }
     : {
         heading: '404 / NO DROP HERE',
@@ -43,12 +45,18 @@ export default async function RootNotFound() {
         shopHref: '/en/shop',
         homeHref: '/en',
         dir: 'ltr' as const,
+        lang: 'en',
       };
 
+  // Font CSS variables (--font-geist, --font-ibm-plex-arabic) and the `lang`
+  // attribute must both be present on an ancestor for `:lang()` selectors in
+  // globals.css to match. The synthesized root layout provides neither, so
+  // both are pinned here on the outer wrapper.
   return (
     <div
+      lang={copy.lang}
       dir={copy.dir}
-      className="min-h-[100vh] bg-black text-white antialiased flex items-center justify-center px-6"
+      className={`${geist.variable} ${ibmPlexArabic.variable} min-h-[100vh] bg-black text-white antialiased flex items-center justify-center px-6`}
     >
       <div className="max-w-md text-center space-y-8">
         <h1 className="text-6xl md:text-[100px] font-bold leading-none tracking-tighter text-white">
