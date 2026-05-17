@@ -35,7 +35,7 @@ export function ShopDropdown({ label, items }: ShopDropdownProps) {
     >
       <Link
         href="/shop"
-        className="flex items-center gap-1 text-sm font-medium tracking-tight focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        className="text-sm font-medium tracking-tight whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
         <span className="link-underline inline-block leading-none py-2">{label}</span>
       </Link>
