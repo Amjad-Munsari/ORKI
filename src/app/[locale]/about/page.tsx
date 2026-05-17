@@ -37,7 +37,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
                 {isRtl ? 'رؤيتنا' : '01 — Vision'}
               </span>
-              <p className="text-2xl md:text-4xl font-bold uppercase tracking-tight text-white leading-tight">
+              <p className="font-light text-2xl md:text-4xl tracking-tight text-white leading-tight">
                 {isRtl 
                   ? 'أوركي هي علامة تجارية ولدت من صخب الرياض. نحن نؤمن بأن ملابس الشارع هي لغة بصرية توثق اللحظة الراهنة.' 
                   : 'ORKI is a brand born from the noise of Riyadh. We believe streetwear is a visual language that documents the here and now.'}
@@ -57,9 +57,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
                 {isRtl ? 'جذورنا' : '02 — Heritage'}
               </span>
-              <p className="text-lg text-white/60 leading-relaxed">
-                {isRtl 
-                  ? 'من قلب نجد إلى شوارع العالم. تصاميمنا تدمج الخطوط الكلاسيكية مع القصات العصرية، لخلق توازن فريد يعبر عن الجيل الجديد.' 
+              <p className="font-normal text-base leading-relaxed text-white/80">
+                {isRtl
+                  ? 'من قلب نجد إلى شوارع العالم. تصاميمنا تدمج الخطوط الكلاسيكية مع القصات العصرية، لخلق توازن فريد يعبر عن الجيل الجديد.'
                   : 'From the heart of Najd to the streets of the world. Our designs merge classic lines with modern silhouettes, creating a unique balance that speaks for the new generation.'}
               </p>
             </section>
@@ -79,9 +79,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
                 {isRtl ? 'الجودة' : '03 — Quality'}
               </span>
-              <p className="text-lg text-white/60 leading-relaxed">
-                {isRtl 
-                  ? 'نحن نستخدم أجود أنواع القطن والمنسوجات، مع اهتمام فائق بالتفاصيل الدقيقة التي تجعل كل قطعة عملاً فنياً قائماً بذاته.' 
+              <p className="font-normal text-base leading-relaxed text-white/80">
+                {isRtl
+                  ? 'نحن نستخدم أجود أنواع القطن والمنسوجات، مع اهتمام فائق بالتفاصيل الدقيقة التي تجعل كل قطعة عملاً فنياً قائماً بذاته.'
                   : 'We use the finest cotton and textiles, with obsessive attention to the minute details that make every piece a standalone work of art.'}
               </p>
             </section>
