@@ -4,15 +4,15 @@ milestone: v2.0
 milestone_name: Backend Integration & Technical Foundations
 current_phase: 11
 status: executing
-stopped_at: Completed 11-01 (design token foundation)
-last_updated: "2026-05-17T13:14:58.861Z"
+stopped_at: Completed 11-09 (About body/pull-quote rhythm lock)
+last_updated: "2026-05-17T13:18:14Z"
 last_activity: 2026-05-17
 progress:
   total_phases: 8
   completed_phases: 3
   total_plans: 43
-  completed_plans: 36
-  percent: 84
+  completed_plans: 37
+  percent: 86
 ---
 
 # Project State: ORKI
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 ## Current Position
 
 Phase: 11 (storefront-ui-ux-polish-en) — EXECUTING
-Plan: 6 of 15
+Plan: 7 of 15
 
 - [x] Phase 5: Local Database & ORM (Drizzle + Postgres) [100%]
 - [x] Phase 6: Admin Dashboard & Product Management [100%]
@@ -64,6 +64,7 @@ Last activity: 2026-05-17
 | Phase 11 P02 | 12 | 2 tasks | 4 files |
 | Phase 11 P03 | 8 | 2 tasks | 7 files |
 | Phase 11-storefront-ui-ux-polish-en P08 | 7 | 3 tasks | 3 files |
+| Phase 11-storefront-ui-ux-polish-en P09 | 2 | 1 task | 1 file |
 
 ## Accumulated Context
 
@@ -90,6 +91,7 @@ Recent decisions affecting current work:
 - 11-01: display-1..4 fluid utilities via clamp() added to @layer utilities — all storefront display text uses these, never bespoke text-[Npx] literals.
 - 11-01: --container-max:1440px token in @theme inline — all storefront page wrappers use max-w-[var(--container-max)] (checkout out of scope).
 - 11-01: Canonical near-black: #0A0A0A → --color-placeholder-bg for editorial frames; #111111 → --color-secondary-surface for dark UI chrome.
+- 11-09: About body: font-normal text-base leading-relaxed text-white/80 (canonical, single style). About pull-quote: font-light text-2xl tracking-tight (1x/section max). EN 01/02/03 numbering retained; AR-side deferred to Phase 999.11.
 - 04-01: Used `AnimatePresence` with `mode="wait"` in `layout.tsx` for premium page transitions.
 - 04-01: Implemented `useReducedMotion` hook to toggle transform-based animations for accessibility.
 - 04-01: Home page editorial grid uses 3:4 and 4:5 aspect ratios consistent with catalog/PDP.
@@ -123,7 +125,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-17T13:14:58.842Z
-Stopped at: Completed 11-01 (design token foundation)
+Last session: 2026-05-17T13:18:14Z
+Stopped at: Completed 11-09 (About body/pull-quote rhythm lock)
 Resume file: None
-Next command: /gsd-execute-phase 11 (Plan 2 of 15 next)
+Next command: /gsd-execute-phase 11 (Plan 10 of 15 next)
