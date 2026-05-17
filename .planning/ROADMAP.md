@@ -90,7 +90,7 @@ Plans:
 **Goal:** Close the EN-scope findings from the 2026-05-16 storefront cross-phase audit so the public storefront (Home, Shop + category, PDP, About, Contact, Navbar, Footer, 404) feels intentional, branded, and accessible. AR-specific copy/voice reconciliation deferred to a future sibling phase.
 **Source of truth:** `.planning/STOREFRONT-UI-REVIEW-EN.md` (23 findings; 6 already closed in commit `becd464`).
 **Out of scope:** Checkout, cart drawer, admin pages, auth flows, account pages, AR copy reconciliation (see `.planning/STOREFRONT-UI-REVIEW-AR.md`).
-**Plans:** 7/15 plans executed
+**Plans:** 8/15 plans executed
 **Success Criteria:**
 1. All `[OPEN]` findings in `STOREFRONT-UI-REVIEW-EN.md` resolved or explicitly deferred with rationale.
 2. Storefront visually verified in a live `npm run dev` session (audit was code-only).
@@ -107,7 +107,7 @@ Plans:
 - [x] 11-05-PLAN.md — Wave 1: Footer wordmark display-1 utility reconciliation
 - [x] 11-06-PLAN.md — Wave 1: PlaceholderImage 4-variant system + deterministic slug-hash helper + ProductCard/PDPGallery wiring
 - [x] 11-07-PLAN.md — Wave 2: Home rewrites — typographic category splat (D-03), Featured-Drops ScrollReveal taming, em-dash → rtl-flip ArrowRight, shared grid scale
-- [ ] 11-08-PLAN.md — Wave 2: PDP gallery upgrade — desktop vertical thumb strip + mobile scroll-snap + dots + skeleton + reduced-motion
+- [x] 11-08-PLAN.md — Wave 2: PDP gallery upgrade — desktop vertical thumb strip + mobile scroll-snap + dots + skeleton + reduced-motion
 - [ ] 11-09-PLAN.md — Wave 2: About body/pull-quote rhythm lock (D-09); keep EN 01/02/03 numbering
 - [ ] 11-10-PLAN.md — Wave 2: Contact form → WhatsApp callout card; WA_NUMBER='TBD'; mock setTimeout removed
 - [ ] 11-11-PLAN.md — Wave 2: PDP misc — passive Limited-stock line + text-destructive→text-white/60 + nav-height comment reconciliation
