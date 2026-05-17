@@ -98,11 +98,12 @@ export default async function HomePage({ params }: HomePageProps) {
               : 'We don\'t just make clothes. We document the evolution of street culture.'}
           </h3>
           <div className="pt-8">
-            <Link 
+            <Link
               href="/about"
-              className="text-sm font-medium text-white/40 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              {isRtl ? 'اقرأ قصتنا' : 'Read Our Story'} —
+              {isRtl ? 'اقرأ قصتنا' : 'Read Our Story'}
+              <ArrowRight className="size-4 rtl-flip" />
             </Link>
           </div>
         </ScrollReveal>
