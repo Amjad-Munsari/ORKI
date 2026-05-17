@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { Search } from 'lucide-react'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CartTrigger } from './CartTrigger'
@@ -20,7 +19,7 @@ export async function Navbar() {
   const authedUser = user ? { id: user.id, email: user.email ?? '' } : null
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-white text-black border-b border-black/5">
+    <header className="fixed top-0 z-50 w-full bg-black/80 backdrop-blur text-white border-b border-white/[0.08]">
       <div className="w-full px-12 h-[80px] grid grid-cols-3 items-stretch">
 
         {/* Left Side: Navigation Links */}
@@ -58,12 +57,6 @@ export async function Navbar() {
 
         {/* Right Side: Icons & Lang */}
         <div className="h-full flex items-center gap-12 justify-end">
-          <button
-            aria-label="Search"
-            className="h-full flex items-center justify-center hover:opacity-60 transition-opacity"
-          >
-            <Search className="size-5" strokeWidth={2.5} />
-          </button>
           <div className="h-full flex items-center justify-center">
             <CartTrigger ariaLabel={t('cart')} />
           </div>
