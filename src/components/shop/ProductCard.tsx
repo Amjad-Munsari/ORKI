@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation';
 import { PlaceholderImage } from '@/components/PlaceholderImage';
 import { StockStateBadge } from '@/components/shop/StockStateBadge';
 import { getStockState } from '@/lib/products-logic';
+import { getPlaceholderVariantName } from '@/lib/placeholder-variant';
 import type { Product, Locale } from '@/types/domain';
 
 interface ProductCardProps {
@@ -16,6 +17,7 @@ interface ProductCardProps {
 // on all child elements simultaneously — image zoom + name underline fire together (D-09, ANIM-03).
 export function ProductCard({ product, locale, priority = false }: ProductCardProps) {
   const stockState = getStockState(product);
+  const variant = getPlaceholderVariantName(product.slug);
 
   // SAR price with Western numerals in both locales per CLAUDE.md design system.
   // 'ar-SA-u-nu-latn' forces Latin (Western) numerals even in Arabic locale.
@@ -41,6 +43,7 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
           alt={product.name[locale]}
           src={product.images[0]}
           priority={priority}
+          variant={variant}
           // D-09, ANIM-03: image zoom on hover.
           // cardHover preset = 0.3s duration, ease-out — expressed as Tailwind duration-300 ease-out.
           // motion-safe: prefix disables scale when prefers-reduced-motion: reduce is active.
