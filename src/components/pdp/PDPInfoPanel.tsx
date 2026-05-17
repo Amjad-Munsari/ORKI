@@ -4,6 +4,7 @@ import { SizeSelector } from './SizeSelector'
 import { AddToCartButton } from './AddToCartButton'
 import { StockStateBadge } from '@/components/shop/StockStateBadge'
 import { getStockState } from '@/lib/products-logic'
+import { formatPriceSAR } from '@/lib/format-price'
 import type { Product, Locale } from '@/types/domain'
 
 function lowestInStock(sizes: Product['sizes']): number {
@@ -21,12 +22,7 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
   const stockState = getStockState(product)
   const isFullyOOS = stockState === 'out-of-stock'
 
-  const formattedPrice = new Intl.NumberFormat('ar-SA-u-nu-latn', {
-    style: 'currency',
-    currency: 'SAR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(product.price)
+  const formattedPrice = formatPriceSAR(product.price, locale)
 
   const lowest = lowestInStock(product.sizes)
   const showPassiveLowStock = lowest > 0 && lowest <= 5 && !isFullyOOS

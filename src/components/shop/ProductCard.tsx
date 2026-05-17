@@ -3,6 +3,7 @@ import { PlaceholderImage } from '@/components/PlaceholderImage';
 import { StockStateBadge } from '@/components/shop/StockStateBadge';
 import { getStockState } from '@/lib/products-logic';
 import { getPlaceholderVariantName } from '@/lib/placeholder-variant';
+import { formatPriceSAR } from '@/lib/format-price';
 import type { Product, Locale } from '@/types/domain';
 
 interface ProductCardProps {
@@ -19,14 +20,8 @@ export function ProductCard({ product, locale, priority = false }: ProductCardPr
   const stockState = getStockState(product);
   const variant = getPlaceholderVariantName(product.slug);
 
-  // SAR price with Western numerals in both locales per CLAUDE.md design system.
-  // 'ar-SA-u-nu-latn' forces Latin (Western) numerals even in Arabic locale.
-  const formattedPrice = new Intl.NumberFormat('ar-SA-u-nu-latn', {
-    style: 'currency',
-    currency: 'SAR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(product.price);
+  // SAR price with Western numerals + the new SAMA Riyal glyph (formatPriceSAR).
+  const formattedPrice = formatPriceSAR(product.price, locale);
 
   return (
     // 'group' on the outer Link enables group-hover on child elements (Tailwind group pattern).

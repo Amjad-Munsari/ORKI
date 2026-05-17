@@ -6,8 +6,6 @@
  * `computeOrderTotals` for the cart summary UI. The server re-prices
  * authoritatively in `src/lib/orders/server.ts` (Plan 08-05).
  */
-import type { Locale } from '@/types/domain';
-
 /** KSA standard rate (ZATCA). Applied on (subtotal + shipping). */
 export const VAT_RATE = 0.15;
 
@@ -60,12 +58,8 @@ export function computeOrderTotals(items: PricingInput[]): OrderTotals {
 
 /**
  * Format halalas as SAR currency. Western numerals in BOTH locales — per
- * CLAUDE.md "Currency" rule (`'ar-SA-u-nu-latn'`).
+ * CLAUDE.md "Currency" rule (`'ar-SA-u-nu-latn'`). Uses the new SAMA Riyal
+ * glyph (formatPriceSARFromHalalas) — kept as a thin re-export so existing
+ * callers don't need to be touched.
  */
-export function formatSAR(cents: number, locale: Locale): string {
-  const fmt = new Intl.NumberFormat(
-    locale === 'ar' ? 'ar-SA-u-nu-latn' : 'en-SA',
-    { style: 'currency', currency: 'SAR', maximumFractionDigits: 2 }
-  );
-  return fmt.format(cents / 100);
-}
+export { formatPriceSARFromHalalas as formatSAR } from '@/lib/format-price';

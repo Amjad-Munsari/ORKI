@@ -75,19 +75,24 @@ describe('computeOrderTotals', () => {
 });
 
 describe('formatSAR', () => {
-  it('formats EN with Western numerals', () => {
+  // Phase 11 followup: switched the symbol from the locale-default 'SAR' / 'ر.س'
+  // to the new SAMA Riyal glyph (⃁) via formatPriceSARFromHalalas.
+  const RIYAL = '⃁';
+
+  it('formats EN with Western numerals + Riyal glyph', () => {
     const s = formatSAR(12500, 'en');
-    expect(s).toMatch(/SAR/);
+    expect(s).toContain(RIYAL);
     expect(s).toMatch(/125/);
   });
 
-  it('formats AR with Western numerals (ar-SA-u-nu-latn)', () => {
+  it('formats AR with Western numerals (ar-SA-u-nu-latn) + Riyal glyph', () => {
     const s = formatSAR(12500, 'ar');
-    // Western digits required per CLAUDE.md
+    expect(s).toContain(RIYAL);
     expect(s).toMatch(/125/);
   });
 
   it('formats zero', () => {
     expect(formatSAR(0, 'en')).toMatch(/0/);
+    expect(formatSAR(0, 'en')).toContain(RIYAL);
   });
 });
