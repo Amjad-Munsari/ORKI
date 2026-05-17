@@ -33,7 +33,10 @@ export function PDPInfoPanel({ product, locale }: PDPInfoPanelProps) {
         <h1 className="text-3xl md:text-4xl font-bold tracking-[-0.02em] leading-tight">
           {product.name[locale]}
         </h1>
-        <p className="text-2xl font-semibold text-white tabular-nums">
+        <p
+          className="text-2xl font-semibold text-white tabular-nums font-[family-name:var(--font-geist)]"
+          dir="ltr"
+        >
           {formattedPrice}
         </p>
         {showPassiveLowStock && (
