@@ -88,13 +88,7 @@
     "emptyBody": "Browse all products or try a different category.",
     "empty": {
       "heading": "No drops in this category yet.",
-      "body": "Check back Friday. Or browse everything we've shipped so far.",
-      "_candidates": {
-        "_comment": "Phase 11 D-06 — UAT picks one in Plan 11-16. Replace live heading+body above, then delete _candidates.",
-        "A_dropCycle": { "heading": "No drops in this category yet.", "body": "Check back Friday. Or browse everything we've shipped so far." },
-        "B_locale": { "heading": "This rack is empty.", "body": "Tops, bottoms, the rest of Riyadh's nights — they're all in the main shop." },
-        "C_stripped": { "heading": "Empty.", "body": "Browse all products." }
-      }
+      "body": "Check back Friday. Or browse everything we've shipped so far."
     },
     "sizeLabel": "Size",
     "sizeGuide": "Size Guide",
@@ -120,13 +114,7 @@
   "Home": {
     "ethos": {
       "line": "We don't make clothes. We track what Riyadh sounds like at night.",
-      "readStory": "Read Our Story",
-      "_candidates": {
-        "_comment": "Phase 11 D-07 — UAT picks one in Plan 11-16. Replace live line above, then delete _candidates.",
-        "A_voice": "We don't make clothes. We track what Riyadh sounds like at night.",
-        "B_heritage": "From Najd to the streets. Documenting a generation in cotton.",
-        "C_stripped": "Streetwear out of Riyadh. Worn loudly."
-      }
+      "readStory": "Read Our Story"
     }
   },
   "Checkout": {
@@ -438,13 +426,7 @@
       "heading": "404 / NO DROP HERE",
       "body": "That page isn't on the rack. The shop is.",
       "browseShop": "Browse shop",
-      "returnHome": "Return home",
-      "_candidates": {
-        "_comment": "Phase 11 D-08 — UAT picks one in Plan 11-16. Replace live heading+body above with the chosen candidate's values, then delete this _candidates key.",
-        "A_voice": { "heading": "404 / NO DROP HERE", "body": "That page isn't on the rack. The shop is." },
-        "B_locative": { "heading": "404 / OFF THE MAP", "body": "This street doesn't run through ORKI. Take the shop instead." },
-        "C_minimal": { "heading": "404", "body": "Page not here. Shop is." }
-      }
+      "returnHome": "Return home"
     },
     "section": {
       "shopLoadFailed": "We're having trouble loading the catalog right now. Try again in a moment.",
