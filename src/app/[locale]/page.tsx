@@ -114,16 +114,28 @@ export default async function HomePage({ params }: HomePageProps) {
 function CategoryCard({ title, href, locale }: { title: string; href: string; locale: string }) {
   const isRtl = locale === 'ar'
   return (
-    <Link href={href} className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16">
-      <div className="absolute inset-0 bg-[var(--color-secondary-surface)] flex items-center justify-center pointer-events-none transition-transform duration-1000 group-hover:scale-105">
+    <Link
+      href={href}
+      className="group relative h-full w-full overflow-hidden flex items-end p-12 md:p-16 bg-[var(--color-placeholder-bg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+    >
+      {/* Massive kerned wordmark of the category title — D-03 typographic-only treatment.
+          Sits behind the foreground Shop-Now block; subtle scale on group-hover. */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden transition-transform duration-1000 group-hover:scale-[1.03]"
+        aria-hidden="true"
+      >
         <span
-          className="font-semibold tracking-[0.2em] text-[8vw] md:text-[5vw] uppercase"
-          style={{color: 'rgba(255, 255, 255, 0.05)'}}
+          className="font-bold uppercase leading-none tracking-[-0.04em]"
+          style={{
+            color: 'rgba(255, 255, 255, 0.08)',
+            fontSize: '22vw',
+          }}
         >
-          ORKI
+          {title}
         </span>
       </div>
-      <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors duration-500" />
+
+      {/* Foreground action row — title (smaller, readable) + Shop Now button. */}
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-8">
         <h3 className="text-5xl md:text-8xl font-medium text-white leading-tight">
           {title}
