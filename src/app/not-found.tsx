@@ -43,7 +43,7 @@ export default async function RootNotFound() {
 
   return (
     <html lang={copy.lang} dir={copy.dir}>
-      <body className="bg-black text-white">
+      <body className="bg-black text-white" suppressHydrationWarning>
         <div className="min-h-[100vh] bg-black flex items-center justify-center px-6">
           <div className="max-w-md text-center space-y-8">
             <h1 className="text-6xl md:text-[100px] font-bold leading-none tracking-tighter text-white">

@@ -48,7 +48,10 @@ export default async function LocaleLayout({ children, params }: Props) {
       dir={dir}
       className={`dark ${geist.variable} ${ibmPlexArabic.variable}`}
     >
-      <body className="bg-black text-white antialiased min-h-screen flex flex-col">
+      <body
+        className="bg-black text-white antialiased min-h-screen flex flex-col"
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreHydration />
           <Navbar />
