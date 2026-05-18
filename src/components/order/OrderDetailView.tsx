@@ -16,7 +16,8 @@
  */
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
-import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
+import { ArrowCta } from '@/components/ui/ArrowCta';
 import { formatSAR } from '@/lib/orders/pricing';
 import type { Locale, Order } from '@/types/domain';
 
@@ -90,14 +91,10 @@ export async function OrderDetailView({
         </Link>
         <Link
           href="/shop"
-          className="w-full sm:w-auto text-sm font-bold uppercase tracking-widest text-white underline underline-offset-8 hover:text-white/80 transition-colors flex items-center gap-2 min-h-[44px]"
+          className="group w-full sm:w-auto text-sm font-bold uppercase tracking-widest text-white underline underline-offset-8 hover:text-white/80 transition-colors flex items-center gap-2 min-h-[44px]"
         >
           {t('continueShopping')}
-          {isRtl ? (
-            <ArrowLeft className="size-4" aria-hidden />
-          ) : (
-            <ArrowRight className="size-4" aria-hidden />
-          )}
+          <ArrowCta locale={locale} />
         </Link>
       </div>
 

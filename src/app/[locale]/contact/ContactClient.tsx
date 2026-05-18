@@ -1,6 +1,7 @@
 'use client'
 
-import { MessageCircle, ArrowRight } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
+import { ArrowCta } from '@/components/ui/ArrowCta'
 
 interface Props {
   locale: 'en' | 'ar'
@@ -70,10 +71,10 @@ export function ContactClient({ locale }: Props) {
               </p>
               <a
                 {...linkAttrs}
-                className={`inline-flex items-center gap-3 w-full h-16 rounded-lg font-bold uppercase tracking-widest justify-center transition-[background-color,color,transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'bg-white text-black cursor-pointer hover:bg-white/90 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(255,255,255,0.25)] active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
+                className={`group inline-flex items-center gap-3 w-full h-16 rounded-lg font-bold uppercase tracking-widest justify-center transition-[background-color,color,transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${waConfigured ? 'bg-white text-black cursor-pointer hover:bg-white/90 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(255,255,255,0.25)] active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
               >
                 {isRtl ? 'افتح الواتساب' : 'Open WhatsApp'}
-                <ArrowRight className="size-5 rtl-flip" />
+                <ArrowCta locale={locale} size="size-5" />
               </a>
               {!waConfigured && (
                 <p className="text-xs text-white/40 leading-relaxed italic">

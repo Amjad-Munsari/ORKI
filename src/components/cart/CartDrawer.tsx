@@ -11,7 +11,8 @@ import {
 import { CartItem } from './CartItem'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/types/domain'
-import { ShoppingBag, ArrowRight, ArrowLeft } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
+import { ArrowCta } from '@/components/ui/ArrowCta'
 
 interface CartDrawerProps {
   locale: Locale
@@ -94,11 +95,7 @@ export function CartDrawer({ locale }: CartDrawerProps) {
               className="w-full h-14 bg-white text-black rounded-lg font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/90 transition-colors group"
             >
               {isRtl ? 'إتمام الشراء' : 'Checkout'}
-              {isRtl ? (
-                <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
-              ) : (
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              )}
+              <ArrowCta locale={locale} />
             </Link>
 
             <p className="text-[10px] text-white/30 text-center uppercase tracking-tighter">

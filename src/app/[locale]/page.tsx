@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { getAllProducts } from '@/lib/products'
 import { ProductCard } from '@/components/shop/ProductCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import { ArrowRight, ArrowLeft } from 'lucide-react'
+import { ArrowCta } from '@/components/ui/ArrowCta'
 
 import type { Locale } from '@/types/domain'
 
@@ -100,10 +100,10 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="pt-8">
             <Link
               href="/about"
-              className="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {tEthos('readStory')}
-              <ArrowRight className="size-4 rtl-flip" />
+              <ArrowCta locale={locale as Locale} />
             </Link>
           </div>
         </ScrollReveal>
@@ -150,11 +150,9 @@ function CategoryCard({ title, href, locale }: { title: string; href: string; lo
         <h3 className="text-5xl md:text-8xl font-medium text-white leading-tight">
           {title}
         </h3>
-        <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3
-                        transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)]
-                        group-hover:translate-x-2 motion-reduce:transform-none">
+        <div className="bg-black text-white px-8 py-4 text-sm font-semibold flex items-center gap-3">
           {isRtl ? 'تسوق الآن' : 'Shop Now'}
-          {isRtl ? <ArrowLeft className="size-4" /> : <ArrowRight className="size-4" />}
+          <ArrowCta locale={locale as Locale} />
         </div>
       </div>
     </Link>

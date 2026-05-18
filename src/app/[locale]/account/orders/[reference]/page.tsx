@@ -16,7 +16,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowCta } from '@/components/ui/ArrowCta';
 import { createClient } from '@/lib/supabase/server';
 import { getOrderByReference } from '@/lib/orders/server';
 import { OrderDetailView } from '@/components/order/OrderDetailView';
@@ -49,9 +49,9 @@ export default async function AccountOrderDetailPage({ params }: Props) {
       <div className="max-w-2xl mx-auto space-y-8">
         <Link
           href="/account"
-          className="text-sm font-bold uppercase tracking-widest text-white underline underline-offset-8 hover:text-white/80 transition-colors flex items-center gap-2 min-h-[44px]"
+          className="group text-sm font-bold uppercase tracking-widest text-white underline underline-offset-8 hover:text-white/80 transition-colors flex items-center gap-2 min-h-[44px]"
         >
-          <ArrowLeft className="size-4 rtl-flip" aria-hidden />
+          <ArrowCta locale={locale as Locale} direction="back" />
           {t('backToAccount')}
         </Link>
         <p className="text-sm text-white/60">
