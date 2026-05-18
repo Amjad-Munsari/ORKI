@@ -25,15 +25,19 @@ export function CartDrawer({ locale }: CartDrawerProps) {
 
   return (
     <Sheet open={isDrawerOpen} onOpenChange={setDrawerOpen}>
-      <SheetContent 
-        side={isRtl ? 'left' : 'right'}
-        className="w-full sm:max-w-md bg-black/95 backdrop-blur-xl border-white/10 flex flex-col p-0"
+      <SheetContent
+        side="right"
+        className={`w-full sm:max-w-md bg-black/95 backdrop-blur-xl border-white/10 flex flex-col p-0 !duration-[1200ms] !ease-[cubic-bezier(0.19,1,0.22,1)] data-starting-style:!opacity-100 data-ending-style:!opacity-100 ${
+          isRtl
+            ? 'data-starting-style:!-translate-x-full data-ending-style:!-translate-x-full'
+            : 'data-starting-style:!translate-x-full data-ending-style:!translate-x-full'
+        }`}
       >
         <SheetHeader className="px-6 pt-8 pb-4 border-b border-white/10">
           <SheetTitle className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
             <ShoppingBag className="size-5" />
             {isRtl ? 'حقيبة التسوق' : 'Shopping Bag'}
-            <span className="ms-auto text-sm font-normal text-white/40 tabular-nums">
+            <span className="text-sm font-normal text-white/40 tabular-nums">
               ({items.length})
             </span>
           </SheetTitle>
