@@ -45,6 +45,15 @@ vi.mock('@/lib/cart/session', () => ({
 // next/cache.revalidatePath is not callable from a node test environment.
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
+// submitCheckout resolves the authenticated user (for order.userId tagging) via
+// the SSR Supabase client, which reads cookies(). In a node test there is no
+// request scope — mock it to a guest (orders get userId null).
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(async () => ({
+    auth: { getUser: vi.fn(async () => ({ data: { user: null } })) },
+  })),
+}));
+
 // NOTE: Plan 08-07 (Resend email) is deferred — no @/lib/email/send module
 // exists yet, and submitCheckout/transitionOrderStatus do not import one.
 // When 08-07 lands, add a vi.mock factory here to no-op the email send.

@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
 import { products, productSizes, productImages } from '@/lib/db/schema';
+import { requireAdmin, AdminAuthError } from '@/lib/auth/require-admin';
 import { seedData } from '../../../../scripts/seed-data';
 
 export async function GET(request: Request) {
+  // AUTHORIZATION: this route writes (and with ?force=1 destructively wipes) the
+  // product catalog. The middleware matcher excludes /api, so it is otherwise
+  // wholly ungated. Outside local dev, require an authenticated admin.
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      await requireAdmin('seed');
+    } catch (authErr) {
+      const status = authErr instanceof AdminAuthError ? 403 : 401;
+      return NextResponse.json({ ok: false, error: 'Forbidden' }, { status });
+    }
+  }
+
   try {
     const force = new URL(request.url).searchParams.get('force') === '1';
 
@@ -57,23 +70,17 @@ export async function GET(request: Request) {
       message: `Seeded ${seedData.length} products.`,
     });
   } catch (err) {
+    // Log full internals server-side for forensics; NEVER leak DB error
+    // detail/hint/stack in the HTTP response.
     const e = err as { message?: string; cause?: unknown; stack?: string };
-    const cause = e.cause as { message?: string; code?: string; detail?: string; severity?: string; hint?: string } | undefined;
-    const payload = {
-      ok: false,
-      error: e.message ?? String(err),
-      cause: cause
-        ? {
-            message: cause.message,
-            code: cause.code,
-            detail: cause.detail,
-            severity: cause.severity,
-            hint: cause.hint,
-          }
-        : null,
+    console.error('Seed error:', {
+      message: e.message ?? String(err),
+      cause: e.cause,
       stack: e.stack?.split('\n').slice(0, 5),
-    };
-    console.error('Seed error:', JSON.stringify(payload, null, 2));
-    return NextResponse.json(payload, { status: 500 });
+    });
+    return NextResponse.json(
+      { ok: false, error: 'Seeding failed. Check server logs.' },
+      { status: 500 }
+    );
   }
 }

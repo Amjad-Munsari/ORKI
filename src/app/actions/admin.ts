@@ -4,12 +4,15 @@ import { db } from '@/lib/db/client';
 import { products, productSizes } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 /**
  * Toggles the overall stock status of a product.
  * In a real app, this might also affect size availability.
  */
 export async function toggleProductStock(productId: string, inStock: boolean) {
+  await requireAdmin('toggleProductStock');
+
   await db
     .update(products)
     .set({ 
@@ -29,7 +32,7 @@ export async function toggleProductStock(productId: string, inStock: boolean) {
  * Updates basic product details.
  */
 export async function updateProductDetails(
-  productId: string, 
+  productId: string,
   data: {
     nameEn: string;
     nameAr: string;
@@ -39,6 +42,16 @@ export async function updateProductDetails(
     category: string;
   }
 ) {
+  await requireAdmin('updateProductDetails');
+
+  // Domain-contract sanity: price is whole-SAR non-negative, category is constrained.
+  if (!Number.isInteger(data.price) || data.price < 0) {
+    throw new Error('price must be a non-negative integer (whole SAR)');
+  }
+  if (data.category !== 'tops' && data.category !== 'bottoms') {
+    throw new Error(`invalid category: ${data.category}`);
+  }
+
   await db
     .update(products)
     .set({
@@ -57,9 +70,15 @@ export async function updateProductDetails(
  * Updates inventory for a specific size (stock and status).
  */
 export async function updateSizeInventory(
-  sizeId: string, 
+  sizeId: string,
   data: { stock?: number; inStock?: boolean }
 ) {
+  await requireAdmin('updateSizeInventory');
+
+  if (typeof data.stock === 'number' && (!Number.isInteger(data.stock) || data.stock < 0)) {
+    throw new Error('stock must be a non-negative integer');
+  }
+
   // If stock is provided and is 0, auto-set inStock to false
   const updateData: Partial<{ stock: number; inStock: boolean }> = { ...data };
   if (typeof data.stock === 'number' && data.stock === 0) {

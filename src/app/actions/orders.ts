@@ -21,6 +21,7 @@ import {
 } from '@/lib/orders/server';
 import type { OrderStatus } from '@/types/domain';
 import type { CheckoutInput } from '@/lib/checkout/schemas';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 export async function submitCheckoutAction(input: CheckoutInput) {
   return submitCheckout(input);
@@ -35,5 +36,10 @@ export async function transitionOrderAction(
     reason?: string;
   } = {}
 ) {
+  // AUTHORIZATION: order state transitions (cancel/ship/refund/deliver) are
+  // admin-only. This `'use server'` shim is the RPC-reachable boundary — the
+  // admin/layout.tsx gate does NOT protect Server Action invocation — so the
+  // admin check must live here. requireAdmin throws (audited) on a non-admin.
+  await requireAdmin('transitionOrder');
   return transitionOrderStatus(orderId, to, opts);
 }

@@ -18,6 +18,7 @@ import type {
 } from '@/types/domain';
 import { getOrCreateCart } from '@/lib/cart/session';
 import { getCart } from '@/lib/cart/server';
+import { createClient } from '@/lib/supabase/server';
 import { computeOrderTotals } from './pricing';
 import { generateOrderReference } from './reference';
 import { assertTransition, canTransition } from './state-machine';
@@ -105,6 +106,15 @@ export async function submitCheckout(
   }
   const { shipping, payment } = parsed.data;
 
+  // 1b. Resolve the authenticated user, if any. Guests check out with userId
+  //     null; logged-in users get the order tagged so it appears in their
+  //     history and the orders_select_own RLS policy / IDOR guards apply.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const userId = user?.id ?? null;
+
   // 2. Resolve the active cart.
   const session = await getOrCreateCart();
   const cart = await getCart(session.id);
@@ -174,6 +184,7 @@ export async function submitCheckout(
             .insert(orders)
             .values({
               reference,
+              userId,
               email: shipping.email,
               locale: cart.locale,
               status: 'pending',
@@ -425,6 +436,10 @@ export async function transitionOrderStatus(
     reason?: string;
   } = {}
 ): Promise<ActionResult<null>> {
+  // AUTHORIZATION NOTE: this is a privileged operation, but the auth gate lives
+  // in the `'use server'` entry point (`transitionOrderAction` in
+  // app/actions/orders.ts) — that is the only RPC-reachable boundary. Keeping
+  // this lib function gate-free keeps it unit-testable in isolation.
   const requestId = newRequestId();
   let result: ActionResult<null>;
   try {

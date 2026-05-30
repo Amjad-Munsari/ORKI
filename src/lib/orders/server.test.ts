@@ -28,6 +28,14 @@ vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
 }));
 
+// submitCheckout resolves the authenticated user via the SSR Supabase client
+// (cookies()). No request scope in unit tests — mock to a guest (userId null).
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(async () => ({
+    auth: { getUser: vi.fn(async () => ({ data: { user: null } })) },
+  })),
+}));
+
 // Stub the DB so even if the txn opens (it shouldn't for these tests), the
 // chain calls don't blow up. The handlers below are no-ops; the tests only
 // assert on the pre-flight return envelope.
