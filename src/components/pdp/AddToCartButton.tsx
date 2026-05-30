@@ -1,8 +1,9 @@
 'use client'
 import { useState, useTransition } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { Check } from 'lucide-react'
 import { animationPresets } from '@/lib/animation-presets'
+import { useReducedMotionSafe } from '@/hooks/useReducedMotionSafe'
 import { useCartStore } from '@/store/cartStore'
 import { addToCartAction } from '@/app/actions/cart'
 import type { Product, Locale, ServerCartItem } from '@/types/domain'
@@ -20,7 +21,7 @@ export function AddToCartButton({ product, selectedSize, locale }: AddToCartButt
   const addItem = useCartStore(s => s.addItem)
   const setItems = useCartStore(s => s.setItems)
   const setDrawerOpen = useCartStore(s => s.setDrawerOpen)
-  const shouldReduceMotion = useReducedMotion()
+  const shouldReduceMotion = useReducedMotionSafe()
   const [, startTransition] = useTransition()
 
   /** Refetch from the server when the action fails — reconciles optimistic UI. */

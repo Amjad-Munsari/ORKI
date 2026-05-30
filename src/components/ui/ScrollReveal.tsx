@@ -1,6 +1,7 @@
 'use client'
 
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
+import { useReducedMotionSafe } from '@/hooks/useReducedMotionSafe'
 
 interface ScrollRevealProps {
   children: React.ReactNode
@@ -15,7 +16,9 @@ export function ScrollReveal({
   direction = 'up',
   className = '' 
 }: ScrollRevealProps) {
-  const shouldReduceMotion = useReducedMotion()
+  // Hydration-safe: SSR + first client render assume no reduced motion so the
+  // markup matches; the real preference applies after mount (no React mismatch).
+  const shouldReduceMotion = useReducedMotionSafe()
 
   // Fallback for reduced motion: instant render, no fade, no movement.
   // (Phase 11 anim pass: reduced-motion users skip the reveal entirely.)

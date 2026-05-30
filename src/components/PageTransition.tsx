@@ -1,11 +1,14 @@
 'use client'
 
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { usePathname } from 'next/navigation'
+import { useReducedMotionSafe } from '@/hooks/useReducedMotionSafe'
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const prefersReducedMotion = useReducedMotion()
+  // Hydration-safe: server + first client render use the non-reduced markup so
+  // the SSR inline style matches; the preference applies after mount.
+  const prefersReducedMotion = useReducedMotionSafe()
 
   const initial = prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }
   const animate = prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }
