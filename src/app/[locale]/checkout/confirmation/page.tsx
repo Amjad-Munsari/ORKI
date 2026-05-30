@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getOrderByReference } from '@/lib/orders/server';
+import { sessionMayViewOrder } from '@/lib/orders/order-access';
+import { createClient } from '@/lib/supabase/server';
 import { OrderDetailView } from '@/components/order/OrderDetailView';
 import type { Locale, Order } from '@/types/domain';
 
@@ -42,6 +44,21 @@ export default async function ConfirmationPage({
   }
 
   if (!order) notFound();
+
+  // AUTHORIZATION (anti-enumeration, IDOR): this page exposes full order PII.
+  // Allow only (a) the browser that placed the order — proven by the httpOnly
+  // order-view cookie set at checkout — or (b) the signed-in owner. Anyone else
+  // gets notFound(), NEVER 403 (must not reveal that the reference exists).
+  const placedBySession = await sessionMayViewOrder(ref);
+  let ownedByUser = false;
+  if (!placedBySession && order.userId) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    ownedByUser = !!user && order.userId === user.id;
+  }
+  if (!placedBySession && !ownedByUser) notFound();
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-24 px-6">

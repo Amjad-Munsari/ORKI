@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { PlaceholderImage } from '@/components/PlaceholderImage'
+import { formatPriceSAR } from '@/lib/format-price'
 import {
   updateQtyAction,
   removeItemAction,
@@ -90,7 +91,7 @@ export function CartItem({ item, locale }: CartItemProps) {
             <button
               onClick={handleRemove}
               className="text-white/40 hover:text-white transition-colors p-1 -me-1"
-              aria-label="Remove item"
+              aria-label={locale === 'ar' ? 'إزالة المنتج' : 'Remove item'}
             >
               <Trash2 className="size-4" />
             </button>
@@ -105,7 +106,7 @@ export function CartItem({ item, locale }: CartItemProps) {
             <button
               onClick={() => handleDelta(-1)}
               className="p-1 hover:text-white text-white/60 transition-colors"
-              aria-label="Decrease quantity"
+              aria-label={locale === 'ar' ? 'تقليل الكمية' : 'Decrease quantity'}
             >
               <Minus className="size-3" />
             </button>
@@ -115,13 +116,13 @@ export function CartItem({ item, locale }: CartItemProps) {
             <button
               onClick={() => handleDelta(1)}
               className="p-1 hover:text-white text-white/60 transition-colors"
-              aria-label="Increase quantity"
+              aria-label={locale === 'ar' ? 'زيادة الكمية' : 'Increase quantity'}
             >
               <Plus className="size-3" />
             </button>
           </div>
           <p className="text-sm font-bold text-white">
-            {item.product.price * item.quantity} SAR
+            {formatPriceSAR(item.product.price * item.quantity, locale)}
           </p>
         </div>
       </div>

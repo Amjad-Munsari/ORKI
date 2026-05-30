@@ -74,7 +74,6 @@ export async function Footer() {
               <span className="text-xs font-semibold text-white/40 block">{tHelp('groupLabel')}</span>
               <ul className="space-y-4">
                 <li><Link href="/contact" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tHelp('contact')}</Link></li>
-                <li><Link href="/faq" className="text-sm font-semibold inline-block leading-none py-2 link-underline">{tHelp('faq')}</Link></li>
               </ul>
             </div>
           </div>

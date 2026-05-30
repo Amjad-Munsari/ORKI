@@ -22,7 +22,7 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days (CONTEXT.md)
  * multiple Server Actions in the same flow.
  */
 export async function getOrCreateCart(
-  locale: Locale = 'en'
+  locale?: Locale
 ): Promise<{ id: string; sessionId: string; locale: Locale }> {
   const jar = await cookies(); // Next 15 async API
   let sessionId = jar.get(COOKIE_NAME)?.value;
@@ -34,10 +34,17 @@ export async function getOrCreateCart(
       where: eq(carts.sessionId, sessionId),
     });
     if (existing) {
+      // Keep the persisted locale in sync with the caller's current locale so
+      // the order snapshot (and thus the email language) reflects how the user
+      // was actually browsing. Only update when the caller PROVIDES a locale —
+      // callers that pass nothing (e.g. submitCheckout) must not clobber it.
+      if (locale && existing.locale !== locale) {
+        await db.update(carts).set({ locale }).where(eq(carts.id, existing.id));
+      }
       resolvedCart = {
         id: existing.id,
         sessionId,
-        locale: (existing.locale as Locale) ?? locale,
+        locale: locale ?? (existing.locale as Locale) ?? 'en',
       };
     }
     // Cookie present but row missing (DB reset). Reuse the same sessionId so
@@ -47,9 +54,10 @@ export async function getOrCreateCart(
   }
 
   if (!resolvedCart) {
+    const newLocale: Locale = locale ?? 'en';
     const [cart] = await db
       .insert(carts)
-      .values({ sessionId, locale })
+      .values({ sessionId, locale: newLocale })
       .returning();
 
     jar.set(COOKIE_NAME, sessionId, {
@@ -60,7 +68,7 @@ export async function getOrCreateCart(
       maxAge: COOKIE_MAX_AGE,
     });
 
-    resolvedCart = { id: cart.id, sessionId, locale };
+    resolvedCart = { id: cart.id, sessionId, locale: newLocale };
   }
 
   // Phase 10: first-sign-in merge hook (defensive — covers paths that don't go
@@ -100,7 +108,7 @@ export async function getOrCreateCart(
           resolvedCart = {
             id: refreshed.id,
             sessionId: refreshed.sessionId,
-            locale: (refreshed.locale as Locale) ?? locale,
+            locale: (refreshed.locale as Locale) ?? locale ?? 'en',
           };
         }
       }

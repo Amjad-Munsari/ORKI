@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/sheet'
 import { CartItem } from './CartItem'
 import { Link } from '@/i18n/navigation'
+import { formatPriceSAR } from '@/lib/format-price'
 import type { Locale } from '@/types/domain'
 import { ShoppingBag } from 'lucide-react'
 import { ArrowCta } from '@/components/ui/ArrowCta'
@@ -85,7 +86,7 @@ export function CartDrawer({ locale }: CartDrawerProps) {
                 {isRtl ? 'المجموع الفرعي' : 'Subtotal'}
               </span>
               <span className="text-2xl font-bold text-white tabular-nums">
-                {subtotal} SAR
+                {formatPriceSAR(subtotal, locale)}
               </span>
             </div>
             

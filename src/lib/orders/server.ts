@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { eq, inArray, sql, and } from 'drizzle-orm';
 import { db } from '@/lib/db/client';
 import {
+  products,
   productSizes,
   orders,
   orderItems,
@@ -19,6 +20,7 @@ import type {
 import { getOrCreateCart } from '@/lib/cart/session';
 import { getCart } from '@/lib/cart/server';
 import { createClient } from '@/lib/supabase/server';
+import { grantOrderView } from './order-access';
 import { computeOrderTotals } from './pricing';
 import { generateOrderReference } from './reference';
 import { assertTransition, canTransition } from './state-machine';
@@ -173,6 +175,33 @@ export async function submitCheckout(
           .where(eq(productSizes.id, item.sizeId));
       }
 
+      // 6b. Reconcile the derived inStock flags with the new stock levels so the
+      //     catalog never advertises a size as in-stock at 0 units (parity with
+      //     admin.updateSizeInventory). A size that hit 0 flips to inStock=false;
+      //     the product flips when no size remains purchasable. We never force a
+      //     positive-stock size back to TRUE here — an admin may have deliberately
+      //     disabled it.
+      const decrementedProductIds = [...new Set(cart.items.map((i) => i.productId))];
+      for (const pid of decrementedProductIds) {
+        const sizes = await tx
+          .select()
+          .from(productSizes)
+          .where(eq(productSizes.productId, pid));
+        for (const s of sizes) {
+          if (s.stock <= 0 && s.inStock) {
+            await tx
+              .update(productSizes)
+              .set({ inStock: false })
+              .where(eq(productSizes.id, s.id));
+          }
+        }
+        const anyInStock = sizes.some((s) => s.inStock && s.stock > 0);
+        await tx
+          .update(products)
+          .set({ inStock: anyInStock })
+          .where(eq(products.id, pid));
+      }
+
       // 7. Insert the order row in 'pending' state with reference-collision retry.
       let reference = '';
       let orderRow: { id: string } | undefined;
@@ -308,6 +337,18 @@ export async function submitCheckout(
   }
 
   // Post-commit side effects. Email failures must NOT roll back the order.
+  // Authorize THIS browser to view the new order's confirmation page. Guests
+  // have no account, so the httpOnly cookie is what binds confirmation viewing
+  // to the session that placed the order (prevents reference-enumeration IDOR).
+  try {
+    await grantOrderView(createdReference);
+  } catch (cookieErr) {
+    console.error(
+      `[submitCheckout][${requestId}] could not grant order-view for ${createdReference}`,
+      cookieErr
+    );
+  }
+
   // CONTRACT: this block lives OUTSIDE the db.transaction(...) closure above —
   // the order is already committed by the time we get here.
   try {
@@ -495,6 +536,30 @@ export async function transitionOrderStatus(
               })
               .where(eq(productSizes.id, size.id));
           }
+        }
+
+        // Restored stock can bring a sold-out size/product back in stock —
+        // re-enable any size that now has positive stock and recompute the
+        // product flag (mirror of the checkout-decrement reconciliation).
+        const restoredProductIds = [...new Set(items.map((it) => it.productId))];
+        for (const pid of restoredProductIds) {
+          const sizes = await tx
+            .select()
+            .from(productSizes)
+            .where(eq(productSizes.productId, pid));
+          for (const s of sizes) {
+            if (s.stock > 0 && !s.inStock) {
+              await tx
+                .update(productSizes)
+                .set({ inStock: true })
+                .where(eq(productSizes.id, s.id));
+            }
+          }
+          const anyInStock = sizes.some((s) => s.stock > 0);
+          await tx
+            .update(products)
+            .set({ inStock: anyInStock })
+            .where(eq(products.id, pid));
         }
       }
 

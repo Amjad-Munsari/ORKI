@@ -14,6 +14,7 @@
  *     Raw errors NEVER cross the wire.
  */
 import { revalidatePath } from 'next/cache';
+import { getLocale } from 'next-intl/server';
 import type { Cart, Locale } from '@/types/domain';
 import { getOrCreateCart } from '@/lib/cart/session';
 import {
@@ -42,7 +43,7 @@ export async function addToCartAction(
   quantity: number = 1
 ): Promise<ActionResult<Cart>> {
   try {
-    const session = await getOrCreateCart();
+    const session = await getOrCreateCart((await getLocale()) as Locale);
     await addItemToCart(session.id, productId, sizeId, quantity);
     const cart = await getCart(session.id);
     if (!cart) return { ok: false, code: 'UNKNOWN', messageKey: 'Checkout.errors.unknown' };
@@ -59,7 +60,7 @@ export async function updateQtyAction(
   quantity: number
 ): Promise<ActionResult<Cart>> {
   try {
-    const session = await getOrCreateCart();
+    const session = await getOrCreateCart((await getLocale()) as Locale);
     await updateCartItemQuantity(session.id, cartItemId, quantity);
     const cart = await getCart(session.id);
     if (!cart) return { ok: false, code: 'UNKNOWN', messageKey: 'Checkout.errors.unknown' };
@@ -75,7 +76,7 @@ export async function removeItemAction(
   cartItemId: string
 ): Promise<ActionResult<Cart>> {
   try {
-    const session = await getOrCreateCart();
+    const session = await getOrCreateCart((await getLocale()) as Locale);
     await removeCartItem(session.id, cartItemId);
     const cart = await getCart(session.id);
     if (!cart) return { ok: false, code: 'UNKNOWN', messageKey: 'Checkout.errors.unknown' };
