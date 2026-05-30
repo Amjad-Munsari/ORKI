@@ -14,7 +14,6 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
 import { Field } from '@/components/forms/Field';
 import { requestPasswordResetAction } from '@/app/actions/auth';
 import { requestResetSchema, type RequestResetInput } from '@/lib/auth/schemas';
@@ -66,14 +65,6 @@ export function ForgotPasswordForm() {
           className="text-sm text-white/60 text-center"
         >
           {t('success')}
-        </p>
-        <p className="text-center">
-          <Link
-            href="/login"
-            className="underline underline-offset-4 text-white text-sm"
-          >
-            {t('back')}
-          </Link>
         </p>
       </div>
     );
