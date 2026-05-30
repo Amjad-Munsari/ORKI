@@ -90,7 +90,7 @@ Plans:
 **Goal:** Close the EN-scope findings from the 2026-05-16 storefront cross-phase audit so the public storefront (Home, Shop + category, PDP, About, Contact, Navbar, Footer, 404) feels intentional, branded, and accessible. AR-specific copy/voice reconciliation deferred to a future sibling phase.
 **Source of truth:** `.planning/STOREFRONT-UI-REVIEW-EN.md` (23 findings; 6 already closed in commit `becd464`).
 **Out of scope:** Checkout, cart drawer, admin pages, auth flows, account pages, AR copy reconciliation (see `.planning/STOREFRONT-UI-REVIEW-AR.md`).
-**Plans:** 14/15 plans executed
+**Plans:** 15/15 plans complete
 **Success Criteria:**
 1. All `[OPEN]` findings in `STOREFRONT-UI-REVIEW-EN.md` resolved or explicitly deferred with rationale.
 2. Storefront visually verified in a live `npm run dev` session (audit was code-only).
@@ -114,7 +114,7 @@ Plans:
 - [x] 11-12-PLAN.md — Wave 2: Shop Suspense skeleton (8 cards at 3:4) + shadcn Select replacing native sort
 - [x] 11-13-PLAN.md — Wave 3: EN 404 voice — 3 candidate copy drafts in messages/en.json (UAT picks live)
 - [x] 11-14-PLAN.md — Wave 3: Shop empty-state + Home brand-ethos copy candidates (3 drafts each) + next-intl key migration
-- [ ] 11-15-PLAN.md — Wave 4: Live `npm run dev` verification, UAT copy selection, WA_NUMBER swap, 11-VERIFICATION.md
+- [x] 11-15-PLAN.md — Wave 4: Live `npm run dev` verification, UAT copy selection, WA_NUMBER swap, 11-VERIFICATION.md
 
 ---
 
