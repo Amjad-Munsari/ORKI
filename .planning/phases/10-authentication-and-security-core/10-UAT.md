@@ -1,5 +1,5 @@
 ---
-status: partial
+status: diagnosed
 phase: 10-authentication-and-security-core
 source: [10-01-SUMMARY.md, 10-02-SUMMARY.md, 10-03-SUMMARY.md, 10-04-SUMMARY.md, 10-05-SUMMARY.md, 10-06-SUMMARY.md, 10-07-SUMMARY.md]
 started: 2026-05-30T18:18:12Z
@@ -108,49 +108,80 @@ blocked: 1
 - truth: "Submitting invalid login credentials shows a generic anti-enumeration error message"
   status: failed
   reason: "User reported: Runtime TypeError — 'Failed to fetch'. Next.js 15.5.18 (Turbopack)."
-  severity: blocker
+  severity: minor   # downgraded from blocker: not an app defect (environmental)
   test: 4
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
-  missing: []        # Filled by diagnosis
-  debug_session: ""  # Filled by diagnosis
+  root_cause: "NOT an application defect. The invalid-credentials branch is correct: signInAction returns a clean AuthActionResult (auth.ts:125-134), mapSupabaseError maps invalid_credentials correctly (errors.ts:84-94), writeAuthEvent swallows its own errors (audit.ts:48-73). Clean-browser Playwright repro succeeded 4/4; live endpoint returned HTTP 200 on 15/15 invalid POSTs. 'Failed to fetch' is a client-side transport abort — content-injecting browser extension or a transient Turbopack HMR recompile dropping the in-flight Server Action POST. Only the error path shows it because the success path uses window.location.assign (full reload) which masks transport hiccups."
+  artifacts:
+    - path: "src/components/auth/LoginForm.tsx:57"
+      issue: "`await signInAction(data)` is unguarded — a transport-level rejection bubbles to the Next dev overlay as 'Failed to fetch' instead of a graceful message (optional hardening point only)."
+  missing:
+    - "VERIFY FIRST: re-run Test 4 in an incognito window with extensions disabled — symptom should vanish."
+    - "OPTIONAL hardening: wrap `await signInAction(data)` in try/catch and on a thrown transport error call setFormError(tErrors('unknown')) so an extension/HMR abort degrades to a generic message."
+  debug_session: .planning/debug/invalid-login-failed-to-fetch.md
 
 - truth: "Forgot-password success state shows a single 'back to sign-in' affordance"
   status: failed
   reason: "User reported: works, but why are there two 'back to sign-in' buttons"
   severity: minor
   test: 6
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
-  missing: []        # Filled by diagnosis
-  debug_session: ""  # Filled by diagnosis
+  root_cause: "Two identical 'Back to sign in' links render in the success state. The page chrome renders an UNCONDITIONAL footer back-link (forgot-password/page.tsx:25-32) AND the form's success branch renders its own back-link (ForgotPasswordForm.tsx:70-77). Both use Auth.forgot.back ('Back to sign in') → /login. The intended pattern (login/page.tsx:23-32) has the chrome own the single link and the form render none."
+  artifacts:
+    - path: "src/components/auth/ForgotPasswordForm.tsx:70-77"
+      issue: "Redundant success-state back-link (the duplicate)."
+    - path: "src/app/[locale]/(auth)/forgot-password/page.tsx:25-32"
+      issue: "Always-present chrome back-link that stays visible during the success state."
+  missing:
+    - "Remove the form's success-state back-link (ForgotPasswordForm.tsx:70-77) so the chrome's single footer link is the only one — matching the login/signup pattern."
+  debug_session: .planning/debug/forgot-password-duplicate-backlink.md
 
 - truth: "Password-reset email link opens the reset-password form and lets the user set a new password"
   status: failed
   reason: "User reported: clicking the reset link lands back on /en/forgot-password (callback hit invalid_link path — ?code exchange failed). Round-trip never completes. Secondary: benign fdprocessedid hydration console warning (browser-extension injected)."
   severity: major
   test: 7
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
-  missing: []        # Filled by diagnosis
-  debug_session: ""  # Filled by diagnosis
+  root_cause: "Param-shape mismatch (code bug + dashboard config gap). The recovery callback only handles the PKCE `?code` shape via exchangeCodeForSession (callback/route.ts:35,41,44), but Supabase's default 'Reset Password' email delivers a `token_hash` + `type=recovery` verifyOtp link — NOT a `?code` link. So `searchParams.get('code')` is null on every real click, the if(code) guard is false, and control falls through to the failure redirect → /forgot-password?error=invalid_link. The plan (10-RESEARCH.md:565) was built on the incorrect assumption that Supabase emails a ?code recovery URL. requestPasswordResetAction's redirectTo (auth.ts:231-233) is correct and NOT at fault."
+  artifacts:
+    - path: "src/app/api/auth/callback/route.ts:35-54"
+      issue: "Only parses ?code / exchangeCodeForSession; no token_hash + type=recovery → verifyOtp branch."
+    - path: "Supabase dashboard — Reset Password email template + redirect URL config"
+      issue: "Still the default token_hash shape; never reconciled with the code-only callback (deferred per notes/supabase-dashboard-checklist.md:55-57)."
+  missing:
+    - "Add a token_hash branch to the callback: read token_hash + type, call supabase.auth.verifyOtp({ type: 'recovery', token_hash }), then redirect to next. Keep the existing ?code→exchangeCodeForSession path as a fallback so both shapes work."
+    - "Preferred over customizing the email template (verifyOtp matches Supabase's current default and avoids PKCE code_verifier-cookie fragility on cross-context email clicks)."
+  debug_session: .planning/debug/password-reset-invalid-link.md
 
 - truth: "A guest's cart is merged into the user's account cart after sign-in (item retained)"
   status: failed
   reason: "User reported: nope, it doesn't merge"
   severity: major
   test: 10
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
-  missing: []        # Filled by diagnosis
-  debug_session: ""  # Filled by diagnosis
+  root_cause: "mergeGuestCartIntoUserCart performs NO item-level union. When the signed-in account already owns a carts row, it takes the DELETE-guest-cart branch (merge-on-signin.ts:46-55); because cart_items.cartId is ON DELETE CASCADE (schema.ts:129), the guest's item is destroyed. The precondition is reliably true by Test 10: the defensive merge hook in getOrCreateCart (session.ts:84-119) fires on every authenticated GET /api/cart, which StoreHydration calls on every page mount (StoreHydration.tsx:83, mounted globally in [locale]/layout.tsx:58) — so the account's first authenticated render (during signup/sign-in) already claimed+stamped a userId-bound cart. New guest item then hits the DELETE branch and is silently discarded. Eliminated: cookie mismatch (both use 'orki_sid'), cookie rotation, merge ordering."
+  artifacts:
+    - path: "src/lib/cart/merge-on-signin.ts:46-55"
+      issue: "DELETE-guest-cart branch with no item-level union; where the guest item is lost."
+    - path: "src/lib/db/schema.ts:129"
+      issue: "cart_items.cartId ON DELETE CASCADE turns the cart-row DELETE into item destruction."
+    - path: "src/lib/cart/session.ts:84-119 + src/store/StoreHydration.tsx:83"
+      issue: "Defensive merge fires on every page mount, so the account acquires a userId-bound cart before Test 10, forcing the DELETE branch."
+  missing:
+    - "Replace the silent DELETE branch with a real item-level union: when a user cart already exists, upsert the guest cart's cart_items into the user's cart (insert with onConflictDoUpdate summing quantities on the (cartId, productId, sizeId) unique index, mirroring addItemToCart in server.ts:42-59) before deleting the now-empty guest cart — all inside the existing transaction."
+  debug_session: .planning/debug/guest-cart-not-merging.md
 
 - truth: "Auth/nav pages hydrate without a real (non-extension) hydration mismatch"
   status: failed
   reason: "User reported: console hydration mismatch on MobileNavDrawer SheetTrigger — Base UI generated id diverges server/client (base-ui-_R_1pn9etb_ vs _R_76r9etb_). Genuine useId divergence in Navbar tree, not extension-injected. Recurring auth-page hydration issue."
   severity: major
   test: 12
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
-  missing: []        # Filled by diagnosis
-  debug_session: ""  # Filled by diagnosis
+  root_cause: "The mismatched base-ui- id is a downstream symptom of a server↔client useId counter divergence in the Navbar's motion subtree. CartBadge.tsx:12 and MobileNavDrawer.tsx:31 call the RAW useReducedMotion() from motion/react — not the project's hydration-safe useReducedMotionSafe() wrapper (which documents exactly this hazard). Raw useReducedMotion resolves false on the server but the user's real value on the client's first render, so for a prefers-reduced-motion user the AnimatePresence subtrees render differently. Motion consumes React useId slots inside those subtrees (PresenceChild/PopChild/use-presence) from the SAME counter Base UI's Sheet later draws from. CartBadge renders before MobileNavDrawer (Navbar.tsx:66 vs 72), so the shift cascades into the SheetTrigger id. The `user` prop is stable/serialized and NOT the cause. Prior fix (commit 1e5c2f5) added useReducedMotionSafe but only migrated PageTransition, leaving these two callers raw — explaining the recurring auth-page error."
+  artifacts:
+    - path: "src/components/nav/CartBadge.tsx:12"
+      issue: "Calls raw useReducedMotion() inside AnimatePresence; primary upstream useId-counter divergence point."
+    - path: "src/components/nav/MobileNavDrawer.tsx:31"
+      issue: "Also calls raw useReducedMotion(); same hazard at the component reporting the mismatch."
+    - path: "src/components/pdp/PDPGallery.tsx:26"
+      issue: "Another raw useReducedMotion() consumer — audit for the same pattern."
+  missing:
+    - "Replace raw useReducedMotion() with useReducedMotionSafe() in CartBadge.tsx and MobileNavDrawer.tsx so server and first-client render agree (false), stabilizing the shared useId sequence."
+    - "Audit other raw useReducedMotion() consumers whose value affects render output (e.g. PDPGallery.tsx:26)."
+    - "Do NOT use suppressHydrationWarning on the SheetTrigger — it only masks the symptom."
+  debug_session: .planning/debug/navbar-baseui-hydration-mismatch.md
