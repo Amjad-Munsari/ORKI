@@ -16,8 +16,6 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 
-test.use({ reducedMotion: 'reduce' });
-
 // The Next dev server lazy-compiles routes on first hit; the very first
 // hydration of a cold route can emit a one-off transient that is NOT a real
 // mismatch (verified clean against a production build). Retry absorbs that
@@ -33,6 +31,8 @@ async function expectNoHydrationError(page: Page, path: string) {
   const onPageError = (e: Error) => {
     if (/hydrat/i.test(e.message)) errors.push(e.message);
   };
+  // Emulate the user preference that triggered the original mismatch.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   // Warm the route (dev lazy-compile) without measuring.
   await page.goto(path, { waitUntil: 'networkidle' });
   // Now measure a clean hydration on the warm route.

@@ -13,8 +13,8 @@
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useRouter, Link } from '@/i18n/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { Field } from '@/components/forms/Field';
 import { signInAction } from '@/app/actions/auth';
 import { signinSchema, type SigninInput } from '@/lib/auth/schemas';
@@ -38,7 +38,7 @@ function ariaProps(id: string, error: string | undefined) {
 export function LoginForm() {
   const t = useTranslations('Auth.login');
   const tErrors = useTranslations('Auth.errors');
-  const router = useRouter();
+  const locale = useLocale();
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -59,7 +59,12 @@ export function LoginForm() {
         setFormError(resolveAuthErrorMessage(tErrors, result.messageKey));
         return;
       }
-      router.push('/account');
+      // signInAction set the Supabase session cookie in its response. A soft
+      // (client) navigation can render /account before the server sees that
+      // cookie and bounce back to /login. A full-document navigation guarantees
+      // the cookie is sent and /account renders authenticated. Login is
+      // infrequent, so the full reload is an acceptable trade for correctness.
+      window.location.assign(`/${locale}/account`);
     });
   });
 
