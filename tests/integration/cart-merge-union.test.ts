@@ -8,6 +8,10 @@
  * Mirrors tests/integration/cart-merge.test.ts structure:
  *  - `describe.skipIf(!hasDbUrl)` gates live-DB tests
  *  - `seedProductWithSize` / `cleanPhase8Tables` / `deleteTestProduct` lifecycle
+ *
+ * Note: carts.userId is a cross-schema FK to auth.users — tests that exercise
+ * the user-cart branch create a real Supabase auth user via createTestUser and
+ * clean it up in afterAll. Tests are also gated on hasSupabaseEnv for that path.
  */
 import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 import {
@@ -15,26 +19,37 @@ import {
   cleanPhase8Tables,
   deleteTestProduct,
 } from '../helpers/test-db';
+import {
+  hasSupabaseEnv,
+  createTestUser,
+  cleanupTestUser,
+} from '../setup/supabase-test-client';
 import { seedProductWithSize } from '../helpers/factories';
 import { db } from '@/lib/db/client';
 import { carts, cartItems } from '@/lib/db/schema';
 import { eq, and, isNull } from 'drizzle-orm';
 import { mergeGuestCartIntoUserCart } from '@/lib/cart/merge-on-signin';
 
-const TEST_USER_ID = '00000000-0000-0000-0000-000000000001';
-const USER_SID = 'user-sid-merge-union-test';
 const GUEST_SID = 'guest-sid-merge-union-test';
+const USER_SID = 'user-sid-merge-union-test';
 
-describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', () => {
+// All 4 tests need both DB + Supabase env (for the auth.users FK)
+const canRun = hasDbUrl && hasSupabaseEnv;
+
+describe.skipIf(!canRun)('mergeGuestCartIntoUserCart — item-level union', () => {
   let seed: Awaited<ReturnType<typeof seedProductWithSize>>;
+  let testUserId: string;
 
   beforeAll(async () => {
     seed = await seedProductWithSize({ stock: 10, sizeLabel: 'L' });
+    const user = await createTestUser();
+    testUserId = user.userId;
   });
 
   afterAll(async () => {
     await cleanPhase8Tables();
     await deleteTestProduct(seed.productId);
+    await cleanupTestUser(testUserId);
   });
 
   beforeEach(async () => {
@@ -45,7 +60,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
     // Create user cart with qty 1
     const [userCart] = await db
       .insert(carts)
-      .values({ sessionId: USER_SID, userId: TEST_USER_ID, locale: 'en' })
+      .values({ sessionId: USER_SID, userId: testUserId, locale: 'en' })
       .returning();
     await db.insert(cartItems).values({
       cartId: userCart.id,
@@ -66,7 +81,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
       quantity: 2,
     });
 
-    await mergeGuestCartIntoUserCart(TEST_USER_ID, GUEST_SID);
+    await mergeGuestCartIntoUserCart(testUserId, GUEST_SID);
 
     const items = await db
       .select()
@@ -88,7 +103,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
     // User cart: only the first product
     const [userCart] = await db
       .insert(carts)
-      .values({ sessionId: USER_SID, userId: TEST_USER_ID, locale: 'en' })
+      .values({ sessionId: USER_SID, userId: testUserId, locale: 'en' })
       .returning();
     await db.insert(cartItems).values({
       cartId: userCart.id,
@@ -109,7 +124,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
       quantity: 3,
     });
 
-    await mergeGuestCartIntoUserCart(TEST_USER_ID, GUEST_SID);
+    await mergeGuestCartIntoUserCart(testUserId, GUEST_SID);
 
     const items = await db
       .select()
@@ -132,7 +147,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
     // User cart + guest cart with same item
     const [userCart] = await db
       .insert(carts)
-      .values({ sessionId: USER_SID, userId: TEST_USER_ID, locale: 'en' })
+      .values({ sessionId: USER_SID, userId: testUserId, locale: 'en' })
       .returning();
     await db.insert(cartItems).values({
       cartId: userCart.id,
@@ -152,7 +167,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
       quantity: 2,
     });
 
-    await mergeGuestCartIntoUserCart(TEST_USER_ID, GUEST_SID);
+    await mergeGuestCartIntoUserCart(testUserId, GUEST_SID);
 
     const remaining = await db
       .select()
@@ -174,7 +189,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
       quantity: 4,
     });
 
-    await mergeGuestCartIntoUserCart(TEST_USER_ID, GUEST_SID);
+    await mergeGuestCartIntoUserCart(testUserId, GUEST_SID);
 
     // Guest cart should now be owned by the user
     const claimed = await db
@@ -182,7 +197,7 @@ describe.skipIf(!hasDbUrl)('mergeGuestCartIntoUserCart — item-level union', ()
       .from(carts)
       .where(eq(carts.sessionId, GUEST_SID));
     expect(claimed).toHaveLength(1);
-    expect(claimed[0].userId).toBe(TEST_USER_ID);
+    expect(claimed[0].userId).toBe(testUserId);
 
     // Items should be intact
     const items = await db

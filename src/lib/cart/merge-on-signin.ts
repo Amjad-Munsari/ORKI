@@ -6,9 +6,10 @@ import 'server-only';
  *
  * Semantics (CONTEXT.md §"Guest cart merge behavior"):
  *  - If user has no server cart → claim the guest cart by setting userId = userId.
- *  - If user already has a server cart → prefer it. DELETE the guest cart silently
- *    (T-10-05-07 accepted: no item-level union per CONTEXT.md, simpler UX than
- *    "overwrite" or "replace").
+ *  - If user already has a server cart → union the guest cart's items into the
+ *    user cart (upsert with onConflictDoUpdate summing quantity on the
+ *    (cartId, productId, sizeId) unique index, mirroring addItemToCart in
+ *    server.ts:42-59), then delete the now-empty guest cart row.
  *
  * Race-safety (RESEARCH §7 #9): wrapped in db.transaction with SELECT ... FOR
  * UPDATE on the user's cart row. Two simultaneous tabs both calling this
@@ -16,8 +17,8 @@ import 'server-only';
  *   1. No user cart yet → first tab claims the guest cart; second tab sees the
  *      guest cart already userId-bound (or absent) and the WHERE userId IS NULL
  *      guard makes the second UPDATE a no-op.
- *   2. User cart present → both tabs delete the guest cart (idempotent: DELETE
- *      on a missing row is a no-op).
+ *   2. User cart present → both tabs proceed to the union branch; the second
+ *      tab will find the guest cart already gone and return early (no-op).
  *
  * Idempotent. Never throws raw — all errors are swallowed via the
  * migrateLocalCartAction precedent (src/app/actions/cart.ts:96-112). Auth flow
@@ -25,7 +26,7 @@ import 'server-only';
  */
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { db } from '@/lib/db/client';
-import { carts } from '@/lib/db/schema';
+import { carts, cartItems } from '@/lib/db/schema';
 
 export async function mergeGuestCartIntoUserCart(
   userId: string,
@@ -44,9 +45,49 @@ export async function mergeGuestCartIntoUserCart(
         .for('update');
 
       if (userCart.length > 0) {
-        // User already has a server cart → silently discard the guest cart.
-        // Guest cart is matched by sessionId AND a NULL userId guard — if a
-        // concurrent tab already claimed it, this DELETE is a no-op.
+        const userCartId = userCart[0].id;
+
+        // Resolve the guest cart row (sessionId + NULL userId guard).
+        // If a concurrent tab already claimed it, this is a no-op.
+        const guestCart = await tx
+          .select()
+          .from(carts)
+          .where(and(eq(carts.sessionId, sessionId), isNull(carts.userId)));
+        if (guestCart.length === 0) return; // already merged / no guest cart
+
+        // Load all items from the guest cart.
+        const guestItems = await tx
+          .select()
+          .from(cartItems)
+          .where(eq(cartItems.cartId, guestCart[0].id));
+
+        // Upsert each guest item into the user cart, summing quantities on
+        // conflict (cartId, productId, sizeId) — mirrors addItemToCart in
+        // src/lib/cart/server.ts:42-59.
+        for (const item of guestItems) {
+          await tx
+            .insert(cartItems)
+            .values({
+              cartId: userCartId,
+              productId: item.productId,
+              sizeId: item.sizeId,
+              quantity: item.quantity,
+            })
+            .onConflictDoUpdate({
+              target: [cartItems.cartId, cartItems.productId, cartItems.sizeId],
+              set: { quantity: sql`${cartItems.quantity} + ${item.quantity}` },
+            });
+        }
+
+        // Bump the user cart's updatedAt timestamp.
+        await tx
+          .update(carts)
+          .set({ updatedAt: sql`now()` })
+          .where(eq(carts.id, userCartId));
+
+        // Delete the now-empty guest cart row.
+        // Guest items were already moved above; the CASCADE only removes any
+        // remaining (already-unioned) guest items, which is harmless.
         await tx
           .delete(carts)
           .where(
