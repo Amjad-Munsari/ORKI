@@ -1,6 +1,7 @@
 'use client'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useCartStore } from '@/store/cartStore'
+import { useReducedMotionSafe } from '@/hooks/useReducedMotionSafe'
 
 
 // Server renders count=0 (skipHydration), client rehydrates actual value after StoreHydration mounts.
@@ -9,7 +10,7 @@ export function CartBadge() {
   const count = useCartStore(state =>
     state.items.reduce((n, i) => n + i.quantity, 0)
   )
-  const shouldReduceMotion = useReducedMotion()
+  const shouldReduceMotion = useReducedMotionSafe()
 
   return (
     <AnimatePresence mode="popLayout">

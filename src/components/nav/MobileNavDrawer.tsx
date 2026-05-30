@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import {motion, AnimatePresence, useReducedMotion} from 'motion/react';
+import {motion, AnimatePresence} from 'motion/react';
 import {useLocale, useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
 import {List, X} from '@phosphor-icons/react';
@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import {useDirection} from '@/hooks/useDirection';
+import {useReducedMotionSafe} from '@/hooks/useReducedMotionSafe';
 import {animationPresets} from '@/lib/animation-presets';
 import {UserMenu} from '@/components/auth/UserMenu';
 
@@ -28,7 +29,7 @@ export function MobileNavDrawer({user = null}: MobileNavDrawerProps) {
   const t = useTranslations('Nav');
   const locale = useLocale();
   const direction = useDirection(); // 1 for LTR (EN), -1 for RTL (AR)
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotionSafe();
 
   // Drawer slides from inline-end:
   // EN (LTR): inline-end is the right edge → side="right"
