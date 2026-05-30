@@ -84,8 +84,6 @@
     "sortNewest": "Newest",
     "sortPriceAsc": "Price: Low to High",
     "sortPriceDesc": "Price: High to Low",
-    "emptyHeading": "Nothing here yet.",
-    "emptyBody": "Browse all products or try a different category.",
     "empty": {
       "heading": "No drops in this category yet.",
       "body": "Check back Friday. Or browse everything we've shipped so far."

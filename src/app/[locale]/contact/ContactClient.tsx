@@ -7,10 +7,9 @@ interface Props {
   locale: 'en' | 'ar'
 }
 
-// Phase 11 D-16: WhatsApp number held as a single constant. UAT (Plan 11-16)
-// prompts the user to replace 'TBD' with the real international number
-// (no leading +, no spaces, no dashes). e.g. '966555123456'.
-const WA_NUMBER = 'TBD'
+// Phase 11 D-16: WhatsApp number held as a single constant. Set during Plan
+// 11-15 UAT (international format — no leading +, no spaces, no dashes).
+const WA_NUMBER: string = '905539339440'
 
 export function ContactClient({ locale }: Props) {
   const isRtl = locale === 'ar'
