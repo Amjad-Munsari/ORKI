@@ -1,17 +1,22 @@
 /**
  * Phase 10 Plan 04 — Supabase recovery-link callback.
  *
- * Receives `?code=<oauth-pkce-code>&next=<destination>` from the recovery
- * email link (issued by `supabase.auth.resetPasswordForEmail` in
- * requestPasswordResetAction, Plan 10-03). Exchanges the code for a session
- * via the SSR client (writes the auth cookies) then redirects to `next`
- * (defaults to /en/reset-password).
+ * Handles TWO link shapes produced by Supabase:
+ *
+ *  PRIMARY — `token_hash` + `type=recovery` (Supabase default "Reset Password"
+ *  email template). Verified via `supabase.auth.verifyOtp({ type: 'recovery',
+ *  token_hash })`. This is the shape real users receive from a stock Supabase
+ *  project — no email-template customisation required.
+ *
+ *  FALLBACK — `?code=<pkce-code>` shape. Verified via
+ *  `supabase.auth.exchangeCodeForSession(code)`. Used when the Supabase project
+ *  is configured for PKCE email links (custom template or future default change).
  *
  * Per RESEARCH §7 #14: this route lives at `/api/auth/callback` (INSIDE /api)
  * so next-intl middleware excludes it — the route handler creates its own
  * SSR client and owns the cookie write.
  *
- * On any failure (missing code, exchange error) we redirect to
+ * On any failure (missing params, exchange/verify error) we redirect to
  * /en/forgot-password?error=invalid_link rather than surfacing internals
  * (SEC-06 generic error policy).
  */
@@ -38,6 +43,24 @@ export async function GET(request: Request) {
   // requestPasswordResetAction). Default to the resolved locale when absent.
   const next = searchParams.get('next') ?? `/${locale}/reset-password`;
 
+  // PRIMARY: token_hash + type=recovery — Supabase's default "Reset Password"
+  // email shape. verifyOtp matches the stock template and avoids PKCE
+  // code_verifier-cookie fragility on cross-context email clicks.
+  const token_hash = searchParams.get('token_hash');
+  const type = searchParams.get('type');
+  if (token_hash && type === 'recovery') {
+    try {
+      const supabase = await createClient();
+      const { error } = await supabase.auth.verifyOtp({ type: 'recovery', token_hash });
+      if (!error) {
+        return NextResponse.redirect(`${origin}${next}`);
+      }
+    } catch (err) {
+      console.error('[auth/callback]', err);
+    }
+  }
+
+  // FALLBACK: ?code PKCE shape (custom template or future Supabase default).
   if (code) {
     try {
       const supabase = await createClient();
