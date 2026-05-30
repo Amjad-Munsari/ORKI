@@ -70,7 +70,7 @@ Plans:
 ### Phase 10: Authentication & Security Core
 **Goal:** Implement secure user authentication and fundamental API security.
 **Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09
-**Plans:** 7 plans (Wave 0..3)
+**Plans:** 8/8 plans complete
 **Success Criteria:**
 1. User can register and log in via httpOnly cookies
 2. Invalid login returns generic message and locks after repeated failures
