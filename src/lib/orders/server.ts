@@ -24,6 +24,12 @@ import { assertTransition, canTransition } from './state-machine';
 import { OrderError, type OrderErrorCode } from './errors';
 import { simulatePayment } from './payment';
 import { checkoutSchema, type CheckoutInput } from '@/lib/checkout/schemas';
+import {
+  sendOrderConfirmed,
+  sendOrderShipped,
+  sendOrderCancelled,
+  sendOrderRefunded,
+} from '@/lib/email/send';
 
 /**
  * Canonical Server Action result envelope. The client maps `code` + `messageKey`
@@ -290,6 +296,26 @@ export async function submitCheckout(
     };
   }
 
+  // Post-commit side effects. Email failures must NOT roll back the order.
+  // CONTRACT: this block lives OUTSIDE the db.transaction(...) closure above —
+  // the order is already committed by the time we get here.
+  try {
+    const persisted = await getOrderByReference(createdReference);
+    if (persisted) {
+      const result = await sendOrderConfirmed(persisted);
+      if (!result.ok) {
+        console.warn(
+          `[submitCheckout][${requestId}] confirmation email returned ${result.code} for ${createdReference}`
+        );
+      }
+    }
+  } catch (emailErr) {
+    console.error(
+      `[submitCheckout][${requestId}] post-commit email error for ${createdReference}`,
+      emailErr
+    );
+  }
+
   revalidatePath('/[locale]/checkout', 'page');
   revalidatePath('/[locale]/admin/orders', 'page');
 
@@ -308,6 +334,22 @@ export async function getOrderByReference(
 ): Promise<Order | null> {
   const row = await db.query.orders.findFirst({
     where: eq(orders.reference, reference),
+    with: {
+      items: true,
+      events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
+    },
+  });
+  return row ? toOrder(row) : null;
+}
+
+/**
+ * Internal-id lookup used by the post-commit email dispatch in
+ * `transitionOrderStatus` (Plan 08-07). Mirrors `getOrderByReference` but keys
+ * on `orders.id`. Returns null when the id is not found.
+ */
+export async function getOrderById(orderId: string): Promise<Order | null> {
+  const row = await db.query.orders.findFirst({
+    where: eq(orders.id, orderId),
     with: {
       items: true,
       events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
@@ -384,8 +426,9 @@ export async function transitionOrderStatus(
   } = {}
 ): Promise<ActionResult<null>> {
   const requestId = newRequestId();
+  let result: ActionResult<null>;
   try {
-    return await db.transaction(async (tx) => {
+    result = await db.transaction(async (tx) => {
       const [current] = await tx
         .select()
         .from(orders)
@@ -479,6 +522,33 @@ export async function transitionOrderStatus(
       messageKey: 'Checkout.errors.unknown',
     };
   }
+
+  // Post-commit email dispatch. Failures are logged, never re-thrown, and never
+  // change the function's return value. Lives OUTSIDE the db.transaction(...)
+  // closure above — only fires on a committed, successful transition.
+  if (result.ok) {
+    try {
+      const persisted = await getOrderById(orderId);
+      if (persisted) {
+        let r: Awaited<ReturnType<typeof sendOrderShipped>> | undefined;
+        if (to === 'shipped') r = await sendOrderShipped(persisted);
+        else if (to === 'cancelled') r = await sendOrderCancelled(persisted);
+        else if (to === 'refunded') r = await sendOrderRefunded(persisted);
+        if (r && !r.ok) {
+          console.warn(
+            `[transitionOrderStatus][${requestId}] ${to} email returned ${r.code}`
+          );
+        }
+      }
+    } catch (emailErr) {
+      console.error(
+        `[transitionOrderStatus][${requestId}] post-commit email error`,
+        emailErr
+      );
+    }
+  }
+
+  return result;
 }
 
 // ─── Row → Domain mapping ─────────────────────────────────────────────────────

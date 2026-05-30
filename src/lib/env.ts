@@ -33,6 +33,11 @@ const envSchema = z
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(100),
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(100),
     SUPABASE_ADMIN_EMAILS: z.string().min(1),
+    // Phase 8 (Plan 08-07) — Resend transactional email. All optional so the
+    // build/dev server runs without a key; the email subsystem no-ops instead.
+    RESEND_API_KEY: z.string().optional(),
+    RESEND_FROM_EMAIL: z.string().email().default('onboarding@resend.dev'),
+    ORKI_BASE_URL: z.string().url().optional(),
   })
   .transform((data) => ({
     DB_URL: data.STORAGE_URL ?? data.DATABASE_URL,
@@ -41,6 +46,9 @@ const envSchema = z
     NEXT_PUBLIC_SUPABASE_ANON_KEY: data.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     SUPABASE_SERVICE_ROLE_KEY: data.SUPABASE_SERVICE_ROLE_KEY,
     SUPABASE_ADMIN_EMAILS: data.SUPABASE_ADMIN_EMAILS,
+    RESEND_API_KEY: data.RESEND_API_KEY,
+    RESEND_FROM_EMAIL: data.RESEND_FROM_EMAIL,
+    ORKI_BASE_URL: data.ORKI_BASE_URL,
   }))
   .refine((data) => Boolean(data.DB_URL), {
     message:
