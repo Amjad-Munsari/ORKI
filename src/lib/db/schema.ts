@@ -18,8 +18,9 @@ import {
   index,
   uniqueIndex,
   jsonb,
+  check,
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -47,6 +48,9 @@ export const products = pgTable(
   (table) => [
     index('products_category_idx').on(table.category),
     index('products_in_stock_idx').on(table.inStock),
+    check('products_price_nonneg', sql`${table.price} >= 0`),
+    check('products_category_valid', sql`${table.category} in ('tops', 'bottoms')`),
+    check('products_currency_valid', sql`${table.currency} = 'SAR'`),
   ]
 );
 
@@ -57,17 +61,29 @@ export const productsRelations = relations(products, ({ many }) => ({
 
 // ─── Product Sizes ─────────────────────────────────────────────────────────────
 
-export const productSizes = pgTable('product_sizes', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  /** FK to products.id — cascades delete so removing a product removes its sizes */
-  productId: text('product_id')
-    .notNull()
-    .references(() => products.id, { onDelete: 'cascade' }),
-  /** Size label: 'XS' | 'S' | 'M' | 'L' | 'XL' */
-  label: text('label').notNull(),
-  stock: integer('stock').notNull().default(0),
-  inStock: boolean('in_stock').notNull().default(true),
-});
+export const productSizes = pgTable(
+  'product_sizes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    /** FK to products.id — cascades delete so removing a product removes its sizes */
+    productId: text('product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    /** Size label: 'XS' | 'S' | 'M' | 'L' | 'XL' */
+    label: text('label').notNull(),
+    stock: integer('stock').notNull().default(0),
+    inStock: boolean('in_stock').notNull().default(true),
+  },
+  (table) => [
+    // One row per (product, label) — stock restoration / inStock reconciliation
+    // assume label uniqueness within a product.
+    uniqueIndex('product_sizes_product_label_unq').on(
+      table.productId,
+      table.label
+    ),
+    check('product_sizes_stock_nonneg', sql`${table.stock} >= 0`),
+  ]
+);
 
 export const productSizesRelations = relations(productSizes, ({ one }) => ({
   product: one(products, {
@@ -119,6 +135,7 @@ export const carts = pgTable(
   (table) => [
     index('carts_session_id_idx').on(table.sessionId),
     index('carts_user_id_idx').on(table.userId),
+    check('carts_locale_valid', sql`${table.locale} in ('en', 'ar')`),
   ]
 );
 
@@ -137,6 +154,7 @@ export const cartItems = pgTable(
     uniqueIndex('cart_items_cart_product_size_unq').on(
       table.cartId, table.productId, table.sizeId
     ),
+    check('cart_items_quantity_positive', sql`${table.quantity} > 0`),
   ]
 );
 
@@ -204,6 +222,8 @@ export const orders = pgTable(
     index('orders_user_id_idx').on(table.userId),
     index('orders_status_idx').on(table.status),
     index('orders_placed_at_idx').on(table.placedAt),
+    check('orders_currency_valid', sql`${table.currency} = 'SAR'`),
+    check('orders_locale_valid', sql`${table.locale} in ('en', 'ar')`),
   ]
 );
 
@@ -222,6 +242,7 @@ export const orderItems = pgTable(
   (table) => [
     index('order_items_order_id_idx').on(table.orderId),
     index('order_items_product_id_idx').on(table.productId),
+    check('order_items_quantity_positive', sql`${table.quantity} > 0`),
   ]
 );
 
