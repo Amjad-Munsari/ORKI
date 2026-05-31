@@ -1,5 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'motion/react'
+import { useTranslations } from 'next-intl'
 import { useCartStore } from '@/store/cartStore'
 import { useReducedMotionSafe } from '@/hooks/useReducedMotionSafe'
 
@@ -10,6 +11,7 @@ export function CartBadge() {
   const count = useCartStore(state =>
     state.items.reduce((n, i) => n + i.quantity, 0)
   )
+  const t = useTranslations('Nav')
   const shouldReduceMotion = useReducedMotionSafe()
 
   return (
@@ -29,7 +31,7 @@ export function CartBadge() {
           className="absolute -bottom-1 -end-2
                      text-[10px] font-bold leading-none text-white
                      pointer-events-none select-none z-10 tabular-nums"
-          aria-label={`${count} items in cart`}
+          aria-label={t('cartItemCount', { count })}
         >
           {count}
         </motion.span>

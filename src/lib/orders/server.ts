@@ -442,15 +442,20 @@ export async function getOrdersForUser(
 }
 
 /**
- * Admin-list helper. Newest-placed first.
+ * Admin-list helper. Newest-placed first. Bounded by `limit` (default 200,
+ * hard-capped at 500) so the admin list can't load the entire orders table
+ * with all joins into memory as volume grows. Pagination UI can pass an offset
+ * later; for now this is a defensive ceiling.
  */
-export async function getAllOrders(): Promise<Order[]> {
+export async function getAllOrders(limit = 200): Promise<Order[]> {
+  const safeLimit = Math.min(Math.max(1, Math.floor(limit)), 500);
   const rows = await db.query.orders.findMany({
     with: {
       items: true,
       events: { orderBy: (e, { asc }) => [asc(e.createdAt)] },
     },
     orderBy: (o, { desc: d }) => [d(o.placedAt)],
+    limit: safeLimit,
   });
   return rows.map(toOrder);
 }

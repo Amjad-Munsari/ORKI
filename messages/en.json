@@ -12,7 +12,8 @@
     "categories": "Categories",
     "cart": "Cart",
     "signIn": "Sign in",
-    "account": "Account"
+    "account": "Account",
+    "cartItemCount": "{count, plural, =0 {No items in cart} one {# item in cart} other {# items in cart}}"
   },
   "Footer": {
     "shipping": "Shipping",

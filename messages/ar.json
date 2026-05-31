@@ -12,7 +12,8 @@
     "categories": "الفئات",
     "cart": "السلة",
     "signIn": "تسجيل الدخول",
-    "account": "الحساب"
+    "account": "الحساب",
+    "cartItemCount": "{count, plural, =0 {لا عناصر في السلة} one {عنصر واحد في السلة} two {عنصران في السلة} few {# عناصر في السلة} many {# عنصراً في السلة} other {# عنصر في السلة}}"
   },
   "Footer": {
     "shipping": "الشحن",
