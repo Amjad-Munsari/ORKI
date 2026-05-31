@@ -4,17 +4,21 @@ import { products, productSizes, productImages } from '@/lib/db/schema';
 import { requireAdmin, AdminAuthError } from '@/lib/auth/require-admin';
 import { seedData } from '../../../../scripts/seed-data';
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   // AUTHORIZATION: this route writes (and with ?force=1 destructively wipes) the
   // product catalog. The middleware matcher excludes /api, so it is otherwise
-  // wholly ungated. Outside local dev, require an authenticated admin.
-  if (process.env.NODE_ENV === 'production') {
-    try {
-      await requireAdmin('seed');
-    } catch (authErr) {
-      const status = authErr instanceof AdminAuthError ? 403 : 401;
-      return NextResponse.json({ ok: false, error: 'Forbidden' }, { status });
-    }
+  // wholly ungated. Require an authenticated admin in EVERY environment — the
+  // prior NODE_ENV==='production' gate left preview/dev deployments open to an
+  // unauthenticated catalog wipe. Local seeding should use `npm run db:seed`
+  // (scripts/seed.ts), which bypasses this route entirely.
+  //
+  // This is a POST (not GET) so it cannot be triggered by prefetch, crawlers,
+  // or a CSRF <img>/<link> tag.
+  try {
+    await requireAdmin('seed');
+  } catch (authErr) {
+    const status = authErr instanceof AdminAuthError ? 403 : 401;
+    return NextResponse.json({ ok: false, error: 'Forbidden' }, { status });
   }
 
   try {
