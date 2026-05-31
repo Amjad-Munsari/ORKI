@@ -68,13 +68,6 @@ export default async function AdminLayout({
             <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
           <Link
-            href="/admin/products"
-            className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
-          >
-            <span className="font-bold uppercase tracking-tight">Products</span>
-            <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-          </Link>
-          <Link
             href="/admin/orders"
             className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
           >

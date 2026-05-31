@@ -32,3 +32,6 @@ next-env.d.ts
 
 # Local-only session handoff notes
 HANDOFF.md
+
+# Ad-hoc scratch/probe scripts and their output (never commit)
+tmp-*

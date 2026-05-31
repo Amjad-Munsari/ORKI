@@ -37,7 +37,8 @@
       "Bash(npx shadcn *)",
       "Bash(npx tsc *)",
       "Bash(New-Item -ItemType Directory -Force -Path \"C:\\\\dev\\\\Antigravity\\\\ORKI\\\\src\\\\app\\\\[locale]\\\\shop\\\\[category]\\\\[slug]\")",
-      "Bash(Out-Null)"
+      "Bash(Out-Null)",
+      "Bash(gsd-sdk query *)"
     ]
   }
 }
