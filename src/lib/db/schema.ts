@@ -233,6 +233,12 @@ export const orderItems = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     orderId: uuid('order_id').notNull().references(() => orders.id, { onDelete: 'cascade' }),
     productId: text('product_id').notNull().references(() => products.id),
+    /**
+     * FK to the purchased size row. Nullable + ON DELETE SET NULL: order_items
+     * is a historical snapshot, so a deleted size must not delete the line.
+     * Stock restoration prefers this id; sizeLabel is the snapshot fallback.
+     */
+    sizeId: uuid('size_id').references(() => productSizes.id, { onDelete: 'set null' }),
     sizeLabel: text('size_label').notNull(),
     productNameEn: text('product_name_en').notNull(),
     productNameAr: text('product_name_ar').notNull(),
@@ -242,6 +248,7 @@ export const orderItems = pgTable(
   (table) => [
     index('order_items_order_id_idx').on(table.orderId),
     index('order_items_product_id_idx').on(table.productId),
+    index('order_items_size_id_idx').on(table.sizeId),
     check('order_items_quantity_positive', sql`${table.quantity} > 0`),
   ]
 );
@@ -275,6 +282,7 @@ export const ordersRelations = relations(orders, ({ many }) => ({
 export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   order: one(orders, { fields: [orderItems.orderId], references: [orders.id] }),
   product: one(products, { fields: [orderItems.productId], references: [products.id] }),
+  size: one(productSizes, { fields: [orderItems.sizeId], references: [productSizes.id] }),
 }));
 
 export const orderEventsRelations = relations(orderEvents, ({ one }) => ({

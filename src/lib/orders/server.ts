@@ -259,6 +259,7 @@ export async function submitCheckout(
         cart.items.map((item) => ({
           orderId: orderRow!.id,
           productId: item.productId,
+          sizeId: item.sizeId,
           sizeLabel: item.sizeLabel,
           productNameEn: item.product.name.en,
           productNameAr: item.product.name.ar,
@@ -520,18 +521,25 @@ export async function transitionOrderStatus(
           .from(orderItems)
           .where(eq(orderItems.orderId, orderId));
         for (const it of items) {
-          // Match the productSizes row by (productId, sizeLabel) snapshot —
-          // size IDs are not denormalized into order_items.
-          const sized = await tx
-            .select()
-            .from(productSizes)
-            .where(
-              and(
-                eq(productSizes.productId, it.productId),
-                eq(productSizes.label, it.sizeLabel)
-              )
-            )
-            .for('update');
+          // Prefer the denormalized size_id (stable across label renames);
+          // fall back to the (productId, sizeLabel) snapshot for legacy rows
+          // written before size_id existed, or if the size was since deleted.
+          const sized = it.sizeId
+            ? await tx
+                .select()
+                .from(productSizes)
+                .where(eq(productSizes.id, it.sizeId))
+                .for('update')
+            : await tx
+                .select()
+                .from(productSizes)
+                .where(
+                  and(
+                    eq(productSizes.productId, it.productId),
+                    eq(productSizes.label, it.sizeLabel)
+                  )
+                )
+                .for('update');
           const size = sized[0];
           if (size) {
             await tx
