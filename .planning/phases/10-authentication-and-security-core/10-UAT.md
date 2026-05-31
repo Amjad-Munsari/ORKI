@@ -209,7 +209,8 @@ re_verification_2026_05_31:
 session_2026_05_31_b:
   - test 4 sign-out fix committed (1bb3933); tsc + eslint clean
   - test 12 closed as dev-only cosmetic non-blocker; production build verified compiling cleanly
-  - remaining blockers: test 7 (real recovery email), test 9 (order data) — both external prerequisites, not code defects
+  - test 7 + test 9 UNBLOCKED via two new live-Supabase integration tests (commit e5f10b8); 5/5 passing, tsc + eslint clean
+  - phase now: 16 pass, 1 accepted cosmetic (test 12), 0 blocked
 
 ## Gaps
 
