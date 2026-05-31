@@ -10,10 +10,27 @@
  */
 import 'server-only';
 import { db } from '@/lib/db/client';
-import { cartItems, carts } from '@/lib/db/schema';
+import { cartItems, carts, productSizes } from '@/lib/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { toProduct } from '@/lib/products';
 import type { Cart, ServerCartItem, Locale } from '@/types/domain';
+
+/**
+ * Typed cart-mutation failure so Server Actions can map it to a precise
+ * client envelope (validation / product-not-found / insufficient-stock)
+ * instead of collapsing everything to UNKNOWN.
+ */
+export class CartMutationError extends Error {
+  constructor(
+    public readonly code: 'VALIDATION' | 'PRODUCT_NOT_FOUND' | 'INSUFFICIENT_STOCK'
+  ) {
+    super(code);
+    this.name = 'CartMutationError';
+  }
+}
+
+/** Largest quantity a single cart line may hold, independent of stock. */
+const MAX_LINE_QUANTITY = 99;
 
 /**
  * Returns the full cart (with joined items + product snapshots), or null when
@@ -38,6 +55,12 @@ export async function getCart(cartId: string): Promise<Cart | null> {
 /**
  * UPSERT an item onto the cart. Increments quantity on conflict via the
  * unique composite index (cartId, productId, sizeId).
+ *
+ * Validates that `quantity` is a positive integer and caps the resulting line
+ * quantity at the size's available stock (and a hard MAX_LINE_QUANTITY). The
+ * cap is also enforced in SQL (LEAST) so the increment-on-conflict path can't
+ * exceed stock either. Final authoritative stock is still re-checked under a
+ * row lock at checkout — this is a cart-side guard against unbounded growth.
  */
 export async function addItemToCart(
   cartId: string,
@@ -45,12 +68,26 @@ export async function addItemToCart(
   sizeId: string,
   quantity: number
 ): Promise<void> {
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new CartMutationError('VALIDATION');
+  }
+
+  const size = await db.query.productSizes.findFirst({
+    where: and(eq(productSizes.id, sizeId), eq(productSizes.productId, productId)),
+  });
+  if (!size) throw new CartMutationError('PRODUCT_NOT_FOUND');
+
+  const available = Math.min(size.stock ?? 0, MAX_LINE_QUANTITY);
+  if (available < 1) throw new CartMutationError('INSUFFICIENT_STOCK');
+
+  const insertQty = Math.min(quantity, available);
   await db
     .insert(cartItems)
-    .values({ cartId, productId, sizeId, quantity })
+    .values({ cartId, productId, sizeId, quantity: insertQty })
     .onConflictDoUpdate({
       target: [cartItems.cartId, cartItems.productId, cartItems.sizeId],
-      set: { quantity: sql`${cartItems.quantity} + ${quantity}` },
+      // Cap the incremented quantity at available stock.
+      set: { quantity: sql`LEAST(${cartItems.quantity} + ${quantity}, ${available})` },
     });
   await db
     .update(carts)
@@ -59,21 +96,36 @@ export async function addItemToCart(
 }
 
 /**
- * Sets an absolute quantity for a cart item. quantity <= 0 deletes the row.
+ * Sets an absolute quantity for a cart item. A non-positive (or non-integer
+ * <= 0) quantity deletes the row; otherwise the value is validated as a
+ * positive integer and capped at the size's available stock (and
+ * MAX_LINE_QUANTITY).
  */
 export async function updateCartItemQuantity(
   cartId: string,
   cartItemId: string,
   quantity: number
 ): Promise<void> {
+  if (!Number.isInteger(quantity)) throw new CartMutationError('VALIDATION');
+
   if (quantity <= 0) {
     await db
       .delete(cartItems)
       .where(and(eq(cartItems.id, cartItemId), eq(cartItems.cartId, cartId)));
   } else {
+    const item = await db.query.cartItems.findFirst({
+      where: and(eq(cartItems.id, cartItemId), eq(cartItems.cartId, cartId)),
+      with: { size: true },
+    });
+    if (!item) throw new CartMutationError('PRODUCT_NOT_FOUND');
+
+    const available = Math.min(item.size?.stock ?? 0, MAX_LINE_QUANTITY);
+    if (available < 1) throw new CartMutationError('INSUFFICIENT_STOCK');
+
+    const capped = Math.min(quantity, available);
     await db
       .update(cartItems)
-      .set({ quantity })
+      .set({ quantity: capped })
       .where(and(eq(cartItems.id, cartItemId), eq(cartItems.cartId, cartId)));
   }
   await db

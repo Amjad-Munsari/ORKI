@@ -22,6 +22,7 @@ import {
   addItemToCart,
   updateCartItemQuantity,
   removeCartItem,
+  CartMutationError,
 } from '@/lib/cart/server';
 import {
   migrateLocalStorageCart,
@@ -37,6 +38,24 @@ export type ActionResult<T = unknown> =
       messageKey: string;
     };
 
+type CartActionError = Extract<ActionResult, { ok: false }>;
+
+/**
+ * Maps a typed CartMutationError to the precise client envelope; returns null
+ * for anything else so the caller falls back to the generic UNKNOWN envelope.
+ */
+function mapCartError(err: unknown): CartActionError | null {
+  if (!(err instanceof CartMutationError)) return null;
+  switch (err.code) {
+    case 'INSUFFICIENT_STOCK':
+      return { ok: false, code: 'INSUFFICIENT_STOCK', messageKey: 'Checkout.errors.stockUnavailable' };
+    case 'VALIDATION':
+      return { ok: false, code: 'VALIDATION', messageKey: 'Checkout.errors.validation' };
+    case 'PRODUCT_NOT_FOUND':
+      return { ok: false, code: 'PRODUCT_NOT_FOUND', messageKey: 'Checkout.errors.unknown' };
+  }
+}
+
 export async function addToCartAction(
   productId: string,
   sizeId: string,
@@ -50,6 +69,8 @@ export async function addToCartAction(
     revalidatePath('/[locale]/checkout', 'page');
     return { ok: true, data: cart };
   } catch (err) {
+    const mapped = mapCartError(err);
+    if (mapped) return mapped;
     console.error('[addToCartAction]', err);
     return { ok: false, code: 'UNKNOWN', messageKey: 'Checkout.errors.unknown' };
   }
@@ -67,6 +88,8 @@ export async function updateQtyAction(
     revalidatePath('/[locale]/checkout', 'page');
     return { ok: true, data: cart };
   } catch (err) {
+    const mapped = mapCartError(err);
+    if (mapped) return mapped;
     console.error('[updateQtyAction]', err);
     return { ok: false, code: 'UNKNOWN', messageKey: 'Checkout.errors.unknown' };
   }
