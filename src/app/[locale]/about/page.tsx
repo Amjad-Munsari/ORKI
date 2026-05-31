@@ -53,11 +53,11 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </span>
             </div>
 
-            <section className="space-y-8 max-w-xl">
+            <section className="space-y-8">
               <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
                 {isRtl ? 'جذورنا' : '02 — Heritage'}
               </span>
-              <p className="font-normal text-base leading-relaxed text-white/80">
+              <p className="font-light text-2xl md:text-4xl tracking-tight text-white leading-tight">
                 {isRtl
                   ? 'من قلب نجد إلى شوارع العالم. تصاميمنا تدمج الخطوط الكلاسيكية مع القصات العصرية، لخلق توازن فريد يعبر عن الجيل الجديد.'
                   : 'From the heart of Najd to the streets of the world. Our designs merge classic lines with modern silhouettes, creating a unique balance that speaks for the new generation.'}
@@ -79,7 +79,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <span className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
                 {isRtl ? 'الجودة' : '03 — Quality'}
               </span>
-              <p className="font-normal text-base leading-relaxed text-white/80">
+              <p className="font-light text-2xl md:text-4xl tracking-tight text-white leading-tight">
                 {isRtl
                   ? 'نحن نستخدم أجود أنواع القطن والمنسوجات، مع اهتمام فائق بالتفاصيل الدقيقة التي تجعل كل قطعة عملاً فنياً قائماً بذاته.'
                   : 'We use the finest cotton and textiles, with obsessive attention to the minute details that make every piece a standalone work of art.'}

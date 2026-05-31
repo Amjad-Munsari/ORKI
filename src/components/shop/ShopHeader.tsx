@@ -99,9 +99,14 @@ export function ShopHeader({ activeCategory, activeSort, productCount, locale }:
               aria-label={locale === 'ar' ? 'ترتيب المنتجات' : 'Sort products'}
               className="w-auto min-w-[180px] bg-transparent border-white/[0.12] text-white hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <SelectValue />
+              <SelectValue>
+                {(value) => sorts.find((s) => s.value === value)?.label ?? ''}
+              </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-[var(--color-secondary-surface)] border-white/[0.12] text-white">
+            <SelectContent
+              alignItemWithTrigger={false}
+              className="bg-[var(--color-secondary-surface)] border-white/[0.12] text-white"
+            >
               {sorts.map(({ value, label }) => (
                 <SelectItem
                   key={value}
