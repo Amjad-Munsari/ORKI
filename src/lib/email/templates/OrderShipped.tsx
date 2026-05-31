@@ -9,6 +9,7 @@ import {
   Hr,
 } from '@react-email/components';
 import type { Locale } from '@/types/domain';
+import { emailFontFamily, StoreCta } from './_shared';
 
 interface Props {
   locale: Locale;
@@ -47,9 +48,7 @@ export default function OrderShippedEmail({
       <Head />
       <Body
         style={{
-          fontFamily: isRtl
-            ? '"IBM Plex Sans Arabic", sans-serif'
-            : '"Space Grotesk", sans-serif',
+          fontFamily: emailFontFamily(isRtl),
           backgroundColor: '#000',
           color: '#fff',
           margin: 0,
@@ -75,6 +74,7 @@ export default function OrderShippedEmail({
               {t.trackingLabel}: <strong>{trackingNumber}</strong>
             </Text>
           )}
+          <StoreCta locale={locale} />
           <Hr style={{ borderColor: '#222' }} />
           <Text style={{ color: '#777', fontSize: 12 }}>{t.footer}</Text>
         </Container>

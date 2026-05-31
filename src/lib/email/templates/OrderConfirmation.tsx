@@ -10,6 +10,7 @@ import {
   Section,
 } from '@react-email/components';
 import type { Locale } from '@/types/domain';
+import { emailFontFamily, StoreCta } from './_shared';
 
 interface Props {
   locale: Locale;
@@ -37,9 +38,7 @@ const COPY = {
 } as const;
 
 const bodyStyle = (isRtl: boolean) => ({
-  fontFamily: isRtl
-    ? '"IBM Plex Sans Arabic", sans-serif'
-    : '"Space Grotesk", sans-serif',
+  fontFamily: emailFontFamily(isRtl),
   backgroundColor: '#000',
   color: '#fff',
   margin: 0,
@@ -85,6 +84,7 @@ export default function OrderConfirmationEmail({
           <Text>
             {t.totalLabel}: <strong>{totalFormatted}</strong>
           </Text>
+          <StoreCta locale={locale} />
           <Hr style={{ borderColor: '#222' }} />
           <Text style={{ color: '#777', fontSize: 12 }}>{t.footer}</Text>
         </Container>

@@ -20,3 +20,16 @@ if (env.NODE_ENV !== 'production' && resend) {
 }
 
 export const FROM_EMAIL = env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev';
+
+// In production, a real API key paired with the sandbox sender means customer
+// mail only reaches the Resend account owner and looks untrustworthy. Warn
+// loudly (non-fatal) so the misconfiguration is caught in logs.
+if (
+  env.NODE_ENV === 'production' &&
+  resend &&
+  FROM_EMAIL === 'onboarding@resend.dev'
+) {
+  console.warn(
+    '[email] RESEND_API_KEY is set but RESEND_FROM_EMAIL is unset — sending from the Resend sandbox (onboarding@resend.dev), which only delivers to the account owner. Set a verified RESEND_FROM_EMAIL (e.g. orders@orki.sa).'
+  );
+}
