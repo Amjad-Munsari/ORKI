@@ -24,6 +24,14 @@ const conn =
     max: env.NODE_ENV === 'production' ? 10 : 1,
     connect_timeout: 10,
     ssl: 'require',
+    // Supabase's transaction pooler (PgBouncer) does not support prepared
+    // statements; disabling them keeps the same connection string working on
+    // the pooler, the session pooler, and a direct connection. Bound idle/max
+    // lifetimes so the pooler can reclaim connections without surfacing as
+    // intermittent "connection closed" errors.
+    prepare: false,
+    idle_timeout: 20,
+    max_lifetime: 60 * 30,
   });
 
 if (env.NODE_ENV !== 'production') {

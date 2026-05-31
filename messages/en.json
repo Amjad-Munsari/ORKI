@@ -491,6 +491,7 @@
       "emailInvalid": "Enter a valid email address.",
       "passwordRequired": "Password is required.",
       "passwordTooShort": "Password must be at least 8 characters.",
+      "passwordTooLong": "Password must be at most 72 characters.",
       "passwordMismatch": "Passwords do not match.",
       "acceptTermsRequired": "You must agree to the terms to create an account.",
       "tooManyAttempts": "Too many attempts. Try again in a few minutes.",

@@ -23,7 +23,10 @@ export const signupSchema = z.object({
     .trim()
     .toLowerCase()
     .email('Auth.errors.emailInvalid'),
-  password: z.string().min(8, 'Auth.errors.passwordTooShort'),
+  password: z
+    .string()
+    .min(8, 'Auth.errors.passwordTooShort')
+    .max(72, 'Auth.errors.passwordTooLong'),
   acceptTerms: z.boolean().refine((v) => v === true, {
     message: 'Auth.errors.acceptTermsRequired',
   }),
@@ -48,8 +51,14 @@ export const requestResetSchema = z.object({
 
 export const setPasswordSchema = z
   .object({
-    password: z.string().min(8, 'Auth.errors.passwordTooShort'),
-    confirmPassword: z.string().min(8, 'Auth.errors.passwordTooShort'),
+    password: z
+      .string()
+      .min(8, 'Auth.errors.passwordTooShort')
+      .max(72, 'Auth.errors.passwordTooLong'),
+    confirmPassword: z
+      .string()
+      .min(8, 'Auth.errors.passwordTooShort')
+      .max(72, 'Auth.errors.passwordTooLong'),
   })
   .refine((d) => d.password === d.confirmPassword, {
     message: 'Auth.errors.passwordMismatch',

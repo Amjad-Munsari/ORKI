@@ -491,6 +491,7 @@
       "emailInvalid": "أدخل بريدًا إلكترونيًا صحيحًا.",
       "passwordRequired": "كلمة المرور مطلوبة.",
       "passwordTooShort": "يجب ألا تقل كلمة المرور عن 8 أحرف.",
+      "passwordTooLong": "يجب ألا تزيد كلمة المرور عن 72 حرفاً.",
       "passwordMismatch": "كلمتا المرور غير متطابقتين.",
       "acceptTermsRequired": "يجب الموافقة على الشروط لإنشاء حساب.",
       "tooManyAttempts": "محاولات كثيرة. حاول مرة أخرى بعد دقائق.",
