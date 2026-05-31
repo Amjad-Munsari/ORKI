@@ -27,6 +27,22 @@ export async function submitCheckoutAction(input: CheckoutInput) {
   return submitCheckout(input);
 }
 
+/**
+ * Trim, drop ASCII control characters, and cap length on client-supplied
+ * free text before it is persisted / rendered. Implemented without a
+ * control-char regex literal so the source stays pure-ASCII.
+ */
+function cleanText(v: string | undefined, maxLen: number): string | undefined {
+  if (typeof v !== 'string') return undefined;
+  let out = '';
+  for (const ch of v) {
+    const code = ch.codePointAt(0) ?? 0;
+    if (code >= 0x20 && code !== 0x7f) out += ch;
+  }
+  out = out.trim();
+  return out ? out.slice(0, maxLen) : undefined;
+}
+
 export async function transitionOrderAction(
   orderId: string,
   to: OrderStatus,
@@ -40,6 +56,13 @@ export async function transitionOrderAction(
   // admin-only. This `'use server'` shim is the RPC-reachable boundary — the
   // admin/layout.tsx gate does NOT protect Server Action invocation — so the
   // admin check must live here. requireAdmin throws (audited) on a non-admin.
-  await requireAdmin('transitionOrder');
-  return transitionOrderStatus(orderId, to, opts);
+  const admin = await requireAdmin('transitionOrder');
+  // Stamp the audited actor from the authenticated admin identity — NEVER trust
+  // the client-supplied opts.actor (it was forgeable / hardcoded 'admin').
+  // Validate + bound the free-text fields before they're persisted/rendered.
+  return transitionOrderStatus(orderId, to, {
+    actor: admin.email ?? admin.id,
+    reason: cleanText(opts.reason, 500),
+    trackingNumber: cleanText(opts.trackingNumber, 100),
+  });
 }

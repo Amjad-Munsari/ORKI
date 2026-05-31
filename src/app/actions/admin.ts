@@ -5,21 +5,29 @@ import { products, productSizes } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { writeAuthEvent } from '@/lib/auth/audit';
 
 /**
  * Toggles the overall stock status of a product.
  * In a real app, this might also affect size availability.
  */
 export async function toggleProductStock(productId: string, inStock: boolean) {
-  await requireAdmin('toggleProductStock');
+  const admin = await requireAdmin('toggleProductStock');
 
   await db
     .update(products)
-    .set({ 
+    .set({
       inStock,
-      updatedAt: new Date() 
+      updatedAt: new Date()
     })
     .where(eq(products.id, productId));
+
+  await writeAuthEvent({
+    type: 'admin_action',
+    userId: admin.id,
+    email: admin.email,
+    metadata: { action: 'toggleProductStock', productId, inStock },
+  });
 
   revalidatePath('/[locale]/admin/inventory', 'page');
   revalidatePath('/[locale]/shop', 'page');
@@ -42,7 +50,7 @@ export async function updateProductDetails(
     category: string;
   }
 ) {
-  await requireAdmin('updateProductDetails');
+  const admin = await requireAdmin('updateProductDetails');
 
   // Domain-contract sanity: price is whole-SAR non-negative, category is constrained.
   if (!Number.isInteger(data.price) || data.price < 0) {
@@ -60,6 +68,18 @@ export async function updateProductDetails(
     })
     .where(eq(products.id, productId));
 
+  await writeAuthEvent({
+    type: 'admin_action',
+    userId: admin.id,
+    email: admin.email,
+    metadata: {
+      action: 'updateProductDetails',
+      productId,
+      price: data.price,
+      category: data.category,
+    },
+  });
+
   revalidatePath('/[locale]/admin/inventory', 'page');
   revalidatePath('/[locale]/shop', 'page');
   revalidatePath('/[locale]/shop/[category]', 'page');
@@ -73,7 +93,7 @@ export async function updateSizeInventory(
   sizeId: string,
   data: { stock?: number; inStock?: boolean }
 ) {
-  await requireAdmin('updateSizeInventory');
+  const admin = await requireAdmin('updateSizeInventory');
 
   if (typeof data.stock === 'number' && (!Number.isInteger(data.stock) || data.stock < 0)) {
     throw new Error('stock must be a non-negative integer');
@@ -121,6 +141,18 @@ export async function updateSizeInventory(
     revalidatePath('/[locale]/shop/[category]', 'page');
     revalidatePath(`/[locale]/shop/${size.product.category}/${size.product.slug}`, 'page');
   }
-  
+
+  await writeAuthEvent({
+    type: 'admin_action',
+    userId: admin.id,
+    email: admin.email,
+    metadata: {
+      action: 'updateSizeInventory',
+      sizeId,
+      stock: data.stock,
+      inStock: updateData.inStock,
+    },
+  });
+
   revalidatePath('/[locale]/admin/inventory', 'page');
 }

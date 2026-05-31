@@ -41,7 +41,9 @@ export default function OrderStateControls({ order }: Props) {
     opts: { trackingNumber?: string; reason?: string }
   ) => {
     startTransition(async () => {
-      await transitionOrderAction(order.id, to, { actor: 'admin', ...opts });
+      // actor is stamped server-side from the authenticated admin identity;
+      // do NOT pass a client-supplied actor (it would be ignored anyway).
+      await transitionOrderAction(order.id, to, opts);
       router.refresh();
     });
   };
