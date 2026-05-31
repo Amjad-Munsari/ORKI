@@ -20,6 +20,8 @@ interface Props {
  * in Tailwind v4 — they apply equal padding/margin on both inline-start and inline-end,
  * so the layout is correct in both LTR and RTL without using `ps-`/`pe-`/`ms-`/`me-`.
  * CLAUDE.md's directional-class prohibition targets `pl-`/`pr-`/`ml-`/`mr-` only.
+ * Pin to the inline-end edge with the logical `end-0` utility (NOT
+ * `inset-inline-end-0`, which Tailwind v4 does not generate).
  */
 export function CookieBanner({}: Props) {
   const [show, setShow] = useState(false);
@@ -33,7 +35,7 @@ export function CookieBanner({}: Props) {
 
   return (
     <div
-      className="fixed bottom-0 inset-inline-end-0 z-50 max-w-md p-6 m-6 bg-[#111111] border border-white/10 space-y-4"
+      className="fixed bottom-0 end-0 z-50 max-w-md p-6 m-6 bg-[#111111] border border-white/10 space-y-4"
       role="region"
       aria-label="Cookie consent"
     >

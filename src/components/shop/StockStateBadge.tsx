@@ -23,7 +23,7 @@ export function StockStateBadge({ state, locale, context }: StockStateBadgeProps
     return (
       <div
         role="status"
-        className={`absolute bottom-0 inset-inline-start-0 inset-inline-end-0 px-3 py-2 text-xs font-normal
+        className={`absolute bottom-0 inset-x-0 px-3 py-2 text-xs font-normal
                    ${state === 'out-of-stock' ? 'bg-black/80 text-white' : 'bg-white/10 text-white/80 backdrop-blur-sm'}`}
       >
         {state === 'out-of-stock' 
