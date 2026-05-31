@@ -11,8 +11,9 @@
  * so screen readers can announce the active account without leaking emails
  * in screenshots / screen recordings.
  *
- * Sign-out is a `<form action={signOutAction}>` (see SignOutButton) — works
- * without JS hydration.
+ * Sign-out (see SignOutButton) calls signOutAction then performs a full-document
+ * navigation to /<locale>/login. It runs inside this JS-only base-ui dropdown,
+ * so it does not rely on no-JS form-action behaviour.
  */
 import { Menu } from '@base-ui/react/menu';
 import { useTranslations } from 'next-intl';

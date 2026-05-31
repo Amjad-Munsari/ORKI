@@ -19,7 +19,6 @@
  */
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { writeAuthEvent } from '@/lib/auth/audit';
 import {
@@ -170,10 +169,20 @@ export async function signInAction(
 // ─── 3. signOutAction ─────────────────────────────────────────────────────────
 
 /**
- * UI-SPEC §"Header Changes" calls this via `<form action={signOutAction}>` —
- * Next.js form actions accept void or a redirect-throwing function. We
- * redirect('/login') from next/navigation, which throws NEXT_REDIRECT (the
- * canonical control-flow shape).
+ * Clears the Supabase session + writes the signout audit row. Returns `void`.
+ *
+ * Navigation is intentionally NOT done here. This action previously ended with
+ * `redirect('/login')`, but a Server-Action `redirect()` invoked from a
+ * `<form action>` resolves as a SOFT client navigation — the browser stays on
+ * the same document instance. The very next Server Action dispatched from that
+ * stale post-sign-out document (i.e. the sign-in POST on /login) fails at the
+ * transport layer with "Failed to fetch" until a full page reload occurs.
+ *
+ * The caller (SignOutButton) therefore performs a full-document
+ * `window.location.assign('/<locale>/login')` after this resolves — the same
+ * fresh-document guarantee the sign-in success path already relies on
+ * (LoginForm, commit 1e37411). The sign-out trigger lives inside a JS-only
+ * base-ui dropdown, so the prior no-JS `<form action>` benefit did not apply.
  */
 export async function signOutAction(): Promise<void> {
   try {
@@ -190,13 +199,16 @@ export async function signOutAction(): Promise<void> {
       email: user?.email ?? null,
     });
   } catch (err) {
-    // Don't block the redirect — even if signOut throws, the cookies have
-    // been cleared at the server boundary; surface the error in logs only.
+    // Even if signOut throws, the cookies have been cleared at the server
+    // boundary; surface the error in logs only and let navigation proceed.
     console.error('[signOutAction]', err);
   }
-  // redirect() throws NEXT_REDIRECT — must be outside try/catch so the
-  // control-flow throw isn't swallowed.
-  redirect('/login');
+  // NO revalidatePath here. The caller (SignOutButton) does a full-document
+  // window.location.assign('/<locale>/login') which re-fetches everything
+  // fresh. Calling revalidatePath would make the router auto-refresh the
+  // current (now-unauthenticated) route in the brief window before that
+  // navigation completes — re-rendering the signed-out page and flashing a
+  // transient dev-overlay error. The full reload makes it redundant.
 }
 
 // ─── 4. requestPasswordResetAction ────────────────────────────────────────────

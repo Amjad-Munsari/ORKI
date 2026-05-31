@@ -116,7 +116,10 @@ describe.skipIf(!hasSupabaseEnv || !hasDbUrl)('writeAuthEvent coverage (SEC-09)'
     const { userId, email } = await createTestUser();
     createdUserId = userId;
 
-    // signOutAction redirects, which throws NEXT_REDIRECT — swallow it.
+    // signOutAction no longer redirects (navigation moved client-side to
+    // SignOutButton to avoid a soft-nav "Failed to fetch" on the next sign-in
+    // POST). It now returns void. The legacy NEXT_REDIRECT guard is retained
+    // defensively in case the action is reverted to a server redirect.
     try {
       await signOutAction();
     } catch (e) {
