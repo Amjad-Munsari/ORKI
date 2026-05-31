@@ -8,23 +8,25 @@ updated: 2026-05-31T22:00:00Z
 
 ## Current Test
 
-[testing paused — 2 items blocked on external prerequisites, 1 accepted as dev-only non-blocker]
+[testing complete — 16 pass, 1 accepted dev-only cosmetic (Test 12), 0 blocked]
 
-OUTSTANDING ITEMS:
-  - Test 7 (Password reset round-trip): BLOCKED. Code fix in place (commit
-    0a1e19a); confirmation requires clicking a real Supabase recovery email.
-  - Test 9 (Order ownership): BLOCKED. Needs a real order to exist for the
-    signed-in user (and a second user's order to attempt cross-access). The
-    DB-layer ownership guarantee is independently proven by Test 17 (RLS deny).
-  - Test 12 (signed-in base-ui hydration mismatch): RESOLVED — accepted as a
-    dev-only, console-only, non-blocking artifact (severity downgraded major →
-    cosmetic). See the Test 12 resolution note below. OPTIONAL final
-    confirmation: `npm run build && npm run start`, sign in, load any page,
-    check the browser console for the base-ui id mismatch (expected: absent in
-    prod — React useId is deterministic in production builds).
+ALL FORMERLY-OUTSTANDING ITEMS NOW RESOLVED:
+  - Test 7 (Password reset round-trip): PASS — verified by automated integration
+    test (tests/integration/password-reset-roundtrip.test.ts, 4 cases); no real
+    inbox needed (admin.generateLink mints the recovery token). See Test 7 note.
+  - Test 9 (Order ownership): PASS — verified by automated integration test
+    (tests/integration/order-ownership.test.ts); invokes the real account
+    order-detail page over real seeded rows for two users. See Test 9 note.
+  - Test 12 (signed-in base-ui hydration mismatch): accepted as a dev-only,
+    console-only, non-blocking cosmetic artifact (downgraded major → cosmetic).
+    OPTIONAL final confirmation: `npm run build && npm run start`, sign in, load
+    any page, check the console (expected: absent in prod — React useId is
+    deterministic in production builds).
 
 RESOLVED THIS SESSION (2026-05-31):
   - Test 4 sign-out fix COMMITTED (1bb3933) — tsc + eslint clean, user-confirmed.
+  - Tests 7 & 9 unblocked via two new live-Supabase integration tests
+    (commit e5f10b8); 5/5 passing, stable across re-runs.
   - Test 12 decision recorded (close as dev-only cosmetic non-blocker).
   - Production build verified compiling cleanly (45/45 pages, BUILD_ID present).
 
@@ -202,7 +204,7 @@ re_verification_2026_05_31:
   - test 10 (guest cart merge): issue → PASS
   - test 7 (password reset round-trip): issue → PASS (verified by new automated integration test via admin.generateLink — no real email needed)
   - test 12 (signed-in base-ui hydration mismatch): issue → RESOLVED (accepted as dev-only console-only non-blocker; severity downgraded major → cosmetic; documented fix disproven, source is base-ui/floating-ui SSR useId internals, deterministic in prod build)
-  - test 9 (order ownership): BLOCKED (still no order data)
+  - test 9 (order ownership): BLOCKED → PASS (verified 2026-05-31 by new automated integration test seeding real orders for two users; commit e5f10b8)
 
 session_2026_05_31_b:
   - test 4 sign-out fix committed (1bb3933); tsc + eslint clean
