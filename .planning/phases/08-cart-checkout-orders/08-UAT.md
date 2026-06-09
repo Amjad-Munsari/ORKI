@@ -23,11 +23,11 @@ fix: "AddToCartButton.tsx now calls addToCartAction (debug session: cart-resets-
 ### 2. AR happy path with RTL (UX-02, UX-03)
 expected: |
   /ar/shop loads with <html dir="rtl" lang="ar">. Add item, open drawer, icons/chevrons mirror correctly, all directional spacing logical (ms-/me-/ps-/pe-). Checkout shows Arabic labels and visually mirrored form, no horizontal-scroll bug. Submit valid form → land on /ar/checkout/confirmation?ref=ORK-XXXXXX with Arabic copy. Currency renders Western numerals in AR ("100.00 SAR" not "١٠٠٫٠٠"). Cart is empty after successful order.
-result: issue
+result: pass
 reported: "I used fake data, but either way it worked and I got the order number. one thing that should've happened is that the cart should be empty"
 severity: major
-note: Main RTL flow + order completion verified. Post-order cart-clear missing.
-fix: "Fixed 2026-06-09. checkout/page.tsx now calls clearCart() (Zustand store) on a successful submitCheckoutAction before router.push to confirmation. The server already deletes cart_items (lib/orders/server.ts:317); the persisted client store was the only thing left stale. tsc 0 / lint 0. Awaiting user browser re-verify (cart empty on confirmation page, EN + AR)."
+note: Main RTL flow + order completion verified. Post-order cart-clear was missing — now fixed and re-verified.
+fix: "Fixed 2026-06-09. checkout/page.tsx now calls clearCart() (Zustand store) on a successful submitCheckoutAction before router.push to confirmation. The server already deletes cart_items (lib/orders/server.ts:317); the persisted client store was the only thing left stale. tsc 0 / lint 0. USER RE-VERIFIED 2026-06-09 — placed a test order, cart empty on the confirmation page."
 
 ### 3. Payment failure recovery (UX-06, UX-08)
 expected: |
@@ -74,8 +74,8 @@ reason: User deferred all checkout/cart/admin verification 2026-05-16 — focusi
 ## Summary
 
 total: 9
-passed: 1
-issues: 1
+passed: 2
+issues: 0
 pending: 0
 skipped: 7
 blocked: 0

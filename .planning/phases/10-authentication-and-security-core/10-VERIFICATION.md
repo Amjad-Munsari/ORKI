@@ -95,7 +95,7 @@ Per CONTEXT.md SEC-08 + Plan 10-06 §"Admin gate (SEC-08)", a signed-in user who
 5. **Expected:** an `auth_events` row with `event='admin_action'`, `email='nobody@orki.test'`, and `metadata.denied=true, reason='not_in_allowlist'` appears in the latest page.
 
 **Outcome:**
-- [ ] Gate passes.
+- [x] **Gate passes (2026-06-09, user walk-through).** Signed in as a non-allowlist throwaway account → navigating to `/en/admin` redirected away (no admin chrome); the denial audit row appeared in `/en/admin/audit` when viewed as an admin.
 - [ ] Gate fails — verify `SUPABASE_ADMIN_EMAILS` env value is set + matches the allowlist email exactly (case-insensitive comparison).
 
 **Date run:** ____  **Run by:** ____
@@ -139,10 +139,10 @@ Per RESEARCH §8 R4 + 10-VALIDATION.md §"Manual-Only Verifications", real-brows
 5. **Expected:** zero CSP violations in the console across all routes.
 
 **Outcome:**
-- [ ] Gate passes — no violations.
+- [x] **Gate passes — no violations (2026-06-09, prod build `next start` walk-through).** Console showed zero `Content-Security-Policy` violations. The only console errors were `/_vercel/insights/script.js` + `/_vercel/speed-insights/script.js` returning 404 (then refused by `X-Content-Type-Options: nosniff` as text/html) — these are Vercel telemetry scripts served only on a Vercel deployment, NOT CSP rejections, and are expected on localhost. Cross-confirms Tests 1 & 2 (Analytics/Speed Insights) require a deploy.
 - [ ] Gate fails — record the violation type + directive + offending URL/inline-script. Adjust CSP per RESEARCH §2.4 footguns. Re-run.
 
-**Date run:** ____  **Run by:** ____
+**Date run:** 2026-06-09  **Run by:** user (prod-build browser walk-through)
 
 ---
 
@@ -229,9 +229,9 @@ Phase 10 ships when Gates 1-6 are all ticked AND all three Outstanding Ops are c
 - [ ] **Outstanding Op Item 3 (signin rate limit set):** date ____  by ____
 - [ ] **Outstanding Op Item 4 (four Management API knobs):** date ____  by ____
 - [ ] **Gate 1 (SEC-07 lockout):** date ____  by ____
-- [ ] **Gate 2 (SEC-08 admin deny):** date ____  by ____
+- [x] **Gate 2 (SEC-08 admin deny):** date 2026-06-09  by user walk-through (redirect + denial audit row confirmed)
 - [x] **Gate 3 (Cross-user RLS deny):** date 2026-06-09  by automated (`cross-user-deny.test.ts` green on live tenant)
-- [ ] **Gate 4 (CSP zero violations):** date ____  by ____
+- [x] **Gate 4 (CSP zero violations):** date 2026-06-09  by user (prod-build walk; only non-CSP /_vercel/* 404s, expected on localhost)
 - [ ] **Gate 5 (Service-role key not in client bundle):** date ____  by ____
 - [x] **Gate 6 (Automated suite green):** date 2026-06-09  by automated (119 passed / 0 failed on live tenant)
 

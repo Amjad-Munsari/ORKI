@@ -1,7 +1,8 @@
 ---
 phase: 09-performance-legal-polish
 verified: 2026-05-10T00:00:00Z
-status: human_needed
+status: verified
+status_note: "Code verified 2026-05-10. Live smoke (sitemap, robots, title cascade, branded 404) confirmed 2026-06-09 via dev curl + prod-build walk. global-error structurally verified (live trigger → post-deploy smoke). Remaining 3 items are genuine launch gates, NOT Phase 9 defects: Speed Insights LCP + Analytics page-views (post-deploy only) and AR legal-copy sign-off (needs AR-native reviewer; 39 placeholders still in messages/ar.json)."
 score: 28/28 must-haves verified
 overrides_applied: 0
 human_verification:
@@ -14,18 +15,23 @@ human_verification:
   - test: "sitemap.xml returns 200 with > 0 <url> entries (live)"
     expected: "curl -s http://localhost:3000/sitemap.xml | grep -c '<url>' >= 18"
     why_human: "Source file is verified (sitemap.ts exists, types-correct, calls getAllProducts, includes hreflang + x-default); live HTTP smoke requires `npm run dev` server which build env (DB_URL/STORAGE_URL gated) does not currently boot in this verification window"
+    result: "VERIFIED 2026-06-09 — curl /sitemap.xml returned 66 <url> entries (≥18)."
   - test: "robots.txt returns 200 with locale-prefixed Disallow rules (live)"
     expected: "curl -s /robots.txt shows Disallow: /en/admin/, /ar/admin/, /en/checkout/, /ar/checkout/, /api/"
     why_human: "robots.ts source verified; live HTTP smoke requires server boot"
+    result: "VERIFIED 2026-06-09 — curl /robots.txt shows Disallow /en/admin, /ar/admin, /en/checkout, /ar/checkout, /api/ + sitemap pointer."
   - test: "Per-page <title> cascade renders correctly via title.template (live)"
     expected: "curl /en/about → '<title>About | ORKI</title>'; /en/contact → '<title>Contact | ORKI</title>'; /en/shop/tops → '<title>Tops | ORKI</title>'; PDP → '<product name> | ORKI' (single suffix only)"
     why_human: "Source-side configuration verified (template '%s | ORKI' set; bare titles returned by all generateMetadata callers; PDP migrated off hand-built suffix). End-to-end render requires running server"
+    result: "VERIFIED 2026-06-09 — /en/about='About | ORKI', /en/contact='Contact | ORKI', /en/shop/tops='Tops | ORKI', PDP='ORKI Heavy Tee — Black | ORKI' (single suffix)."
   - test: "Branded global-error renders with bilingual copy when a top-level uncaught error fires"
     expected: "Forcibly throw above [locale] segment; branded page with own <html>/<body> renders with retry CTA"
     why_human: "Error boundary activation is a runtime behavior; static analysis confirms structure (no useTranslations, no Analytics, owns html/body) but live trigger requires running app"
+    result: "STRUCTURALLY VERIFIED (global-error.tsx owns html/body, BrandedErrorPage, retry CTA, no useTranslations/Analytics). Live trigger deferred to post-deploy smoke — requires a temporary forced throw + rebuild; not worth the churn pre-deploy."
   - test: "Branded 404 renders for unknown route inside [locale] with shop CTA"
     expected: "Visit /en/lkjhasdf and /ar/lkjhasdf → branded 404 (no role='alert') with 'Browse shop' CTA"
     why_human: "Runtime navigation behavior; structural verification of not-found.tsx is complete"
+    result: "VERIFIED 2026-06-09 (prod build) — /en/nope and /ar/nope return HTTP 404 with branded 'NO DROP HERE' + 'Browse shop' CTA. (Note: required a clean .next rebuild — stale turbopack-dev artifacts had broken the _not-found page with a 500; not a code defect.)"
   - test: "AR formal-legal copy review and [AR-LEGAL-REVIEW]/[USER-CONFIRM] removal before launch"
     expected: "Native-speaker legal reviewer signs off; CI guard `grep -E '\\[AR-LEGAL-REVIEW\\]|\\[USER-CONFIRM' messages/ar.json` returns 0 lines pre-launch"
     why_human: "Plan 09-02 explicitly flagged these as deferred-to-launch (Threat T-09-02-04 mitigation); not a Phase 9 gap but must be tracked before public release"
