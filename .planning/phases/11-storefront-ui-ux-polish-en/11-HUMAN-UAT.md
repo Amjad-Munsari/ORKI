@@ -37,8 +37,9 @@ expected: `https://wa.me/905539339440` opens a WhatsApp chat target for ORKI's c
 result: pass
 
 ### 7. DB-connected suite + build (SC-6)
-expected: `npm test` and `npm run build` run fully green against a DB-connected `.env.local` (sandbox could not reach the Supabase tenant: 12 DB tests + `/sitemap.xml` prerender unverified here; tsc + lint are green).
+expected: `npm test` and `npm run build` run fully green against a DB-connected `.env.local`.
 result: pass
+note: "Confirmed 2026-06-09 against the resumed Supabase tenant: npm test = 119 passed / 0 failed / 8 skipped (25 files; the 12 DB/RLS/auth tests exercised green after a cold-start warm-up — first run showed 4 cold-instance 5s timeouts that cleared on re-run); npm run build = exit 0, 'Compiled successfully', /sitemap.xml prerendered. tsc + lint green (1 pre-existing isRtl warning)."
 
 ## Summary
 

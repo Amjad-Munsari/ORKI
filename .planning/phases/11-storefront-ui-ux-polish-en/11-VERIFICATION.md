@@ -1,9 +1,9 @@
 ---
 phase: 11-storefront-ui-ux-polish-en
-verified: 2026-05-30
+verified: 2026-06-09
 verifier: Claude (execute-phase orchestrator)
 source_audit: .planning/STOREFRONT-UI-REVIEW-EN.md
-status: human_needed
+status: verified
 findings_total: 26
 findings_closed: 23
 findings_deferred: 3
@@ -99,7 +99,7 @@ All three copy slots already had Candidate A live (set by Plans 11-13/11-14); us
 1. ~~`WA_NUMBER = 'TBD'`~~ **RESOLVED 2026-05-30** — set to `905539339440` (`https://wa.me/905539339440`). User to confirm the deep-link resolves to ORKI's WhatsApp chat target in a browser.
 2. **AR-side copy reconciliation** for Phase-11 EN-only rewrites (404, Shop.empty, Home.ethos, About numbering). Owned by Phase 999.11 with AR-native + AR-legal reviewer.
 3. **Real editorial photography** — the 4-variant placeholder system is intentional + brand-coherent for v1; swap to commissioned imagery when assets land (no code churn — `Product.heroImage` override path is free).
-4. **Re-run `npm test` + `npm run build` against a DB-connected environment** — the execution sandbox could not reach the Supabase tenant, so 12 DB tests + the `/sitemap.xml` prerender could not be exercised here. tsc + lint are green. Confirm a fully green suite + build before public launch.
+4. ~~**Re-run `npm test` + `npm run build` against a DB-connected environment**~~ **RESOLVED 2026-06-09** — ran against the resumed Supabase tenant: `npm test` = 119 passed / 0 failed / 8 skipped (25 files; the 12 DB/RLS/auth tests now exercised green after a cold-start warm-up), `npm run build` = exit 0 with `/sitemap.xml` prerendered. tsc + lint green (1 pre-existing `isRtl` warning).
 
 ## Gates Still Pending (human verification)
 
@@ -124,6 +124,6 @@ All three copy slots already had Candidate A live (set by Plans 11-13/11-14); us
 - [x] Legacy `Shop.emptyHeading/emptyBody` removed (en + ar); `_candidates` blocks confirmed absent
 - [x] tsc + lint green after changes
 - [x] Phase 11 marked complete in STATE.md + ROADMAP.md (code + UAT scope closed)
-- [ ] **User-owned manual gate:** live-dev walkthrough (every surface, desktop + mobile + EN + AR + RTL + reduced-motion + throttled-network + keyboard) — run against a DB-connected `.env.local`; not performable from the execution sandbox.
-- [ ] **User-owned manual gate:** confirm `https://wa.me/905539339440` resolves to ORKI's WhatsApp target.
-- [ ] **User-owned manual gate:** re-run `npm test` + `npm run build` against DB-connected env → confirm fully green.
+- [x] **User-owned manual gate:** live-dev walkthrough (every surface, desktop + mobile + EN + AR + RTL + reduced-motion + throttled-network + keyboard) — **CLOSED 2026-06-09** via `11-HUMAN-UAT.md` tests 1–5 (all pass).
+- [x] **User-owned manual gate:** confirm `https://wa.me/905539339440` resolves to ORKI's WhatsApp target — **CLOSED 2026-06-09** via `11-HUMAN-UAT.md` test 6 (pass).
+- [x] **User-owned manual gate:** re-run `npm test` + `npm run build` against DB-connected env → confirm fully green — **CLOSED 2026-06-09** against resumed Supabase: `npm test` = 119 passed / 0 failed / 8 skipped (25 files); `npm run build` = exit 0, "Compiled successfully", `/sitemap.xml` prerendered. (1 pre-existing `isRtl` lint warning, not a Phase 11 regression.)
