@@ -14,10 +14,16 @@
  *
  * The chrome pieces are passed in as already-rendered elements (server
  * components) so this client boundary only decides *whether* to show them.
+ *
+ * Smooth scroll (Lenis) is also storefront-only: admin is a data-dense
+ * dashboard that wants native scroll, and keeping Lenis out avoids it
+ * hijacking the wheel over admin's inner scroll containers (e.g. the
+ * ProductEditor slide-over).
  */
 import type { ReactNode } from 'react';
 import { usePathname } from '@/i18n/navigation';
 import { PageTransition } from '@/components/PageTransition';
+import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 
 interface SiteChromeProps {
   navbar: ReactNode;
@@ -42,6 +48,7 @@ export function SiteChrome({
 
   return (
     <>
+      <SmoothScrollProvider />
       {navbar}
       {cartDrawer}
       <PageTransition>

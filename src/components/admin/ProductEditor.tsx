@@ -51,7 +51,14 @@ export default function ProductEditor({ product, onClose }: ProductEditorProps) 
           </button>
         </div>
 
-        <form onSubmit={handleSaveDetails} className="flex-1 overflow-auto p-8 space-y-8">
+        {/*
+          data-lenis-prevent: defense-in-depth for this hand-rolled slide-over.
+          Admin runs native scroll (SmoothScrollProvider is storefront-only via
+          SiteChrome), but this attribute keeps the form scrolling natively even
+          if it's ever rendered under an active Lenis context — without it Lenis
+          would hijack the wheel and scroll the page behind instead.
+        */}
+        <form onSubmit={handleSaveDetails} data-lenis-prevent className="flex-1 overflow-auto p-8 space-y-8">
           {/* Identity Section */}
           <div className="space-y-4">
             <h3 className="text-xs font-black uppercase tracking-widest border-b border-white/20 pb-2 text-white/50">Identity</h3>

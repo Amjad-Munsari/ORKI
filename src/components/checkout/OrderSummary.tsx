@@ -28,7 +28,10 @@ export function OrderSummary({ locale: localeProp }: OrderSummaryProps) {
         {t('summary')}
       </h2>
 
-      <div className="space-y-6 max-h-[400px] overflow-y-auto pe-2 custom-scrollbar">
+      {/* data-lenis-prevent: inner scroll list on a Lenis-active page — without
+          it the smooth-scroll provider hijacks the wheel and scrolls the page
+          instead of this capped order list. */}
+      <div className="space-y-6 max-h-[400px] overflow-y-auto pe-2 custom-scrollbar" data-lenis-prevent>
         {items.map((item) => (
           <div
             key={`${item.product.id}-${item.selectedSize}`}

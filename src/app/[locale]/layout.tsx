@@ -10,7 +10,6 @@ import { Footer } from '@/components/footer/Footer';
 import { StoreHydration } from '@/store/StoreHydration';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { SiteChrome } from '@/components/layout/SiteChrome';
-import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import '@/app/globals.css';
@@ -54,7 +53,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         suppressHydrationWarning
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <SmoothScrollProvider />
           <StoreHydration />
           <SiteChrome
             navbar={<Navbar />}
