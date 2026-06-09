@@ -120,7 +120,7 @@ Per RESEARCH §2.5 + Plan 10-05 cross-user-deny test (skeleton), proven by hitti
 6. Repeat with the service-role key — expect the row IS visible (service_role bypasses RLS).
 
 **Outcome:**
-- [ ] Gate passes.
+- [x] **Gate passes (automated, 2026-06-09).** `tests/rls/cross-user-deny.test.ts` ran green against the live Supabase tenant during the Phase 11 close-out suite: it provisions two auth users via the admin client, has User A's RLS-bound PostgREST client attempt to SELECT User B's order, and asserts the deny. Previously this test could only time out (Supabase paused); with the tenant resumed it passes. The automated path exercises the same trust boundary as the manual curl walkthrough above. (Manual two-JWT curl remains available as a belt-and-suspenders check if desired.)
 - [ ] Gate fails — re-verify policies via `select count(*) from pg_policies where schemaname='public'` returns ≥ 9.
 
 **Date run:** ____  **Run by:** ____
@@ -180,9 +180,9 @@ Per RESEARCH §8 R8: the production CLIENT bundle MUST NOT contain `SUPABASE_SER
 | Playwright e2e (list) | `npx playwright test --list` | Discovers `cart-merge.spec.ts`, `password-reset.spec.ts`, `admin-gate.spec.ts`, `csrf.spec.ts` |
 | Playwright e2e (run) | `npx playwright test` | All pass except `test.skip` blocks (cart-merge end-of-flow, password-reset round-trip, admin-gate signed-in-non-admin) |
 
-- [x] **Gate passes.** `npm test`: 103 passed, 8 skipped (lockout + 7 live-env tests gated by `hasSupabaseEnv`). `npx tsc --noEmit`: 0 errors. `npm run lint`: 0 errors, 0 warnings. `npm run build`: succeeds. Playwright spec discovery: 4 specs (cart-merge, password-reset, admin-gate, csrf) listed cleanly; browser execution deferred to production deploy verification.
+- [x] **Gate passes.** Re-confirmed 2026-06-09 against the live (resumed) Supabase tenant: `npm test` = **119 passed / 0 failed / 8 skipped** (25 files; up from 103 — the previously env-gated DB/RLS/auth tests now run green, including `tests/rls/cross-user-deny.test.ts` → see Gate 3). `npm run build` = exit 0, "Compiled successfully", `/sitemap.xml` prerendered. `tsc --noEmit` 0 errors; lint 0 errors (1 pre-existing `isRtl` warning). Playwright spec discovery: 4 specs listed cleanly; browser execution deferred to production deploy verification.
 
-**Date run:** 2026-05-11  **Run by:** automated (Claude orchestrator, post-cleanup typecheck + lint rot fix)
+**Date run:** 2026-06-09 (orig 2026-05-11)  **Run by:** automated (Claude orchestrator — Phase 11 close-out + UAT audit)
 
 ---
 
@@ -230,9 +230,9 @@ Phase 10 ships when Gates 1-6 are all ticked AND all three Outstanding Ops are c
 - [ ] **Outstanding Op Item 4 (four Management API knobs):** date ____  by ____
 - [ ] **Gate 1 (SEC-07 lockout):** date ____  by ____
 - [ ] **Gate 2 (SEC-08 admin deny):** date ____  by ____
-- [ ] **Gate 3 (Cross-user RLS deny):** date ____  by ____
+- [x] **Gate 3 (Cross-user RLS deny):** date 2026-06-09  by automated (`cross-user-deny.test.ts` green on live tenant)
 - [ ] **Gate 4 (CSP zero violations):** date ____  by ____
 - [ ] **Gate 5 (Service-role key not in client bundle):** date ____  by ____
-- [ ] **Gate 6 (Automated suite green):** date ____  by ____
+- [x] **Gate 6 (Automated suite green):** date 2026-06-09  by automated (119 passed / 0 failed on live tenant)
 
 **Phase 10 complete:** date ____  by ____

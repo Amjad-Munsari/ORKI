@@ -27,6 +27,7 @@ result: issue
 reported: "I used fake data, but either way it worked and I got the order number. one thing that should've happened is that the cart should be empty"
 severity: major
 note: Main RTL flow + order completion verified. Post-order cart-clear missing.
+fix: "Fixed 2026-06-09. checkout/page.tsx now calls clearCart() (Zustand store) on a successful submitCheckoutAction before router.push to confirmation. The server already deletes cart_items (lib/orders/server.ts:317); the persisted client store was the only thing left stale. tsc 0 / lint 0. Awaiting user browser re-verify (cart empty on confirmation page, EN + AR)."
 
 ### 3. Payment failure recovery (UX-06, UX-08)
 expected: |
@@ -94,11 +95,15 @@ blocked: 0
   debug_session: ".planning/debug/cart-resets-on-refresh.md"
 
 - truth: "Cart is cleared after a successful order completes (UX flow contract — user should not see prior items after placing an order)"
-  status: failed
+  status: resolved
+  resolved: 2026-06-09
   reason: "User reported: I used fake data, but either way it worked and I got the order number. one thing that should've happened is that the cart should be empty"
   severity: major
   test: 2
-  root_cause: ""     # Filled by diagnosis
-  artifacts: []      # Filled by diagnosis
+  root_cause: "Checkout success handler (src/app/[locale]/checkout/page.tsx) did router.push to confirmation but never reset the persisted client cart. submitCheckout already deletes server-side cart_items (src/lib/orders/server.ts:317), and clearCart() existed in src/store/cartStore.ts:74 but had ZERO call sites — so the localStorage-backed Zustand store kept the just-ordered items, and the cart drawer still showed them on the confirmation page."
+  fix: "checkout/page.tsx now selects clearCart from useCartStore and calls it on a successful submitCheckoutAction, immediately before router.push. Aligns client state with the already-cleared server cart. tsc 0 / lint 0. Awaiting user browser re-verify."
+  artifacts: ["src/app/[locale]/checkout/page.tsx", "src/store/cartStore.ts:74"]
+  missing: []
+  debug_session: ""
   missing: []        # Filled by diagnosis
   debug_session: ""  # Filled by diagnosis

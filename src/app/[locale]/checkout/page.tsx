@@ -15,6 +15,7 @@ import { CheckoutSteps } from '@/components/checkout/CheckoutSteps';
 import { TrustSignals } from '@/components/checkout/TrustSignals';
 import { useRouter } from '@/i18n/navigation';
 import { submitCheckoutAction } from '@/app/actions/orders';
+import { useCartStore } from '@/store/cartStore';
 import type { Locale } from '@/types/domain';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -37,6 +38,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   );
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const clearCart = useCartStore((s) => s.clearCart);
 
   const handleShippingSubmit = (data: ShippingFormData) => {
     setShippingData(data);
@@ -69,6 +71,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         }
         return;
       }
+      // Order succeeded: submitCheckout already deleted the server-side
+      // cart_items (src/lib/orders/server.ts), so reset the persisted client
+      // store to match — otherwise the localStorage-backed Zustand cart still
+      // shows the just-ordered items on the confirmation page (UAT 08, Test 2).
+      clearCart();
       router.push(
         `/checkout/confirmation?ref=${result.data.reference}`
       );
