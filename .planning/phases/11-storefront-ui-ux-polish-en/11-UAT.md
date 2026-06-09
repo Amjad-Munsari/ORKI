@@ -73,7 +73,7 @@ result: pass
 ### 15. Navbar hydration integrity (no console errors on load)
 expected: Loading any page produces no React hydration mismatch errors in the browser console; the global Navbar (Shop dropdown, account menu, cart, mobile drawer) hydrates cleanly.
 result: pass
-note: "Was an issue on first load (Base UI useId hydration mismatch). Root cause: react/react-dom pinned to 19.1.0 while Next 15.5.18 renders with vendored React 19.2. Fixed by aligning react/react-dom to ^19.2.0 (resolved 19.2.6). User re-verified clean console after dev restart."
+note: "Was an issue on first load (Base UI useId hydration mismatch). Root cause: react/react-dom pinned to 19.1.0 while Next 15.5.18 renders with vendored React 19.2. Fixed by aligning react/react-dom to ^19.2.0 (resolved 19.2.6). User re-verified clean console after dev restart. REGRESSION + PROPER FIX 2026-06-09: the ^19.2.0 pin floated to 19.2.6, which is NEWER than the 19.2.0-canary-0bdb9206-20250818 that Next 15.5.18 vendors for SSR — so useId still skewed (server canary vs client 19.2.6). It resurfaced when signed in (UserMenu Base UI Menu; signed-out is a plain <Link> with no useId, which is why the original verify looked clean). Properly fixed by pinning react+react-dom to EXACTLY 19.2.0-canary-0bdb9206-20250818 (Next's vendored build) via deps + overrides → server/client use the identical React build → useId match guaranteed. CAVEAT: re-pin on every Next upgrade (new bundled canary)."
 
 ## Summary
 
