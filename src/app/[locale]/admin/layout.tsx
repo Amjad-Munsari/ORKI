@@ -64,29 +64,33 @@ export default async function AdminLayout({
             href="/admin/inventory"
             className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
           >
-            <span className="font-bold uppercase tracking-tight">Inventory</span>
+            <span className="text-sm font-bold uppercase tracking-tight">Inventory</span>
             <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
           <Link
             href="/admin/orders"
             className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
           >
-            <span className="font-bold uppercase tracking-tight">Orders</span>
+            <span className="text-sm font-bold uppercase tracking-tight">Orders</span>
             <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
           <Link
             href="/admin/audit"
             className="p-3 border-2 border-transparent hover:border-white transition-all flex justify-between items-center group"
           >
-            <span className="font-bold uppercase tracking-tight">Audit</span>
+            <span className="text-sm font-bold uppercase tracking-tight">Audit</span>
             <span className="text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity">→</span>
           </Link>
         </nav>
 
-        <div className="p-4 border-t-2 border-white/20">
+        <div className="p-4 border-t-2 border-white/20 flex flex-col gap-3">
+          <div className="px-1">
+            <div className="text-[10px] font-mono uppercase opacity-40">Signed in as</div>
+            <div className="text-xs font-bold tracking-tight truncate" dir="ltr">{user.email}</div>
+          </div>
           <Link
             href="/"
-            className="p-3 border-2 border-white bg-white text-black text-center font-bold uppercase tracking-tight block hover:bg-black hover:text-white transition-colors"
+            className="px-3 py-2 border-2 border-white bg-white text-black text-center text-xs font-bold uppercase tracking-tight block hover:bg-black hover:text-white transition-colors"
           >
             Exit Admin
           </Link>
@@ -95,20 +99,6 @@ export default async function AdminLayout({
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto bg-black">
-        <header className="h-20 border-b-2 border-white/20 flex items-center justify-between px-8 sticky top-0 bg-black/80 backdrop-blur-md z-10">
-          <div className="flex items-center gap-4">
-            <div className="h-3 w-3 bg-green-500 animate-pulse border border-white/50" title="System Online" />
-            <span className="text-xs font-mono uppercase tracking-widest font-bold opacity-80">Live Data Sync</span>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="text-end">
-              <div className="text-[10px] font-mono uppercase opacity-40">Signed in as</div>
-              <div className="text-xs font-bold tracking-tight" dir="ltr">{user.email}</div>
-            </div>
-          </div>
-        </header>
-
         <div className="p-8">
           {children}
         </div>

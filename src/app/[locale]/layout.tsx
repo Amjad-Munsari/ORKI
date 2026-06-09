@@ -9,7 +9,7 @@ import { Navbar } from '@/components/nav/Navbar';
 import { Footer } from '@/components/footer/Footer';
 import { StoreHydration } from '@/store/StoreHydration';
 import { CartDrawer } from '@/components/cart/CartDrawer';
-import { PageTransition } from '@/components/PageTransition';
+import { SiteChrome } from '@/components/layout/SiteChrome';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -56,14 +56,13 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider />
           <StoreHydration />
-          <Navbar />
-          <CartDrawer locale={locale as Locale} />
-          <PageTransition>
-            <main className="flex-1 pt-16">
-              {children}
-            </main>
-          </PageTransition>
-          <Footer />
+          <SiteChrome
+            navbar={<Navbar />}
+            cartDrawer={<CartDrawer locale={locale as Locale} />}
+            footer={<Footer />}
+          >
+            {children}
+          </SiteChrome>
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
