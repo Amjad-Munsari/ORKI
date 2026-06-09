@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "vercel-build": "next build",
+    "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
+    "build": "npm run clean && next build",
+    "vercel-build": "npm run clean && next build",
     "start": "next start",
     "lint": "eslint",
     "db:push": "drizzle-kit push",
