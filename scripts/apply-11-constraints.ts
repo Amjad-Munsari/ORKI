@@ -1,4 +1,9 @@
 /**
+ * ⚠ SUPERSEDED by migration 0003_phase11_sizeid_and_constraints.sql — these
+ * statements now live in the Drizzle journal and apply via `npm run db:migrate`.
+ * Kept only for historical reference (Phase 11 planning docs link here). Prefer
+ * db:migrate; running this directly is harmless (idempotent) but unnecessary.
+ *
  * One-off applicator for Phase 11 DB invariants (whole-codebase-review batch).
  *
  * Adds belt-and-suspenders constraints the application already enforces in
