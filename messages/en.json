@@ -1,0 +1,520 @@
+{
+  "Nav": {
+    "shop": "Shop",
+    "tops": "Tops",
+    "bottoms": "Bottoms",
+    "about": "About",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchToAr": "AR",
+    "switchToEn": "EN",
+    "categories": "Categories",
+    "cart": "Cart",
+    "signIn": "Sign in",
+    "account": "Account",
+    "cartItemCount": "{count, plural, =0 {No items in cart} one {# item in cart} other {# items in cart}}"
+  },
+  "Footer": {
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "contact": "Contact",
+    "copyright": "© 2026 ORKI. All rights reserved.",
+    "copyrightShort": "© {year} All Rights Reserved",
+    "benefits": {
+      "shipping": "Free shipping from 300 SAR",
+      "returns": "Easy returns within 14 days",
+      "payments": "Secure payments online",
+      "support": "24/7 customer support"
+    },
+    "nav": {
+      "groupLabel": "(Navigation)",
+      "home": "Home",
+      "tops": "Tops",
+      "bottoms": "Bottoms",
+      "story": "Our Story"
+    },
+    "help": {
+      "groupLabel": "(Help)",
+      "contact": "Contact"
+    },
+    "legal": {
+      "groupLabel": "(Legal)",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "cookies": "Cookie Policy"
+    }
+  },
+  "Placeholder": {
+    "imageAlt": "ORKI product placeholder"
+  },
+  "Meta": {
+    "siteTitle": "ORKI — Saudi Streetwear",
+    "home": {
+      "title": "ORKI — Saudi Streetwear",
+      "description": "Saudi streetwear. Dark. Underground."
+    },
+    "about": {
+      "title": "About",
+      "description": "ORKI's story: Saudi streetwear, dark and underground."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch with ORKI for orders, support, or partnerships."
+    },
+    "shop": {
+      "title": "Shop",
+      "description": "Shop ORKI streetwear: tops and bottoms. New drops first."
+    },
+    "shopTops": {
+      "title": "Tops",
+      "description": "Hoodies, tees, and outerwear from ORKI."
+    },
+    "shopBottoms": {
+      "title": "Bottoms",
+      "description": "Pants, shorts, and joggers from ORKI."
+    }
+  },
+  "Shop": {
+    "tabAll": "All",
+    "tabTops": "Tops",
+    "tabBottoms": "Bottoms",
+    "productCount": "{count} Products",
+    "sortLabel": "Sort:",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "empty": {
+      "heading": "No drops in this category yet.",
+      "body": "Check back Friday. Or browse everything we've shipped so far."
+    },
+    "sizeLabel": "Size",
+    "sizeGuide": "Size Guide",
+    "addToCart": "Add to Cart",
+    "added": "Added",
+    "outOfStock": "Out of Stock",
+    "returnPolicy": "Free returns within 14 days. No questions asked.",
+    "relatedHeading": "You Might Also Like",
+    "someSizesSoldOut": "Some sizes sold out",
+    "sizeGuideTitle": "Size Guide",
+    "sizeGuideClose": "Close",
+    "categories": {
+      "tops": {
+        "title": "Tops",
+        "description": "Hoodies, tees, and outerwear from ORKI."
+      },
+      "bottoms": {
+        "title": "Bottoms",
+        "description": "Pants, shorts, and joggers from ORKI."
+      }
+    }
+  },
+  "Home": {
+    "ethos": {
+      "line": "We don't make clothes. We track what Riyadh sounds like at night.",
+      "readStory": "Read Our Story"
+    }
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "step1": "Shipping Information",
+    "step2": "Payment Method",
+    "stepProgress": "Step {current} of {total}",
+    "edit": "Edit",
+    "continueToPayment": "Continue to Payment",
+    "placeOrder": "Complete Purchase",
+    "processing": "Processing...",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "phonePlaceholder": "+966 5X XXX XXXX",
+    "city": "City",
+    "district": "District",
+    "address": "Street Address",
+    "apartment": "Apartment / Villa (Optional)",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "vat": "VAT (15%)",
+    "total": "Total",
+    "freeShipping": "Free",
+    "summary": "Order Summary",
+    "termsAcknowledgement": "By completing this order, you agree to our Terms of Service and Privacy Policy.",
+    "trust": {
+      "secureCheckout": "Secure Checkout",
+      "returnsPolicy": "14-Day Returns",
+      "sslEncryption": "SSL Encrypted"
+    },
+    "payment": {
+      "card": "Credit Card",
+      "mada": "mada",
+      "stcpay": "stc pay",
+      "applepay": "Apple Pay",
+      "cod": "Cash on Delivery"
+    },
+    "errors": {
+      "required": "This field is required",
+      "tooLong": "This value is too long",
+      "email": "Please enter a valid email",
+      "phone": {
+        "ksa": "Enter a Saudi mobile number (+966 5X XXX XXXX)"
+      },
+      "address": {
+        "short": "Please enter a more complete address"
+      },
+      "payment": {
+        "required": "Please select a payment method"
+      },
+      "stockUnavailable": "One or more items just sold out. Please review your cart.",
+      "paymentDeclined": "Payment was declined. Your cart is preserved — please try another method.",
+      "cartEmpty": "Your cart is empty.",
+      "validation": "Please correct the highlighted fields and try again.",
+      "unknown": "Something went wrong. Please try again or contact support."
+    }
+  },
+  "Order": {
+    "confirmedTitle": "Order Confirmed",
+    "thanks": "Thank you for your order",
+    "reference": "Order Reference",
+    "emailSent": "We've sent a confirmation email with all the details.",
+    "backHome": "Back to Home",
+    "continueShopping": "Continue Shopping",
+    "support": "If you have any questions, please contact our support team.",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    }
+  },
+  "Email": {
+    "confirmation": {
+      "subject": "Your ORKI order is confirmed",
+      "title": "Order Confirmed",
+      "greeting": "Thanks for your order, {name}.",
+      "referenceLabel": "Order Reference",
+      "totalLabel": "Total",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "shipped": {
+      "subject": "Your ORKI order is on the way",
+      "title": "Order Shipped",
+      "greeting": "Good news, {name} — your order is on the way.",
+      "referenceLabel": "Order Reference",
+      "trackingLabel": "Tracking",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "cancelled": {
+      "subject": "Your ORKI order has been cancelled",
+      "title": "Order Cancelled",
+      "greeting": "Hi {name}, your order has been cancelled.",
+      "referenceLabel": "Order Reference",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    },
+    "refunded": {
+      "subject": "Your ORKI order has been refunded",
+      "title": "Order Refunded",
+      "greeting": "Hi {name}, your refund has been processed.",
+      "referenceLabel": "Order Reference",
+      "footer": "Questions? Reply to this email or contact support@orki.sa."
+    }
+  },
+  "Legal": {
+    "lastUpdatedLabel": "Last updated:",
+    "templateDisclaimer": "This document is a template draft pending legal review. Contact us with questions.",
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How ORKI collects, stores, and uses your personal data. KSA PDPL and GDPR aligned.",
+      "eyebrow": "(Legal) — 01",
+      "heading": "Privacy Policy",
+      "section1": {
+        "heading": "Who we are",
+        "body": "ORKI is the data controller for personal data processed through this site, operated under [USER-CONFIRM commercial registration]. For questions about this policy, email us at privacy@orki.sa."
+      },
+      "section2": {
+        "heading": "What personal data we collect",
+        "body": "Cart contents (anonymous, linked to the orki_sid cookie). At checkout: name, email, phone, and shipping address. Admin authentication credentials (Supabase). No browsing tracking beyond cookieless Vercel Analytics page-view counts."
+      },
+      "section3": {
+        "heading": "Why we collect it",
+        "body": "We collect data only for the purposes listed below: processing your orders, delivering products to you, communicating with you about those orders, and running secure admin operations. We do not profile users or sell personal data."
+      },
+      "section4": {
+        "heading": "How we collect it",
+        "body": "Directly from you when you fill the checkout form, write to us, or sign in to admin tools. Automatically via the orki_sid cart cookie when you browse the catalog and add items to your cart."
+      },
+      "section5": {
+        "heading": "How we store it",
+        "body": "Order, customer, and cart data is stored in Supabase Postgres in the [USER-CONFIRM] region. The site is served from Vercel's edge network. Database backups are encrypted at rest."
+      },
+      "section6": {
+        "heading": "How we process and use it",
+        "body": "Lawful basis: contract performance (PDPL Art. 6 / GDPR Art. 6(1)(b)) for order processing, and legitimate interest (PDPL Art. 6 / GDPR Art. 6(1)(f)) for fraud prevention and admin operations. We never use your data for advertising."
+      },
+      "section7": {
+        "heading": "Who we share it with",
+        "body": "Vercel (hosting and CDN), Supabase (database), our payment processor (currently a mock; the real processor will be named here when introduced), and shipping carriers used to deliver your order. Each operates under its own data-protection terms."
+      },
+      "section8": {
+        "heading": "International transfers",
+        "body": "Supabase may store data in a [USER-CONFIRM] region outside KSA. Where applicable, such transfers comply with PDPL Art. 29 and GDPR Art. 44–49 through standard contractual clauses or equivalent safeguards."
+      },
+      "section9": {
+        "heading": "How long we keep it",
+        "body": "Cart cookie: 30 days. Order records: [USER-CONFIRM] 5 years (KSA tax retention requirement). Email correspondence: [USER-CONFIRM] 18 months. Admin audit logs: 12 months. Data is deleted or anonymized after these periods."
+      },
+      "section10": {
+        "heading": "How we destroy it",
+        "body": "When retention expires we delete the database row and write an audit-log entry recording the deletion. Encrypted backups roll off on the standard backup-retention schedule."
+      },
+      "section11": {
+        "heading": "Your rights",
+        "body": "Under KSA PDPL and GDPR you have the right to access, rectification, erasure, restriction of processing, data portability, and to object to processing. You may also withdraw consent where processing is based on consent."
+      },
+      "section12": {
+        "heading": "How to exercise your rights",
+        "body": "Email privacy@orki.sa with the subject line \"Data Request\" and tell us which right you want to exercise. We will verify your identity and respond within 30 days as required by PDPL Art. 11. No fee is charged for routine requests."
+      },
+      "section13": {
+        "heading": "Cookies",
+        "body": "We use only strictly-necessary cookies. See the Cookie Policy at /legal/cookies for the full list, durations, and our position on analytics and marketing cookies."
+      },
+      "section14": {
+        "heading": "Children's privacy",
+        "body": "This service is intended for users 18 years or older. We do not knowingly collect personal data from minors. If you believe a minor has provided personal data to us, contact privacy@orki.sa and we will delete it."
+      },
+      "section15": {
+        "heading": "Changes to this policy",
+        "body": "We may update this policy. The \"Last updated\" date at the top of this page reflects the current version. Material changes will be communicated by email when we hold a verified address on file for you."
+      },
+      "section16": {
+        "heading": "Contact us",
+        "body": "ORKI, [USER-CONFIRM postal address, Riyadh, KSA]. Privacy enquiries: privacy@orki.sa. We respond within 30 days."
+      }
+    },
+    "terms": {
+      "metaTitle": "Terms & Conditions",
+      "metaDescription": "ORKI's terms of sale: pricing, payment, shipping, returns, and dispute resolution.",
+      "eyebrow": "(Legal) — 02",
+      "heading": "Terms & Conditions",
+      "section1": {
+        "heading": "Acceptance of terms",
+        "body": "By accessing this site or placing an order, you agree to these Terms & Conditions and to our Privacy Policy. If you do not agree, please do not use the site."
+      },
+      "section2": {
+        "heading": "About ORKI",
+        "body": "ORKI is a Saudi streetwear brand operated under [USER-CONFIRM commercial registration]. The site at orki.sa is owned and operated by ORKI."
+      },
+      "section3": {
+        "heading": "Eligibility",
+        "body": "You must be 18 years or older and legally capable of entering into a binding contract under KSA law to place an order. Orders placed by minors are void."
+      },
+      "section4": {
+        "heading": "Account and orders",
+        "body": "An order is confirmed once you receive an order confirmation email. We reserve the right to decline or cancel orders for any reason, including stock outages, suspected fraud, or pricing errors."
+      },
+      "section5": {
+        "heading": "Pricing and currency",
+        "body": "All prices are displayed in Saudi Riyals (SAR) and include 15% VAT as required by KSA tax law. Prices may change without notice; the price applicable to your order is the one displayed at checkout."
+      },
+      "section6": {
+        "heading": "Payment",
+        "body": "We accept Mada, Visa, Mastercard, Apple Pay, and Cash on Delivery. Online card payments are processed by our payment processor; we never store full card numbers on our servers."
+      },
+      "section7": {
+        "heading": "Shipping",
+        "body": "Shipping fee is a flat 25 SAR within KSA, free on orders over 300 SAR. Delivery times depend on the carrier and destination city. Risk of loss passes to you on delivery."
+      },
+      "section8": {
+        "heading": "Returns and refunds",
+        "body": "You may return unworn items in their original condition with tags attached within 14 days of delivery for a full refund. Refunds are issued to the original payment method within 14 days of our receipt and inspection of the returned items."
+      },
+      "section9": {
+        "heading": "Order cancellation",
+        "body": "You may cancel an order before it ships by contacting us. Once an order has shipped, the standard 14-day returns process applies."
+      },
+      "section10": {
+        "heading": "Liability",
+        "body": "To the maximum extent permitted by KSA law, ORKI's total liability for any single order is limited to the amount you paid for that order. We are not liable for indirect, incidental, or consequential losses."
+      },
+      "section11": {
+        "heading": "Intellectual property",
+        "body": "All site content — designs, photography, logos, text, and source code — is the intellectual property of ORKI or its licensors. You may not copy, redistribute, or commercially exploit them without prior written consent."
+      },
+      "section12": {
+        "heading": "Prohibited uses",
+        "body": "You may not use this site to commit fraud, scrape data at scale, attempt to breach security controls, or place orders with the intent to disrupt the business or other customers."
+      },
+      "section13": {
+        "heading": "Privacy",
+        "body": "Our handling of your personal data is governed by the Privacy Policy available at /legal/privacy."
+      },
+      "section14": {
+        "heading": "Governing law and dispute resolution",
+        "body": "These Terms are governed by the laws of the Kingdom of Saudi Arabia. Any dispute arising out of or in connection with these Terms is subject to the exclusive jurisdiction of the competent KSA courts."
+      },
+      "section15": {
+        "heading": "Changes to these terms",
+        "body": "We may amend these Terms at any time. The \"Last updated\" date at the top reflects the current version. Continued use of the site after changes are posted means you accept the revised Terms."
+      },
+      "section16": {
+        "heading": "Contact us",
+        "body": "Questions about these Terms: privacy@orki.sa. ORKI, [USER-CONFIRM postal address, Riyadh, KSA]."
+      }
+    },
+    "cookies": {
+      "metaTitle": "Cookie Policy",
+      "metaDescription": "Cookies ORKI uses to run the cart and checkout. No analytics or marketing cookies are set.",
+      "eyebrow": "(Legal) — 03",
+      "heading": "Cookie Policy",
+      "section1": {
+        "heading": "What are cookies",
+        "body": "Cookies are small text files a website stores in your browser so it can remember information between visits. Some cookies are strictly necessary to make the site function (cart, login). Others — for analytics or advertising — are optional and require consent."
+      },
+      "section2": {
+        "heading": "Cookies we use",
+        "body": "ORKI sets only two cookies, both strictly necessary. orki_sid keeps your cart contents linked to your browser for up to 30 days; sb-* keeps admin users signed in for the duration of their session."
+      },
+      "section3": {
+        "heading": "We do not use",
+        "body": "ORKI sets no analytics cookies, no marketing cookies, and no third-party trackers. We do not use Google Analytics, Meta Pixel, TikTok Pixel, or any advertising tag on this site."
+      },
+      "section4": {
+        "heading": "Vercel Analytics and Speed Insights",
+        "body": "We use Vercel Analytics and Speed Insights to count anonymous page views and measure site speed. These services rely on cookieless beacons — no identifying cookie is stored — and they qualify under the PDPL strictly-necessary exemption for service operation."
+      },
+      "section5": {
+        "heading": "Your choices",
+        "body": "You can clear or block cookies in your browser settings. Blocking the orki_sid cookie will prevent the cart from working; blocking sb-* will prevent admin sign-in. Browsing the catalog without using the cart works without any cookie."
+      },
+      "section6": {
+        "heading": "Changes to this policy",
+        "body": "We may update this policy if the cookies we set change. The \"Last updated\" date at the top reflects the current version. Adding any non-strictly-necessary cookie would require a separate consent banner first."
+      },
+      "section7": {
+        "heading": "Contact us",
+        "body": "Questions about cookies on this site: privacy@orki.sa."
+      },
+      "tableHeaders": {
+        "name": "Name",
+        "purpose": "Purpose",
+        "duration": "Duration",
+        "type": "Type"
+      },
+      "tableRows": {
+        "orkiSidName": "orki_sid",
+        "orkiSidPurpose": "Cart persistence",
+        "orkiSidDuration": "30 days",
+        "orkiSidType": "Strictly necessary",
+        "sbAuthName": "sb-*",
+        "sbAuthPurpose": "Admin authentication",
+        "sbAuthDuration": "Session",
+        "sbAuthType": "Strictly necessary"
+      }
+    }
+  },
+  "Errors": {
+    "heading": "Something broke.",
+    "body": "We're working on it. Try again, or head back home.",
+    "retry": "Try again",
+    "home": "Return home",
+    "notFound": {
+      "heading": "404 / NO DROP HERE",
+      "body": "That page isn't on the rack. The shop is.",
+      "browseShop": "Browse shop",
+      "returnHome": "Return home"
+    },
+    "section": {
+      "shopLoadFailed": "We're having trouble loading the catalog right now. Try again in a moment.",
+      "orderLoadFailed": "We can't pull up your order right now — your payment is confirmed. Email us if you need help.",
+      "adminOrdersFailed": "Order list temporarily unavailable."
+    }
+  },
+  "CookieBanner": {
+    "body": "We use strictly-necessary cookies to run the cart and checkout. No analytics or marketing cookies are set.",
+    "primaryCta": "Got it",
+    "secondaryLink": "Read our Cookie Policy"
+  },
+  "Auth": {
+    "login": {
+      "eyebrow": "Account",
+      "heading": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "forgot": "Forgot password?",
+      "alt": "Don't have an account?",
+      "altCta": "Create one"
+    },
+    "signup": {
+      "eyebrow": "New account",
+      "heading": "Sign up",
+      "email": "Email",
+      "password": "Password",
+      "passwordHelper": "8 characters minimum.",
+      "acceptTerms": "I agree to the <terms>Terms & Conditions</terms> and <privacy>Privacy Policy</privacy>.",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "alt": "Already have an account?",
+      "altCta": "Sign in instead"
+    },
+    "forgot": {
+      "eyebrow": "Reset",
+      "heading": "Reset password",
+      "email": "Email",
+      "helper": "Enter your account email. We'll send a recovery link if it matches an account.",
+      "submit": "Send recovery link",
+      "submitting": "Sending...",
+      "success": "Check your inbox. If an account exists for that email, a recovery link is on the way.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "eyebrow": "Reset",
+      "heading": "Set a new password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "success": "Password updated. You can sign in with the new password.",
+      "verifyingLink": "Verifying link...",
+      "linkExpiredHeading": "Link expired",
+      "linkExpiredBody": "Reset links are valid for one hour. Request a new one.",
+      "requestNewLink": "Request new link",
+      "back": "Back to sign in"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Password is required.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "passwordTooLong": "Password must be at most 72 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "acceptTermsRequired": "You must agree to the terms to create an account.",
+      "tooManyAttempts": "Too many attempts. Try again in a few minutes.",
+      "sessionExpired": "Your session expired. Sign in again.",
+      "linkInvalid": "This link is invalid or has expired.",
+      "unknown": "Something went wrong. Try again."
+    }
+  },
+  "Account": {
+    "eyebrow": "Account",
+    "heading": "Your orders",
+    "signedInAs": "Signed in as <email>{email}</email>",
+    "referenceLabel": "Reference",
+    "empty": {
+      "eyebrow": "No orders yet",
+      "heading": "Nothing here yet.",
+      "body": "Once you place an order it'll show up here.",
+      "cta": "Browse the shop"
+    },
+    "backToAccount": "Back to account",
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "userMenu": "Account menu — signed in as {email}",
+    "account": "Account"
+  }
+}

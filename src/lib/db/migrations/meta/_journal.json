@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1778245645896,
+      "tag": "0000_furry_ink",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778361000149,
+      "tag": "0001_phase8_cart_orders",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778803200000,
+      "tag": "0002_phase10_auth_fk_and_rls",
+      "breakpoints": false
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782086400000,
+      "tag": "0003_phase11_sizeid_and_constraints",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782086400001,
+      "tag": "0004_phase11_timestamptz_and_product_fk",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1782086400002,
+      "tag": "0005_phase11_order_idempotency",
+      "breakpoints": true
+    }
+  ]
+}

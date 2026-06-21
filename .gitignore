@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Local-only session handoff notes
+HANDOFF.md
+
+# Ad-hoc scratch/probe scripts and their output (never commit)
+tmp-*
+
+# Internal AI tooling & GSD planning — not part of the deployed store.
+# Kept locally (untracked) so the repo contains only the application.
+.agents/
+.claude/
+.planning/
+.remember/
