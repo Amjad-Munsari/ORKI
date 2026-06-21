@@ -1,0 +1,60 @@
+# CodeRabbit configuration for ORKI
+# Reference: https://docs.coderabbit.ai/reference/configuration
+language: "en-US"
+tone_instructions: "Be direct and specific. Prioritize security, data integrity, and money/order correctness. Explain the impact of each issue in plain terms."
+
+reviews:
+  profile: "assertive"
+  # Don't block merges on review comments — this is advisory.
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  auto_review:
+    enabled: true
+    base_branches:
+      - "main"
+  # Skip generated/noise paths so the review focuses on real source.
+  path_filters:
+    - "!.planning/**"
+    - "!.remember/**"
+    - "!.claude/**"
+    - "!messages/**"
+    - "!public/**"
+    - "!**/migrations/meta/**"
+    - "!**/*.png"
+    - "!**/*.ico"
+    - "!**/*.svg"
+    - "!package-lock.json"
+  path_instructions:
+    - path: "src/**"
+      instructions: >-
+        Bilingual EN/AR storefront with full RTL. Flag any directional CSS
+        (ml-/mr-/pl-/pr-/left-/right- as directional styles) — only logical
+        properties (ms-/me-/ps-/pe-, inline-start/inline-end) are allowed.
+        Product data must flow through /lib/products.ts, never imported directly
+        from /data. Money is integer halalas on order rows (whole SAR on
+        products) — never floats. Flag any currency hardcoded to 'SAR' that
+        would block the planned multi-region (Turkey/Saudi/Europe) expansion.
+    - path: "src/app/actions/**"
+      instructions: >-
+        Server Actions are the RPC-reachable trust boundary. Every privileged
+        operation (order transitions, inventory edits, seeding, refunds) MUST
+        call requireAdmin and re-validate input server-side. Never trust a
+        client-supplied actor or identity. Flag any missing authorization check.
+    - path: "src/app/api/**"
+      instructions: >-
+        API routes bypass middleware. Verify auth on every state-changing route,
+        mutations are POST-only, and that no secret (service-role key) or raw
+        database/SQL error detail is ever returned to the client.
+    - path: "src/lib/orders/**"
+      instructions: >-
+        Order/checkout core. Verify stock decrement is race-safe (SELECT FOR
+        UPDATE), totals/VAT use integer halalas, the idempotency dedupe is
+        intact, and failures roll back cleanly without overselling or
+        double-charging.
+    - path: "src/lib/db/migrations/**"
+      instructions: >-
+        Hand-authored migrations must be idempotent (IF NOT EXISTS / guarded DO
+        blocks) and must not break Drizzle journal ordering. Cross-schema
+        auth.users FKs and RLS cannot be expressed in schema.ts — that is
+        expected, not a defect.
