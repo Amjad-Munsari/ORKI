@@ -530,7 +530,8 @@ export async function transitionOrderStatus(
                 .from(productSizes)
                 .where(eq(productSizes.id, it.sizeId))
                 .for('update')
-            : await tx
+            : it.productId
+            ? await tx
                 .select()
                 .from(productSizes)
                 .where(
@@ -539,7 +540,10 @@ export async function transitionOrderStatus(
                     eq(productSizes.label, it.sizeLabel)
                   )
                 )
-                .for('update');
+                .for('update')
+            : // No sizeId and no productId (product was deleted) — nothing to
+              // restore; its sizes were cascade-deleted with the product.
+              [];
           const size = sized[0];
           if (size) {
             await tx
@@ -554,7 +558,13 @@ export async function transitionOrderStatus(
         // Restored stock can bring a sold-out size/product back in stock —
         // re-enable any size that now has positive stock and recompute the
         // product flag (mirror of the checkout-decrement reconciliation).
-        const restoredProductIds = [...new Set(items.map((it) => it.productId))];
+        const restoredProductIds = [
+          ...new Set(
+            items
+              .map((it) => it.productId)
+              .filter((p): p is string => p !== null)
+          ),
+        ];
         for (const pid of restoredProductIds) {
           const sizes = await tx
             .select()
@@ -671,7 +681,7 @@ interface OrderRowWithJoins {
   updatedAt: Date;
   items?: Array<{
     id: string;
-    productId: string;
+    productId: string | null;
     sizeLabel: string;
     productNameEn: string;
     productNameAr: string;

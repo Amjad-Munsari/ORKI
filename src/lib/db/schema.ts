@@ -42,8 +42,8 @@ export const products = pgTable(
     currency: text('currency').notNull().default('SAR'),
     /** Derived field: true if any size is in stock. Kept for fast list queries. */
     inStock: boolean('in_stock').notNull().default(true),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('products_category_idx').on(table.category),
@@ -129,8 +129,8 @@ export const carts = pgTable(
     userId: uuid('user_id'),
     /** Locale at cart creation/last update — used for email language. */
     locale: text('locale').notNull().default('en'),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('carts_session_id_idx').on(table.sessionId),
@@ -147,7 +147,7 @@ export const cartItems = pgTable(
     productId: text('product_id').notNull().references(() => products.id, { onDelete: 'cascade' }),
     sizeId: uuid('size_id').notNull().references(() => productSizes.id, { onDelete: 'cascade' }),
     quantity: integer('quantity').notNull().default(1),
-    addedAt: timestamp('added_at').notNull().defaultNow(),
+    addedAt: timestamp('added_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('cart_items_cart_id_idx').on(table.cartId),
@@ -213,8 +213,8 @@ export const orders = pgTable(
     /** Nullable — populated when status transitions to 'shipped'. */
     trackingNumber: text('tracking_number'),
 
-    placedAt: timestamp('placed_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    placedAt: timestamp('placed_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('orders_email_idx').on(table.email),
@@ -232,7 +232,15 @@ export const orderItems = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
     orderId: uuid('order_id').notNull().references(() => orders.id, { onDelete: 'cascade' }),
-    productId: text('product_id').notNull().references(() => products.id),
+    /**
+     * Nullable + ON DELETE SET NULL: order_items is a historical snapshot
+     * (productNameEn/Ar, sizeLabel, unitPriceCents are all captured at order
+     * time), so deleting a product must NOT delete or block the order line — it
+     * just nulls the convenience link. Mirrors sizeId's SET NULL behavior. The
+     * previous NO ACTION blocked deleting any product that was ever ordered
+     * (and broke `seed?force=1` once orders existed).
+     */
+    productId: text('product_id').references(() => products.id, { onDelete: 'set null' }),
     /**
      * FK to the purchased size row. Nullable + ON DELETE SET NULL: order_items
      * is a historical snapshot, so a deleted size must not delete the line.
@@ -264,7 +272,7 @@ export const orderEvents = pgTable(
     type: text('type').notNull(),
     /** Free-form metadata: actor (admin/system), reason, fromStatus, toStatus, error */
     metadata: jsonb('metadata'),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     index('order_events_order_id_idx').on(table.orderId),

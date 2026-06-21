@@ -77,7 +77,9 @@ export interface Cart {
 
 export interface OrderItem {
   id: string;
-  productId: string;
+  /** Null if the product was deleted after the order was placed (snapshot
+   *  fields below remain authoritative). See schema.ts order_items.productId. */
+  productId: string | null;
   sizeLabel: string;
   productName: { en: string; ar: string };
   unitPriceCents: number;

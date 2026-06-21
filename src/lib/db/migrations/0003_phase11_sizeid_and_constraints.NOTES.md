@@ -55,21 +55,17 @@ the migrator's per-migration transaction wraps them cleanly.
     drizzle would attempt to re-run `0002` (non-idempotent — see its NOTES) before
     `0003`. Verify before running against prod.
 
-## Still open (intentionally OUT OF SCOPE here — backlog)
+## Follow-ups — all RESOLVED in 0004
 
-This migration fixes the `db:migrate` reproduction gap only. Not addressed:
+These were deferred from 0003 and are now fixed by
+`0004_phase11_timestamptz_and_product_fk.sql` (see its NOTES):
 
-1. **Drizzle snapshot staleness** — the newest real snapshot is `0001`. `0002`
-   and `0003` are hand-authored with no snapshot, and `0001` still describes
-   `user_id` as `text`. So `npm run db:generate` will emit an **incorrect** diff
-   (re-casting `user_id`, re-adding objects, unable to express the `auth.users`
-   FKs/RLS). Forward schema changes must be hand-authored until the snapshot is
-   re-baselined. Do not trust `db:generate` as-is.
-2. **`timestamptz`** — all business timestamps are `timestamp` (no tz) except
-   `auth_events.created_at`. Should be `timestamptz` project-wide.
-3. **`order_items.product_id` ON DELETE** — currently `NO ACTION`, which blocks
-   deleting any product that was ever ordered (inconsistent with the snapshot
-   design; `SET NULL` would preserve history while allowing deletion).
+1. ✅ **Drizzle snapshot staleness** — `meta/0004_snapshot.json` re-baselined from
+   current `schema.ts`; `db:generate` now reports "No schema changes". (Still
+   hand-author migrations touching `auth.users` FKs / RLS — Drizzle can't express
+   them.)
+2. ✅ **`timestamptz`** — the 8 remaining tz-naive columns converted in 0004.
+3. ✅ **`order_items.product_id` ON DELETE** — now nullable + `SET NULL` in 0004.
 
 ## Superseded scripts
 
