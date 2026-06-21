@@ -35,3 +35,10 @@ HANDOFF.md
 
 # Ad-hoc scratch/probe scripts and their output (never commit)
 tmp-*
+
+# Internal AI tooling & GSD planning — not part of the deployed store.
+# Kept locally (untracked) so the repo contains only the application.
+.agents/
+.claude/
+.planning/
+.remember/
