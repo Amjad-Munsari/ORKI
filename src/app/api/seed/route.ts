@@ -25,7 +25,20 @@ export async function POST(request: Request) {
     const force = new URL(request.url).searchParams.get('force') === '1';
 
     if (force) {
-      // Cascade deletes via FK rules clear sizes + images automatically.
+      // DESTRUCTIVE: wipes the ENTIRE catalog (cascade clears sizes + images).
+      // Defense-in-depth beyond the admin gate — require an explicit server-side
+      // opt-in (ALLOW_DESTRUCTIVE_SEED=1) so a mistaken or compromised admin
+      // session cannot erase the catalog with a single request. Unset in prod.
+      if (process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              'Destructive reseed is disabled. Set ALLOW_DESTRUCTIVE_SEED=1 to allow a full catalog wipe.',
+          },
+          { status: 403 }
+        );
+      }
       await db.delete(products);
     } else {
       const existing = await db.select().from(products).limit(1);

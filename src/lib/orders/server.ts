@@ -260,12 +260,30 @@ export async function submitCheckout(
           orderRow = row;
           break;
         } catch (insertErr) {
-          const msg = (insertErr as Error)?.message ?? '';
+          // postgres.js puts the SQLSTATE on `.code` ('23505' = unique_violation)
+          // and the violated constraint on `.constraint_name`. Prefer those over
+          // message-substring matching, which is fragile across driver/pooler
+          // versions; keep a message fallback for safety.
+          const pgErr = insertErr as {
+            code?: string;
+            constraint_name?: string;
+            message?: string;
+          };
+          const msg = pgErr?.message ?? '';
+          const constraint = pgErr?.constraint_name ?? '';
+          const isUnique =
+            pgErr?.code === '23505' ||
+            msg.includes('duplicate key') ||
+            msg.includes('unique constraint');
+
           // Concurrent duplicate submit: another in-flight request with the
           // SAME idempotency key already inserted the order. Abort this txn
-          // (rolls back the stock decrement) and return the winning order in
-          // the outer catch — no second order, no second charge, no oversell.
-          if (msg.includes('orders_idempotency_key_unique')) {
+          // (rolls back the stock decrement); the outer catch returns the winner
+          // — no second order, no second charge, no oversell.
+          if (
+            constraint === 'orders_idempotency_key_unique' ||
+            msg.includes('orders_idempotency_key_unique')
+          ) {
             throw new OrderError(
               'DUPLICATE_SUBMIT',
               'concurrent idempotent checkout',
@@ -274,9 +292,10 @@ export async function submitCheckout(
           }
           // Otherwise a reference collision — retry with a fresh reference.
           const isRefViolation =
-            msg.includes('orders_reference') ||
-            msg.includes('duplicate key') ||
-            msg.includes('unique constraint');
+            isUnique &&
+            (constraint === 'orders_reference_unique' ||
+              constraint === '' ||
+              msg.includes('orders_reference'));
           if (!isRefViolation || attempt === MAX_REF_ATTEMPTS - 1) {
             throw insertErr;
           }

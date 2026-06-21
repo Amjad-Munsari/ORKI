@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
     "build": "npm run clean && next build",
-    "vercel-build": "npm run clean && next build",
+    "vercel-build": "npm run db:migrate && npm run clean && next build",
     "start": "next start",
     "lint": "eslint",
     "db:push": "drizzle-kit push",
