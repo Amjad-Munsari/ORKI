@@ -36,6 +36,13 @@
       "when": 1782086400001,
       "tag": "0004_phase11_timestamptz_and_product_fk",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1782086400002,
+      "tag": "0005_phase11_order_idempotency",
+      "breakpoints": true
     }
   ]
 }

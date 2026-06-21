@@ -39,6 +39,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const clearCart = useCartStore((s) => s.clearCart);
+  // Stable per-checkout-attempt key. If the customer double-clicks "Place order"
+  // or their connection silently retries, the server recognizes this same key
+  // and returns the original order instead of creating a second one / charging
+  // twice. A fresh page load (a genuinely new purchase) gets a new key.
+  const [idempotencyKey] = useState(() => crypto.randomUUID());
 
   const handleShippingSubmit = (data: ShippingFormData) => {
     setShippingData(data);
@@ -49,15 +54,13 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const handlePlaceOrder = () => {
     if (!paymentMethod || !shippingData) return;
     setError(null);
-    // Server action only accepts the four real-rail methods. UI methods 'card'/'cod'
-    // are not part of the server enum — when selected, fall through to the
-    // validation error path with the same envelope.
     startTransition(async () => {
       const result = await submitCheckoutAction({
         shipping: shippingData,
-        // `paymentMethod` is already typed as PaymentMethod which matches the
-        // server-side PaymentMethodCode union (card | mada | stcpay | applepay | cod).
+        // `paymentMethod` is typed as PaymentMethod, matching the server-side
+        // PaymentMethodCode union (card | mada | stcpay | applepay | cod).
         payment: { method: paymentMethod },
+        idempotencyKey,
       });
       if (!result.ok) {
         const raw = result.messageKey;

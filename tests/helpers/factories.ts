@@ -96,4 +96,8 @@ export const validCheckoutInput = (
 ) => ({
   shipping: { ...validShipping, ...overrides },
   payment: { method: 'mada' as const },
+  // Unique per call so two parallel submits model two DIFFERENT customers
+  // (distinct intents), not a deduped double-submit of one. Tests that want to
+  // exercise idempotent dedupe should pass the same key to two calls explicitly.
+  idempotencyKey: crypto.randomUUID(),
 });

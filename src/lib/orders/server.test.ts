@@ -69,6 +69,7 @@ vi.mock('@/lib/db/client', () => {
 });
 
 import { submitCheckout } from './server';
+import { db } from '@/lib/db/client';
 import * as cartServer from '@/lib/cart/server';
 
 const validInput = {
@@ -82,6 +83,7 @@ const validInput = {
     address: 'Street 123 Building 4',
   },
   payment: { method: 'mada' as const },
+  idempotencyKey: '11111111-1111-4111-8111-111111111111',
 };
 
 beforeEach(() => {
@@ -134,5 +136,34 @@ describe('submitCheckout', () => {
     if (!result.ok) {
       expect(result.code).toBe('CART_EMPTY');
     }
+  });
+
+  it('returns VALIDATION when idempotencyKey is missing/invalid', async () => {
+    const result = await submitCheckout({
+      ...validInput,
+      idempotencyKey: 'not-a-uuid',
+    } as unknown as typeof validInput);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.code).toBe('VALIDATION');
+  });
+
+  it('dedupes a double-submit: returns the existing order without creating a new one', async () => {
+    // An order already exists for this idempotency key (the customer's first
+    // click already succeeded). The retry must return THAT order — no new
+    // transaction, no second stock decrement, no second charge.
+    (db.query.orders.findFirst as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+      { id: 'order-existing', reference: 'ORK-EXIST' }
+    );
+
+    const result = await submitCheckout(validInput);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.reference).toBe('ORK-EXIST');
+      expect(result.data.orderId).toBe('order-existing');
+    }
+    // The pre-check short-circuits BEFORE any transaction opens.
+    expect(db.transaction).not.toHaveBeenCalled();
   });
 });

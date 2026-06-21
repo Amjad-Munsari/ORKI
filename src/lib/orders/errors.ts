@@ -12,6 +12,10 @@ export type OrderErrorCode =
   | 'CART_EMPTY'
   | 'PRODUCT_NOT_FOUND'
   | 'VALIDATION'
+  // Internal sentinel: a concurrent submit with the same idempotency key won
+  // the insert race. Never surfaced to the user — submitCheckout catches it and
+  // returns the existing order as success.
+  | 'DUPLICATE_SUBMIT'
   | 'UNKNOWN';
 
 export class OrderError extends Error {

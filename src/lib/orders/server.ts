@@ -106,7 +106,32 @@ export async function submitCheckout(
       messageKey: 'Checkout.errors.validation',
     };
   }
-  const { shipping, payment } = parsed.data;
+  const { shipping, payment, idempotencyKey } = parsed.data;
+
+  // 1a. Idempotency pre-check. A double-click, a back-button resubmit, or a
+  //     silent network retry can invoke this action twice for ONE customer
+  //     intent. The client sends a stable key per checkout attempt; if an order
+  //     already exists for it, return that SAME order — never decrement stock or
+  //     charge a second time. (The DB unique constraint below is the hard
+  //     guarantee; this check handles the common sequential-retry case cheaply.)
+  {
+    const prior = await db.query.orders.findFirst({
+      where: eq(orders.idempotencyKey, idempotencyKey),
+      columns: { id: true, reference: true },
+    });
+    if (prior) {
+      // Re-grant this browser view access to its order, then return success.
+      try {
+        await grantOrderView(prior.reference);
+      } catch {
+        /* cookie grant is best-effort on the dedupe path */
+      }
+      return {
+        ok: true,
+        data: { reference: prior.reference, orderId: prior.id },
+      };
+    }
+  }
 
   // 1b. Resolve the authenticated user, if any. Guests check out with userId
   //     null; logged-in users get the order tagged so it appears in their
@@ -213,6 +238,7 @@ export async function submitCheckout(
             .insert(orders)
             .values({
               reference,
+              idempotencyKey,
               userId,
               email: shipping.email,
               locale: cart.locale,
@@ -234,13 +260,24 @@ export async function submitCheckout(
           orderRow = row;
           break;
         } catch (insertErr) {
-          // Unique-constraint collision on reference — try again with a new one.
           const msg = (insertErr as Error)?.message ?? '';
-          const isUniqueViolation =
+          // Concurrent duplicate submit: another in-flight request with the
+          // SAME idempotency key already inserted the order. Abort this txn
+          // (rolls back the stock decrement) and return the winning order in
+          // the outer catch — no second order, no second charge, no oversell.
+          if (msg.includes('orders_idempotency_key_unique')) {
+            throw new OrderError(
+              'DUPLICATE_SUBMIT',
+              'concurrent idempotent checkout',
+              { idempotencyKey }
+            );
+          }
+          // Otherwise a reference collision — retry with a fresh reference.
+          const isRefViolation =
+            msg.includes('orders_reference') ||
             msg.includes('duplicate key') ||
-            msg.includes('unique constraint') ||
-            msg.includes('orders_reference');
-          if (!isUniqueViolation || attempt === MAX_REF_ATTEMPTS - 1) {
+            msg.includes('unique constraint');
+          if (!isRefViolation || attempt === MAX_REF_ATTEMPTS - 1) {
             throw insertErr;
           }
         }
@@ -317,6 +354,27 @@ export async function submitCheckout(
       await tx.delete(cartItems).where(eq(cartItems.cartId, cart.id));
     });
   } catch (err) {
+    // Concurrent idempotent submit: the racing winner committed the order while
+    // this transaction rolled back. Fetch and return the winner as success —
+    // the customer sees one order, charged once.
+    if (err instanceof OrderError && err.code === 'DUPLICATE_SUBMIT') {
+      const prior = await db.query.orders.findFirst({
+        where: eq(orders.idempotencyKey, idempotencyKey),
+        columns: { id: true, reference: true },
+      });
+      if (prior) {
+        try {
+          await grantOrderView(prior.reference);
+        } catch {
+          /* best-effort cookie grant */
+        }
+        return {
+          ok: true,
+          data: { reference: prior.reference, orderId: prior.id },
+        };
+      }
+      // Winner not found (should never happen) — fall through to generic handling.
+    }
     if (err instanceof OrderError) {
       console.error(
         `[submitCheckout][${requestId}] OrderError:`,

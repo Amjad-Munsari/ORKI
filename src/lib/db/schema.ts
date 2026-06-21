@@ -180,6 +180,15 @@ export const orders = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     /** Public-facing order number, e.g. ORK-A1B2C3. */
     reference: text('reference').notNull().unique(),
+    /**
+     * Idempotency key from the checkout client (one per checkout attempt).
+     * Dedupes double-submits: a retry / double-click / silent network replay
+     * returns the ORIGINAL order instead of creating a second one or charging
+     * twice. Nullable (legacy rows predate it); UNIQUE so the database itself
+     * hard-guarantees no two orders share a key (Postgres permits many NULLs
+     * under a unique index, so guest/legacy rows are unaffected).
+     */
+    idempotencyKey: text('idempotency_key').unique(),
     // userId points at auth.users(id). Drizzle cannot introspect the auth schema
     // (ADR-002 §6), so the FK is enforced at the DB layer only via the migration's
     // ALTER TABLE ... ADD CONSTRAINT (0002_phase10_auth_fk_and_rls.sql). Do NOT

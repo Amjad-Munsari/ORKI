@@ -99,6 +99,7 @@ describe('checkoutSchema', () => {
     const r = checkoutSchema.safeParse({
       shipping: validShipping,
       payment: { method: 'mada' },
+      idempotencyKey: '11111111-1111-4111-8111-111111111111',
     });
     expect(r.success).toBe(true);
   });
