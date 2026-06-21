@@ -13,22 +13,18 @@ reviews:
     enabled: true
     base_branches:
       - "main"
-  # Skip generated/noise paths so the review focuses on real source.
+  # FOCUSED SCOPE: review ONLY the money/security/data core. Positive-only
+  # patterns restrict CodeRabbit to exactly these paths, keeping a whole-repo
+  # review PR well under CodeRabbit's per-review file limit so the critical
+  # logic actually gets reviewed (not eaten by UI/asset/tooling files).
   path_filters:
-    - "!.planning/**"
-    - "!.remember/**"
-    - "!.claude/**"
-    - "!.agents/**"
-    - "!walkthrough.md"
-    - "!test-results/**"
-    - "!skills-lock.json"
-    - "!messages/**"
-    - "!public/**"
-    - "!**/migrations/meta/**"
-    - "!**/*.png"
-    - "!**/*.ico"
-    - "!**/*.svg"
-    - "!package-lock.json"
+    - "src/lib/**"
+    - "!src/lib/db/migrations/meta/**" # generated Drizzle snapshots
+    - "src/app/actions/**"
+    - "src/app/api/**"
+    - "src/store/**"
+    - "src/types/**"
+    - "src/middleware.ts"
   path_instructions:
     - path: "src/**"
       instructions: >-
